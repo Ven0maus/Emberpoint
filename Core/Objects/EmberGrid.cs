@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.Objects.Interfaces;
+﻿using Emberpoint.Core.Objects.Abstracts;
+using Emberpoint.Core.Objects.Interfaces;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,13 @@ namespace Emberpoint.Core.Objects
 
         public int GridSizeX { get; }
         public int GridSizeY { get; }
+
+        public EmberGrid(int gridSizeX, int gridSizeY, Blueprint<EmberCell> blueprint)
+        {
+            GridSizeX = gridSizeX;
+            GridSizeY = gridSizeY;
+            Cells = blueprint.GetCells();
+        }
 
         public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells)
         {

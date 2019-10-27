@@ -1,6 +1,7 @@
 ﻿using SadConsole;
 using Microsoft.Xna.Framework;
 using Emberpoint.Core.Objects;
+using Emberpoint.Core.Objects.Blueprints;
 
 namespace Emberpoint.Core
 {
@@ -50,15 +51,7 @@ namespace Emberpoint.Core
 
         private static void SetMapArea(int gridSizeX, int gridSizeY)
         {
-            var cells = new EmberCell[gridSizeX * gridSizeY];
-            for (int x=0; x < gridSizeX; x++)
-            {
-                for (int y = 0; y < gridSizeY; y++)
-                {
-                    cells[y * gridSizeX + x] = new EmberCell(new Point(x, y), '.', Color.Green);
-                }
-            }
-            Grid = new EmberGrid(gridSizeX, gridSizeY, cells);
+            Grid = new EmberGrid(gridSizeX, gridSizeY, new HouseBlueprint());
             Grid.RenderObject(Map);
         }
     }
