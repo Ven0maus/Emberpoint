@@ -5,8 +5,17 @@ namespace Emberpoint.Core.Objects
 {
     public class EmberCell : Cell
     {
-        public Point Position { get; }
+        public Point Position { get; set; }
         public bool Walkable { get; set; }
+        public string Name { get; set; }
+
+        public EmberCell() 
+        {
+            Foreground = Color.White;
+            Background = Color.Black;
+            Walkable = true;
+            Glyph = '.';
+        }
 
         public EmberCell(Point position, int glyph, Color foreground)
         {

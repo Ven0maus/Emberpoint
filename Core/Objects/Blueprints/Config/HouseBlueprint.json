@@ -1,0 +1,24 @@
+{
+  "gridSizeX": 70,
+  "gridSizeY": 30,
+  "tiles": [
+    {
+      "glyph": ".",
+      "name": "floor",
+      "walkable": true,
+	  "foreground": "Gray",
+    },
+    {
+      "glyph": "+",
+      "name": "door",
+      "walkable": true,
+	  "foreground": "Brown",
+    },
+    {
+      "glyph": "#",
+      "name": "wall",
+      "walkable": false,
+	  "foreground": "Yellow",
+    }
+  ]
+}
