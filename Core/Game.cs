@@ -18,8 +18,6 @@ namespace Emberpoint.Core
 
         public static DialogWindow DialogWindow;
 
-        private static bool _isMessageLocked;
-
         private static void Main()
         {
             // Setup the engine and create the main window.
@@ -33,8 +31,6 @@ namespace Emberpoint.Core
             // Start the game.
             SadConsole.Game.Instance.Run();
             SadConsole.Game.Instance.Dispose();
-
-            _isMessageLocked = false;
         }
 
         private static void Update(GameTime gameTime)
@@ -77,7 +73,6 @@ namespace Emberpoint.Core
 
             DialogWindow.ShowDialog("Game", new string[] { "Game locked until Dialog is accepted.", "Press 'Enter' to continue." });
             DialogWindow.Position = new Point(2, Constants.GameWindowHeight - 7);
-            _isMessageLocked = true;
         }
     }
 }
