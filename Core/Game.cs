@@ -39,11 +39,10 @@ namespace Emberpoint.Core
 
         private static void Update(GameTime gameTime)
         {
-            if (_isMessageLocked)
+            if (DialogWindow.IsVisible)
             {
                 if (Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
                 {
-                    _isMessageLocked = false;
                     DialogWindow.CloseDialog();
                 }
             }
