@@ -15,21 +15,21 @@ namespace Emberpoint.Core.Objects
 
         public void CheckForMovement()
         {
-            if (Global.KeyboardState.IsKeyPressed(Keys.Z))
+            if (Global.KeyboardState.IsKeyPressed(Keys.Z) || Global.KeyboardState.IsKeyPressed(Keys.D8)) 
             {
-                MoveTowards(Position.Translate(0, -1));
+                MoveTowards(Position.Translate(0, -1)); // Move up
             }
-            else if (Global.KeyboardState.IsKeyPressed(Keys.S))
+            else if (Global.KeyboardState.IsKeyPressed(Keys.S) || Global.KeyboardState.IsKeyPressed(Keys.D2))
             {
-                MoveTowards(Position.Translate(0, 1));
+                MoveTowards(Position.Translate(0, 1)); // Move down
             }
-            else if (Global.KeyboardState.IsKeyPressed(Keys.Q))
+            else if (Global.KeyboardState.IsKeyPressed(Keys.Q) || Global.KeyboardState.IsKeyPressed(Keys.D4))
             {
-                MoveTowards(Position.Translate(-1, 0));
+                MoveTowards(Position.Translate(-1, 0)); // Move left
             }
-            else if (Global.KeyboardState.IsKeyPressed(Keys.D))
+            else if (Global.KeyboardState.IsKeyPressed(Keys.D) || Global.KeyboardState.IsKeyPressed(Keys.D6))
             {
-                MoveTowards(Position.Translate(1, 0));
+                MoveTowards(Position.Translate(1, 0)); // Move right
             }
         }
     }
