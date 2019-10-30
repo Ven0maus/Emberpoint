@@ -1,8 +1,4 @@
-﻿using SadConsole;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Emberpoint.Core.Windows
 {
