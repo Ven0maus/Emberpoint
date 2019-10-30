@@ -63,7 +63,7 @@ namespace Emberpoint.Core
 
             var mainConsole = new Console(Constants.GameWindowWidth, Constants.GameWindowHeight);
             mainConsole.Children.Add(Map);
-            mainConsole.Print(Constants.GameWindowWidth / 2 - Constants.GameTitle.Length / 2, 2, Constants.GameTitle);
+            mainConsole.Print(Constants.GameWindowWidth / 2 - Constants.GameTitle.Length / 2, 1, Constants.GameTitle);
 
             Map.Position = new Point(25, 3);
 
@@ -77,7 +77,7 @@ namespace Emberpoint.Core
             mainConsole.Children.Add(DialogWindow);
 
             DialogWindow.ShowDialog("Game", new string[] { "Game locked until Dialog is accepted.", "Press 'Enter' to continue." });
-            DialogWindow.Position = new Point(1, Constants.GameWindowHeight - 7);
+            DialogWindow.Position = new Point(2, Constants.GameWindowHeight - 7);
             _isMessageLocked = true;
         }
     }
