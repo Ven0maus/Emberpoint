@@ -1,5 +1,5 @@
-﻿using Emberpoint.Core.Objects;
-using Emberpoint.Core.Objects.Blueprints;
+﻿using Emberpoint.Core.GameObjects;
+using Emberpoint.Core.GameObjects.Blueprints;
 using NUnit.Framework;
 
 namespace Tests

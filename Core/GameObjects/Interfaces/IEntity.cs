@@ -1,7 +1,7 @@
 ﻿using GoRogue;
 using Microsoft.Xna.Framework;
 
-namespace Emberpoint.Core.Objects.Interfaces
+namespace Emberpoint.Core.GameObjects.Interfaces
 {
     public interface IEntity : IRenderable
     {

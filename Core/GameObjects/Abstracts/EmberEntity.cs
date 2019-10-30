@@ -1,12 +1,13 @@
-﻿using Emberpoint.Core.Objects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Entities;
+using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Managers;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using SadConsole;
-using SadConsole.Entities;
 
-namespace Emberpoint.Core.Objects.Abstracts
+namespace Emberpoint.Core.GameObjects.Abstracts
 {
-    public abstract class EmberEntity : Entity, IEntity
+    public abstract class EmberEntity : SadConsole.Entities.Entity, IEntity
     {
         public int ObjectId { get; }
         public int FieldOfViewRadius { get; set; }
@@ -56,7 +57,7 @@ namespace Emberpoint.Core.Objects.Abstracts
 
         public bool CanMoveTowards(Point position)
         {
-            return Game.Grid.InBounds(position) && Game.Grid.GetCell(position).Walkable && !EntityManager.EntityExistsAt(position);
+            return GridManager.Grid.InBounds(position) && GridManager.Grid.GetCell(position).Walkable && !EntityManager.EntityExistsAt(position);
         }
 
         public void RenderObject(Console console)

@@ -1,6 +1,6 @@
-﻿using Emberpoint.Core.Objects.Abstracts;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
 
-namespace Emberpoint.Core.Objects
+namespace Emberpoint.Core.GameObjects.Managers
 {
     public static class GridManager
     {

@@ -1,11 +1,12 @@
-﻿using Emberpoint.Core.Objects.Abstracts;
-using Emberpoint.Core.Objects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Entities;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Emberpoint.Core.Objects
+namespace Emberpoint.Core.GameObjects.Managers
 {
     public static class EntityManager
     {

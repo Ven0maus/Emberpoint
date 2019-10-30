@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 
-namespace Emberpoint.Core.Objects
+namespace Emberpoint.Core.GameObjects
 {
     public class EmberCell : Cell
     {

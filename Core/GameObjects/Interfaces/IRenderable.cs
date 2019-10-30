@@ -1,6 +1,6 @@
 ﻿using SadConsole;
 
-namespace Emberpoint.Core.Objects.Interfaces
+namespace Emberpoint.Core.GameObjects.Interfaces
 {
     public interface IRenderable
     {

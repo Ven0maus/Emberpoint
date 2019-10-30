@@ -1,5 +1,6 @@
-﻿using Emberpoint.Core.Objects;
-using Emberpoint.Core.Objects.Interfaces;
+﻿using Emberpoint.Core.GameObjects;
+using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Managers;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;

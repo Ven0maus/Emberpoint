@@ -1,22 +1,15 @@
 ﻿using SadConsole;
 using Microsoft.Xna.Framework;
-using Emberpoint.Core.Objects;
-using Emberpoint.Core.Objects.Blueprints;
-using Console = SadConsole.Console;
-using Emberpoint.Core.Windows;
+using Emberpoint.Core.GameObjects.Entities;
+using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.GameObjects.Managers;
 
 namespace Emberpoint.Core
 {
     public static class Game
     {
-        public static Console Map { get; private set; }
-        public static EmberGrid Grid
-        {
-            get { return GridManager.Grid; }
-        }
         public static Player Player { get; private set; }
-
-        public static DialogWindow DialogWindow;
+        public static DialogWindow DialogWindow { get; private set; }
 
         private static void Main()
         {
@@ -42,37 +35,26 @@ namespace Emberpoint.Core
                     DialogWindow.CloseDialog();
                 }
             }
-            else
-            {
-                Player.CheckForMovement();
-            }
+
+            if (UserInterfaceManager.IsPaused) return;
+
+            Player.CheckForMovement();
         }
 
         private static void Init()
         {
-            Map = new Console(Constants.Map.Width, Constants.Map.Height);
-            GridManager.InitializeBlueprint<GroundFloorBlueprint>();
-            Grid.RenderObject(Map);
+            // Initialize user interface
+            UserInterfaceManager.Initialize();
 
-            SadConsole.Game.Instance.Window.Title = Constants.GameTitle;
-
-            var mainConsole = new Console(Constants.GameWindowWidth, Constants.GameWindowHeight);
-            mainConsole.Children.Add(Map);
-            mainConsole.Print(Constants.GameWindowWidth / 2 - Constants.GameTitle.Length / 2, 1, Constants.GameTitle);
-
-            Map.Position = new Point(25, 3);
+            // Keep the dialog window in a global variable so we can check it in the game loop
+            DialogWindow = UserInterfaceManager.Get<DialogWindow>();
 
             // Instantiate player in the middle of the map
             Player = EntityManager.Create<Player>(new Point(Constants.Map.Width / 2, Constants.Map.Height / 2));
-            Player.RenderObject(Map);
+            Player.RenderObject(UserInterfaceManager.Get<MapWindow>());
 
-            Global.CurrentScreen = mainConsole;
-
-            DialogWindow = new DialogWindow(Constants.GameWindowWidth / 2, 6);
-            mainConsole.Children.Add(DialogWindow);
-
-            DialogWindow.ShowDialog("Game", new string[] { "Game locked until Dialog is accepted.", "Press 'Enter' to continue." });
-            DialogWindow.Position = new Point(2, Constants.GameWindowHeight - 7);
+            // Show a tutorial dialog window.
+            DialogWindow.ShowDialog("Tutorial", new string[] { "Welcome to Emberpoint.", "Press 'Enter' to continue." });
         }
     }
 }

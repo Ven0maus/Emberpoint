@@ -1,5 +1,7 @@
-﻿using Emberpoint.Core.Objects.Abstracts;
-using Emberpoint.Core.Objects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.UserInterface.Windows;
 using GoRogue.MapViews;
 using Microsoft.Xna.Framework;
 using System;
@@ -7,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Console = SadConsole.Console;
 
-namespace Emberpoint.Core.Objects
+namespace Emberpoint.Core.GameObjects
 {
     public class EmberGrid : IRenderable
     {
@@ -42,6 +44,15 @@ namespace Emberpoint.Core.Objects
         public int GridSizeY { get; }
 
         public Blueprint<EmberCell> Blueprint { get; }
+
+        private MapWindow _map;
+        private MapWindow Map
+        {
+            get
+            {
+                return _map ?? (_map = UserInterfaceManager.Get<MapWindow>());
+            }
+        }
 
         public EmberGrid(Blueprint<EmberCell> blueprint)
         {
@@ -158,7 +169,7 @@ namespace Emberpoint.Core.Objects
             }
 
             // Redraw the map
-            Game.Map.IsDirty = true;
+            Map.Update();
         }
 
         public EmberCell[] GetNeighbors(EmberCell cell)

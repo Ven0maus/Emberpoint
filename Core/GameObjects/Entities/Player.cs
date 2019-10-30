@@ -1,10 +1,10 @@
 ﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.Objects.Abstracts;
+using Emberpoint.Core.GameObjects.Abstracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
 
-namespace Emberpoint.Core.Objects
+namespace Emberpoint.Core.GameObjects.Entities
 {
     public class Player : EmberEntity
     {

@@ -1,5 +1,5 @@
 ﻿using Emberpoint.Core;
-using Emberpoint.Core.Objects;
+using Emberpoint.Core.GameObjects;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 
@@ -32,7 +32,7 @@ namespace Tests
             return new EmberGrid(width, height, cells);
         }
 
-        [OneTimeSetUp]
+        [SetUp]
         protected virtual void Setup()
         {
             _grid = BuildCustomGrid(Constants.Map.Width, Constants.Map.Height);

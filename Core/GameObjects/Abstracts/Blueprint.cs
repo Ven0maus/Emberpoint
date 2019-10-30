@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Emberpoint.Core.Objects.Abstracts
+namespace Emberpoint.Core.GameObjects.Abstracts
 {
     public abstract class Blueprint<T> where T : EmberCell, new()
     {
