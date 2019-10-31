@@ -1,5 +1,5 @@
-﻿using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public InventoryWindow(int width, int height) : base(width, height)
         {
-            UserInterfaceManager.DrawBorders(this, width, height, "O", "|", "-", Color.Gray);
+            this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
             Print(3, 0, "Inventory", Color.Purple);
 
             _inventoryDict = new Dictionary<string, int>();
@@ -87,6 +87,6 @@ namespace Emberpoint.Core.UserInterface.Windows
                     _textConsole.Cursor.Print(string.Format("{0} : {1}\r\n", item.Value, item.Key));
                 }
             }
-        }        
+        }
     }
 }

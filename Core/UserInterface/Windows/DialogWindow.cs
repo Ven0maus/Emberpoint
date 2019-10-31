@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using SadConsole;
@@ -12,7 +13,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public DialogWindow(int width, int height) : base(width, height)
         {
-            UserInterfaceManager.DrawBorders(this, width, height, "O", "|", "-", Color.Gray);
+            this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
 
             _textConsole = new Console(Width - 2, Height - 2)
             {
