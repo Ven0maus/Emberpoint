@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public InventoryWindow(int width, int height) : base(width, height)
         {
-            DrawBorders(width, height, "O", "|", "-", Color.Gray);
+            UserInterfaceManager.DrawBorders(this, width, height, "O", "|", "-", Color.Gray);
             Print(3, 0, "Inventory", Color.Purple);
 
             _inventoryDict = new Dictionary<string, int>();
@@ -86,34 +87,6 @@ namespace Emberpoint.Core.UserInterface.Windows
                     _textConsole.Cursor.Print(string.Format("{0} : {1}\r\n", item.Value, item.Key));
                 }
             }
-        }
-
-        private void DrawBorders(int width, int height, string cornerGlyph, string horizontalBorderGlyph, string verticalBorderGlyph, Color borderColor)
-        {
-            for (int rowIndex = 0; rowIndex < height; rowIndex++)
-            {
-                for (int colIndex = 0; colIndex < width; colIndex++)
-                {
-                    // Drawing Corners
-                    if ((rowIndex == 0 && colIndex == 0)
-                        || (rowIndex == height - 1 && colIndex == 0)
-                        || (rowIndex == height - 1 && colIndex == width - 1)
-                        || (rowIndex == 0 && colIndex == width - 1))
-                    {
-                        Print(colIndex, rowIndex, cornerGlyph, borderColor);
-                    }
-
-                    if (rowIndex > 0 && rowIndex < height - 1 && (colIndex == 0 || colIndex == width - 1))
-                    {
-                        Print(colIndex, rowIndex, horizontalBorderGlyph, borderColor);
-                    }
-
-                    if (colIndex > 0 && colIndex < width - 1 && (rowIndex == 0 || rowIndex == height - 1))
-                    {
-                        Print(colIndex, rowIndex, verticalBorderGlyph, borderColor);
-                    }
-                }
-            }
-        }
+        }        
     }
 }
