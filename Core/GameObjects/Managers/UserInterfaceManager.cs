@@ -25,6 +25,7 @@ namespace Emberpoint.Core.GameObjects.Managers
             // Initializing Inventory window
             var inventory = new InventoryWindow(Constants.GameWindowWidth / 3, 15);
             Interfaces.Add(inventory);
+            inventory.Initialize();
 
             // Initialize dialog window
             var dialogWindow = new DialogWindow(Constants.GameWindowWidth / 2, 6);

@@ -1,5 +1,4 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using System.Collections.Generic;
@@ -7,9 +6,9 @@ using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class InventoryWindow : Console, IUserInterface
+    public class InventoryWindow : SadConsole.Console, IUserInterface
     {
-        private readonly Console _textConsole;
+        private readonly SadConsole.Console _textConsole;
 
         private int _maxLineRows;
         private Dictionary<string, int> _inventoryDict;
@@ -21,7 +20,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             _inventoryDict = new Dictionary<string, int>();
             _maxLineRows = Height - 2;
-            _textConsole = new Console(Width - 2, Height - 2)
+            _textConsole = new SadConsole.Console(Width - 2, Height - 2)
             {
                 Position = new Point(2, 1),
             };
@@ -32,9 +31,16 @@ namespace Emberpoint.Core.UserInterface.Windows
             Global.CurrentScreen.Children.Add(this);
         }
 
+        public void Initialize()
+        {
+            // Adding default Items to Inventory
+            AddInventoryItem("Potion of Sanity", 3);
+            AddInventoryItem("Potion of Health", 1);
+            RemoveInventoryItem("Potion of Sanity", 2);
+        }
+
         public void Update()
         {
-
         }
 
         public void AddInventoryItem(string name, int amount)
@@ -96,7 +102,6 @@ namespace Emberpoint.Core.UserInterface.Windows
                     }
                 }
             }
-
         }
     }
 }
