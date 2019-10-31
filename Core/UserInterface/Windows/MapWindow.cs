@@ -10,7 +10,7 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         public MapWindow(int width, int height) : base(width, height)
         {
-            Position = new Point(25, 3);
+            Position = new Point(5, 3);
             Global.CurrentScreen.Children.Add(this);
         }
 
