@@ -2,6 +2,7 @@
 using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
@@ -11,13 +12,13 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public DialogWindow(int width, int height) : base(width, height)
         {
-            _textConsole = new Console(Width - 2, Height - 2)
+            _textConsole = new Console(Width - 2, Height - 1)
             {
                 Position = new Point(1, 1),
                 DefaultBackground = Color.Black
             };
 
-            Position = new Point(2, Constants.GameWindowHeight - 7);
+            Position = new Point(2, Constants.GameWindowHeight - 6);
 
             Children.Add(_textConsole);
             Global.CurrentScreen.Children.Add(this);
@@ -27,7 +28,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             Print(0, 0, dialogTitle, Color.Orange);
             _textConsole.Cursor.Position = new Point(0, 0);
-            foreach (var line in dialogLines)
+            foreach (var line in dialogLines.Take(4))
             {
                 _textConsole.Cursor.Print(line);
                 _textConsole.Cursor.Print("\r\n");
