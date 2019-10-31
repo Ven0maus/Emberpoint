@@ -42,6 +42,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void Update()
         {
+            IsDirty = true;
         }
 
         public void AddInventoryItem(string name, int amount)
