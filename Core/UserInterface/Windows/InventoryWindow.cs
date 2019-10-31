@@ -70,9 +70,21 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             _textConsole.Clear();
             _textConsole.Cursor.Position = new Point(0, 0);
-            foreach (var item in _inventoryDict.OrderBy(x => x.Key))
+
+            if (_inventoryDict.Count > _maxLineRows)
             {
-                _textConsole.Cursor.Print(string.Format("{0} : {1}\r\n", item.Value, item.Key));
+                foreach (var item in _inventoryDict.OrderBy(x => x.Key).Take(_maxLineRows - 1))
+                {
+                    _textConsole.Cursor.Print(string.Format("{0} : {1}\r\n", item.Value, item.Key));
+                }
+                _textConsole.Cursor.Print("<More Items..>");
+            }
+            else
+            {
+                foreach (var item in _inventoryDict.OrderBy(x => x.Key))
+                {
+                    _textConsole.Cursor.Print(string.Format("{0} : {1}\r\n", item.Value, item.Key));
+                }
             }
         }
 
