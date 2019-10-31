@@ -64,18 +64,27 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                     if (!tiles.TryGetValue(charValue, out tile)) 
                         throw new Exception("Glyph '" + charValue + "' was not present in the config file for blueprint: " + name);
                     var foregroundColor = GetColorByString(tile.Foreground);
-                    var foregroundFovColor = GetColorByString(tile.ForegroundFov);
-                    cells.Add(new T() 
-                    { 
-                        Glyph = tile.Glyph, 
-                        Position = position, 
-                        Foreground = foregroundColor, 
+                    var cell = new T()
+                    {
+                        Glyph = tile.Glyph,
+                        Position = position,
+                        Foreground = foregroundColor,
                         NormalForeground = foregroundColor,
-                        ForegroundFov = foregroundFovColor,
+                        ForegroundFov = Color.Lerp(foregroundColor, Color.Black, .5f),
                         Walkable = tile.Walkable,
                         Name = tile.Name,
-                        BlocksFov = tile.BlocksFov
-                    });
+                        BlocksFov = tile.BlocksFov,
+                        EmitsLight = tile.EmitsLight,
+                        LightRadius = tile.LightRadius,
+                        Brightness = tile.Brightness
+                    };
+
+                    if (!string.IsNullOrWhiteSpace(tile.LightColor))
+                    {
+                        cell.LightColor = GetColorByString(tile.LightColor);
+                    }
+
+                    cells.Add(cell);
                 }
             }
             return cells.ToArray();
@@ -107,8 +116,11 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             public string Name;
             public bool Walkable;
             public string Foreground;
-            public string ForegroundFov;
             public bool BlocksFov;
+            public bool EmitsLight;
+            public string LightColor;
+            public int LightRadius;
+            public float Brightness;
 #pragma warning restore 0649
         }
     }

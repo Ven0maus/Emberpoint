@@ -1,9 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Emberpoint.Core.GameObjects.Interfaces;
+using Microsoft.Xna.Framework;
 using SadConsole;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Emberpoint.Core.GameObjects.Map
 {
-    public class EmberCell : Cell
+    public class EmberCell : Cell, ILightable, IEquatable<EmberCell>
     {
         public Point Position { get; set; }
         public bool Walkable { get; set; }
@@ -12,11 +15,18 @@ namespace Emberpoint.Core.GameObjects.Map
         public Color ForegroundFov { get; set; }
         public bool BlocksFov { get; set; }
 
+        // Light properties
+        public EmberCell LightSource { get; set; }
+        public float Brightness { get; set; }
+        public int LightRadius { get; set; }
+        public bool EmitsLight { get; set; }
+        public Color LightColor { get; set; }
+
         public EmberCell() 
         {
             NormalForeground = Color.White;
             Foreground = Color.White;
-            ForegroundFov = Color.Gray;
+            ForegroundFov = Color.Lerp(Foreground, Color.Black, .5f);
             Background = Color.Black;
             Walkable = true;
             BlocksFov = false;
@@ -59,6 +69,11 @@ namespace Emberpoint.Core.GameObjects.Map
             Position = cell.Position;
             Walkable = cell.Walkable;
             BlocksFov = cell.BlocksFov;
+            Brightness = cell.Brightness;
+            LightRadius = cell.LightRadius;
+            EmitsLight = cell.EmitsLight;
+            LightColor = cell.LightColor;
+            LightSource = cell.LightSource;
         }
 
         public new EmberCell Clone()
@@ -71,11 +86,22 @@ namespace Emberpoint.Core.GameObjects.Map
                 NormalForeground = this.NormalForeground,
                 Position = this.Position,
                 Walkable = this.Walkable,
-                BlocksFov = this.BlocksFov
+                BlocksFov = this.BlocksFov,
+                Brightness = this.Brightness,
+                LightRadius = this.LightRadius,
+                EmitsLight = this.EmitsLight,
+                LightColor = this.LightColor,
+                LightSource = this.LightSource
             };
             // Does foreground, background, glyph, mirror, decorators
             CopyAppearanceTo(cell);
             return cell;
+        }
+
+        public bool Equals([AllowNull] EmberCell other)
+        {
+            if (other == null) return false;
+            return other.Position.Equals(Position);
         }
     }
 }

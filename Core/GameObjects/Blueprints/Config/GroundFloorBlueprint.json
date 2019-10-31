@@ -6,7 +6,6 @@
       "glyph" : ".",
       "name" : "Floor",
       "walkable" : true,
-	  "foregroundFov" : "Brown",
 	  "foreground" : "BurlyWood",
 	  "blocksfov" : false
     },
@@ -14,7 +13,6 @@
       "glyph" : "#",
       "name" : "Wall",
       "walkable" : false,
-	  "foregroundFov" : "Gray",
 	  "foreground" : "DarkGray",
 	  "blocksfov" : true
     },
@@ -22,7 +20,6 @@
       "glyph" : "+",
       "name" : "Door",
       "walkable" : true,
-	  "foregroundFov" : "Blue",
 	  "foreground" : "LightBlue",
 	  "blocksfov" : true
     },
@@ -30,7 +27,6 @@
       "glyph" : ">",
       "name" : "Stairs Up",
       "walkable" : true,
-	  "foregroundFov" : "Azure",
 	  "foreground" : "Bisque",
 	  "blocksfov" : true
     },
@@ -38,7 +34,6 @@
       "glyph" : "<",
       "name" : "Stairs Down",
       "walkable" : true,
-	  "foregroundFov" : "Azure",
 	  "foreground" : "Bisque",
 	  "blocksfov" : true
     },
@@ -46,7 +41,6 @@
       "glyph" : "G",
       "name" : "Gargoyle Statue",
       "walkable" : false,
-	  "foregroundFov" : "GhostWhite",
 	  "foreground" : "Ivory",
 	  "blocksfov" : true
     },
@@ -54,9 +48,19 @@
       "glyph" : "|",
       "name" : "Pillar",
       "walkable" : false,
-	  "foregroundFov" : "DarkSlateGray",
 	  "foreground" : "LightSlateGray",
-	  "blocksfov" : true
+	  "blocksfov" : false
+    },
+	{
+      "glyph" : "&",
+      "name" : "Lamp",
+      "walkable" : false,
+	  "foreground" : "LightYellow",
+	  "blocksfov" : false,
+	  "EmitsLight" : true,
+	  "Brightness" : 0.5,
+	  "LightRadius" : 5,
+	  "LightColor" : "BlanchedAlmond"
     }
   ]
 }

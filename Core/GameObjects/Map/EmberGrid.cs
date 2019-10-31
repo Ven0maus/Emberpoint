@@ -54,6 +54,15 @@ namespace Emberpoint.Core.GameObjects.Map
             }
         }
 
+        private LightEngine<EmberCell> _lightEngine;
+        private LightEngine<EmberCell> LightEngine
+        {
+            get
+            {
+                return _lightEngine ?? (_lightEngine = new LightEngine<EmberCell>());
+            }
+        }
+
         private Console _renderedConsole;
 
         public EmberGrid(Blueprint<EmberCell> blueprint)
@@ -77,6 +86,14 @@ namespace Emberpoint.Core.GameObjects.Map
                     _fieldOfView[x, y] = !GetCell(x, y).BlocksFov;
                 }
             }
+        }
+
+        /// <summary>
+        /// Call this after the player is loaded once to calibrate the light engine.
+        /// </summary>
+        public void CalibrateLightEngine()
+        {
+            LightEngine.Calibrate(Cells);
         }
 
         public EmberCell GetCell(Point position)
@@ -106,6 +123,9 @@ namespace Emberpoint.Core.GameObjects.Map
 
             // Update the map fov values if the walkable is changed
             bool updateFieldOfView = originalCell.BlocksFov != cell.BlocksFov;
+
+            // Adjust neighboring cell light levels if this object gives of light
+            LightEngine.AdjustLightLevels(cell, originalCell);
 
             // Copy the new cell data
             originalCell.CopyFrom(cell);
@@ -159,20 +179,51 @@ namespace Emberpoint.Core.GameObjects.Map
                 for (int y = 0; y < GridSizeY; y++)
                 {
                     var cell = GetNonClonedCell(x, y);
-                    if (entity.FieldOfView.BooleanFOV[x,y])
-                    {
-                        cell.Foreground = cell.NormalForeground;                       
-                    }
-                    else
-                    {
-                        cell.Foreground = cell.ForegroundFov;
-                    }
+                    SetCellColors(cell, entity);
                     SetCell(cell);
                 }
             }
 
             // Redraw the map
             Map.Update();
+        }
+
+        public void SetCellColors(EmberCell cell, IEntity entity)
+        {
+            // If the cell is in the field of view
+            if (entity == null || entity.FieldOfView.BooleanFOV[cell.Position])
+            {
+                if (cell.Brightness > 0f && cell.LightSource != null)
+                    cell.Foreground = Color.Lerp(cell.LightSource.LightColor, Color.White, cell.Brightness);
+                else
+                    cell.Foreground = cell.NormalForeground;
+            }
+            else
+            {
+                if (cell.Brightness > 0f && cell.LightSource != null)
+                    cell.Foreground = Color.Lerp(Color.Lerp(cell.LightSource.LightColor, Color.Black, .5f), Color.White, cell.Brightness);
+                else
+                    cell.Foreground = cell.ForegroundFov;
+            }
+        }
+
+        public void SetCellColors(EmberCell cell, IEntity entity, Color foreground, Color foregroundFov)
+        {
+            // If the cell is in the field of view
+            if (entity == null || entity.FieldOfView.BooleanFOV[cell.Position])
+            {
+                if (cell.Brightness > 0f)
+                    cell.Foreground = Color.Lerp(foreground, Color.White, cell.Brightness);
+                else
+                    cell.Foreground = cell.NormalForeground;
+            }
+            else
+            {
+                if (cell.Brightness > 0f)
+                    cell.Foreground = Color.Lerp(foregroundFov, Color.White, cell.Brightness);
+                else
+                    cell.Foreground = cell.ForegroundFov;
+            }
         }
 
         public EmberCell[] GetNeighbors(EmberCell cell)

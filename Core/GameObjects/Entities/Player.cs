@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
@@ -11,6 +12,9 @@ namespace Emberpoint.Core.GameObjects.Entities
         public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character, 1, 1)
         {
             FieldOfViewRadius = Constants.Player.FieldOfViewRadius;
+
+            // After player is created, we calibrate the light engine
+            GridManager.Grid.CalibrateLightEngine();
         }
 
         public void CheckForMovement()
