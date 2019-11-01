@@ -193,15 +193,15 @@ namespace Emberpoint.Core.GameObjects.Map
             // If the cell is in the field of view
             if (entity == null || entity.FieldOfView.BooleanFOV[cell.Position])
             {
-                if (cell.Brightness > 0f && cell.LightSource != null)
-                    cell.Foreground = Color.Lerp(cell.LightSource.LightColor, Color.White, cell.Brightness);
+                if (cell.Brightness > 0f && cell.LightSources != null)
+                    cell.Foreground = Color.Lerp(cell.GetClosestLightSource().LightColor, Color.White, cell.Brightness);
                 else
                     cell.Foreground = cell.NormalForeground;
             }
             else
             {
-                if (cell.Brightness > 0f && cell.LightSource != null)
-                    cell.Foreground = Color.Lerp(Color.Lerp(cell.LightSource.LightColor, Color.Black, .5f), Color.White, cell.Brightness);
+                if (cell.Brightness > 0f && cell.LightSources != null)
+                    cell.Foreground = Color.Lerp(Color.Lerp(cell.GetClosestLightSource().LightColor, Color.Black, .5f), Color.White, cell.Brightness);
                 else
                     cell.Foreground = cell.ForegroundFov;
             }

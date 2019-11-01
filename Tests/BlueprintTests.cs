@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Blueprints;
+using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using NUnit.Framework;
 
@@ -12,6 +13,7 @@ namespace Tests
         {
             // Setup a grid based on a blueprint
             _grid = new EmberGrid(new GroundFloorBlueprint());
+            GridManager.InitializeCustomGrid(_grid);
         }
 
         [Test]

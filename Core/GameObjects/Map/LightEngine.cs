@@ -35,7 +35,7 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 fov.Calculate(newCell.Position, oldCell.LightRadius);
 
-                var toChangeCells = new List<EmberCell> { newCell };
+                var toChangeCells = new List<EmberCell>();
                 for (int x = 0; x < GridManager.Grid.GridSizeX; x++)
                 {
                     for (int y = 0; y < GridManager.Grid.GridSizeY; y++)
@@ -45,15 +45,16 @@ namespace Emberpoint.Core.GameObjects.Map
                         {
                             var pos = new Point(x, y);
                             var cellToAdd = newCell.Position == pos ? newCell : GridManager.Grid.GetCell(x, y);
-                            if (cellToAdd.LightSource == newCell)
-                                toChangeCells.Add(cellToAdd);
+                            cellToAdd.LightSources.Remove(newCell);
+                            toChangeCells.Add(cellToAdd);
                         }
                     }
                 }
 
                 foreach (var cell in toChangeCells)
                 {
-                    cell.LightSource = null;
+                    if (cell.LightSources.Any()) continue;
+                    cell.LightSources = null;
                     cell.Brightness = 0f;
                     cell.LightRadius = 0;
                     cell.LightColor = default;
@@ -79,7 +80,11 @@ namespace Emberpoint.Core.GameObjects.Map
                         var pos = new Point(x, y);
                         var distanceOfCenter = newCell.Position.SquaredDistance(pos);
                         var cellToAdd = newCell.Position == pos ? newCell : GridManager.Grid.GetCell(x, y);
-                        cellToAdd.LightSource = newCell;
+                        if (cellToAdd.LightSources == null)
+                        {
+                            cellToAdd.LightSources = new List<EmberCell>();
+                        }
+                        cellToAdd.LightSources.Add(newCell);
                         cells.Add((cellToAdd, distanceOfCenter));
                     }
                 }

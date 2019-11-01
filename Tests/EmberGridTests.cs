@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core;
+using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
@@ -35,7 +36,8 @@ namespace Tests
         [SetUp]
         protected virtual void Setup()
         {
-            _grid = BuildCustomGrid(Constants.Map.Width, Constants.Map.Height);
+            _grid = BuildCustomGrid(10, 10);
+            GridManager.InitializeCustomGrid(_grid);
         }
 
         [Test]

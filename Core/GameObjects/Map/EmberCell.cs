@@ -1,8 +1,9 @@
-﻿using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 
 namespace Emberpoint.Core.GameObjects.Map
 {
@@ -16,11 +17,28 @@ namespace Emberpoint.Core.GameObjects.Map
         public bool BlocksFov { get; set; }
 
         // Light properties
-        public EmberCell LightSource { get; set; }
+        public List<EmberCell> LightSources { get; set; }
         public float Brightness { get; set; }
         public int LightRadius { get; set; }
         public bool EmitsLight { get; set; }
         public Color LightColor { get; set; }
+
+        public EmberCell GetClosestLightSource()
+        {
+            if (LightSources == null) return null;
+            EmberCell closest = null;
+            float smallestDistance = float.MaxValue;
+            foreach (var source in LightSources)
+            {
+                var sqdistance = source.Position.SquaredDistance(Position);
+                if (smallestDistance > sqdistance)
+                {
+                    smallestDistance = sqdistance;
+                    closest = source;
+                }
+            }
+            return closest;
+        }
 
         public EmberCell() 
         {
@@ -73,7 +91,7 @@ namespace Emberpoint.Core.GameObjects.Map
             LightRadius = cell.LightRadius;
             EmitsLight = cell.EmitsLight;
             LightColor = cell.LightColor;
-            LightSource = cell.LightSource;
+            LightSources = cell.LightSources;
         }
 
         public new EmberCell Clone()
@@ -91,17 +109,36 @@ namespace Emberpoint.Core.GameObjects.Map
                 LightRadius = this.LightRadius,
                 EmitsLight = this.EmitsLight,
                 LightColor = this.LightColor,
-                LightSource = this.LightSource
+                LightSources = this.LightSources
             };
             // Does foreground, background, glyph, mirror, decorators
             CopyAppearanceTo(cell);
             return cell;
         }
 
-        public bool Equals([AllowNull] EmberCell other)
+        public bool Equals(EmberCell other)
         {
-            if (other == null) return false;
             return other.Position.Equals(Position);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals((EmberCell)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
+
+        public static bool operator ==(EmberCell lhs, EmberCell rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(EmberCell lhs, EmberCell rhs)
+        {
+            return !lhs.Equals(rhs);
         }
     }
 }
