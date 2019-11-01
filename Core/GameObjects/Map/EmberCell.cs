@@ -26,6 +26,7 @@ namespace Emberpoint.Core.GameObjects.Map
         public EmberCell GetClosestLightSource()
         {
             if (LightSources == null) return null;
+            if (LightSources.Count == 1) return LightSources[0];
             EmberCell closest = null;
             float smallestDistance = float.MaxValue;
             foreach (var source in LightSources)
