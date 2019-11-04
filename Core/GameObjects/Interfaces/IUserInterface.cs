@@ -7,6 +7,7 @@ namespace Emberpoint.Core.GameObjects.Interfaces
         Point Position { get; set; }
         bool IsVisible { get; set; }
         bool IsDirty { get; set; }
+        SadConsole.Console Console { get; }
 
         void Update();
     }

@@ -8,6 +8,11 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class MapWindow : Console, IUserInterface
     {
+        public Console Console
+        {
+            get { return this; }
+        }
+
         public MapWindow(int width, int height) : base(width, height)
         {
             Position = new Point(5, 3);

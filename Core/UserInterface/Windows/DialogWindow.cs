@@ -11,6 +11,11 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         private readonly Console _textConsole;
 
+        public Console Console
+        {
+            get { return this; }
+        }
+
         public DialogWindow(int width, int height) : base(width, height)
         {
             this.DrawBorders(width, height, "O", "|", "-", Color.Gray);

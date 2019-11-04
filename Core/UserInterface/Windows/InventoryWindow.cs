@@ -13,6 +13,11 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         private readonly Console _textConsole;
 
+        public Console Console
+        {
+            get { return this; }
+        }
+
         private int _maxLineRows;
         private readonly List<IItem> _inventory;
 

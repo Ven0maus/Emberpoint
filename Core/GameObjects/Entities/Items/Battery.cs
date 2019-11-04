@@ -42,7 +42,8 @@ namespace Emberpoint.Core.GameObjects.Entities.Items
 
         public override void PickUp()
         {
-            var flashlight = Game.Player.Inventory.GetItemOfType<Flashlight>();
+            var inventory = Game.Player == null ? UserInterfaceManager.Get<InventoryWindow>() : Game.Player.Inventory;
+            var flashlight = inventory.GetItemOfType<Flashlight>();
             if (flashlight != null && flashlight.Battery == null)
             {
                 flashlight.Battery = this;

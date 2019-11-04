@@ -8,8 +8,8 @@ namespace Emberpoint.Core
 {
     public static class Game
     {
-        public static Player Player { get; private set; }
-        public static DialogWindow DialogWindow { get; private set; }
+        public static Player Player { get; set; }
+        public static DialogWindow DialogWindow { get; set; }
 
         private static void Main()
         {
@@ -28,6 +28,8 @@ namespace Emberpoint.Core
 
         private static void Update(GameTime gameTime)
         {
+            if (!UserInterfaceManager.IsInitialized) return;
+
             if (DialogWindow.IsVisible)
             {
                 if (Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
@@ -44,18 +46,7 @@ namespace Emberpoint.Core
 
         private static void Init()
         {
-            // Initialize user interface
-            UserInterfaceManager.Initialize();
-
-            // Keep the dialog window in a global variable so we can check it in the game loop
-            DialogWindow = UserInterfaceManager.Get<DialogWindow>();
-
-            // Instantiate player in the middle of the map
-            Player = EntityManager.Create<Player>(GridManager.Grid.GetFirstCell(a => a.LightProperties.Brightness > 0f && a.CellProperties.Walkable).Position);
-            Player.Initialize();
-
-            // Show a tutorial dialog window.
-            DialogWindow.ShowDialog("Tutorial", new string[] { "Welcome to Emberpoint.", "To turn on your flashlight, press 'F'.", "Press 'Enter' to continue." });
+            UserInterfaceManager.ShowMainMenu();
         }
     }
 }

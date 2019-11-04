@@ -11,7 +11,14 @@ namespace Emberpoint.Core.GameObjects.Entities
 {
     public class Player : EmberEntity
     {
-        public InventoryWindow Inventory { get; private set; }
+        private InventoryWindow _inventory;
+        public InventoryWindow Inventory
+        {
+            get
+            {
+                return _inventory ?? (_inventory = UserInterfaceManager.Get<InventoryWindow>());
+            }
+        }
 
         public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character, 1, 1)
         {
@@ -20,11 +27,6 @@ namespace Emberpoint.Core.GameObjects.Entities
 
         public void Initialize()
         {
-            // Initialize inventory
-            Inventory = new InventoryWindow(Constants.GameWindowWidth / 3, 15);
-            UserInterfaceManager.Add(Inventory);
-            Inventory.Initialize();
-
             // Draw player on the map
             RenderObject(UserInterfaceManager.Get<MapWindow>());
         }

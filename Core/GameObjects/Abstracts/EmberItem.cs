@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Entities;
@@ -82,7 +83,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         /// </summary>
         public virtual void PickUp()
         {
-            Game.Player.Inventory.AddInventoryItem(this);
+            var inventory = Game.Player == null ? UserInterfaceManager.Get<InventoryWindow>() : Game.Player.Inventory;
+            inventory.AddInventoryItem(this);
         }
     }
 }

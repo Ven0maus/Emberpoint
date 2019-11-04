@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
+using Microsoft.Xna.Framework;
 using SadConsole;
 
 namespace Emberpoint.Core.UserInterface.Windows
@@ -15,6 +16,11 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             // Set the current screen to the game window
             Global.CurrentScreen = this;
+        }
+
+        public Console Console
+        {
+            get { return this; }
         }
 
         public void Update()
