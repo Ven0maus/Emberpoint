@@ -28,7 +28,14 @@ namespace Emberpoint.Core.UserInterface.Windows
                 Colors = new SadConsole.Themes.Colors
                 {
                     ControlBack = Color.Black,
-                    Text = Color.Yellow
+                    Text = Color.Yellow,
+                    TextDark = Color.Orange,
+                    TextBright = Color.LightYellow,
+                    TextFocused = Color.Yellow,
+                    TextLight = Color.LightYellow,
+                    TextSelected = Color.Yellow,
+                    TextSelectedDark = Color.Orange,
+                    TitleText = Color.Purple
                 }
             };
             consoleTheme.ButtonTheme.Colors.RebuildAppearances();
