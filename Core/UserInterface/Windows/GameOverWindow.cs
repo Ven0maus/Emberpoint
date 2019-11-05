@@ -1,7 +1,6 @@
 ﻿using System;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.SadConsoleHelpers;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
@@ -17,7 +16,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             var consoleTheme = Library.Default.Clone();
             consoleTheme.Colors.ControlHostBack = Color.Black;
             consoleTheme.Colors.Text = Color.White;
-            consoleTheme.ButtonTheme = new ButtonLinesThemeFixed
+            consoleTheme.ButtonTheme = new ButtonLinesTheme
             {
                 Colors = new Colors
                 {
