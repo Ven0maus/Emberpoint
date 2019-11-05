@@ -1,12 +1,12 @@
 ﻿using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.SadConsoleHelpers;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
 using System;
 using System.Linq;
+using SadConsole.Themes;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
@@ -26,7 +26,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             var consoleTheme = SadConsole.Themes.Library.Default.Clone();
             consoleTheme.Colors.ControlHostBack = Color.Black;
             consoleTheme.Colors.Text = Color.White;
-            consoleTheme.ButtonTheme = new ButtonLinesThemeFixed
+            consoleTheme.ButtonTheme = new ButtonLinesTheme
             {
                 Colors = new SadConsole.Themes.Colors
                 {
