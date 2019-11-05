@@ -2,7 +2,7 @@
   "tiles": [
     {
       "glyph": "@",
-      "name": "Player",
+      "name": "Player"
     }
   ]
 }

@@ -1,6 +1,7 @@
 ﻿using SadConsole;
 using Microsoft.Xna.Framework;
 using Emberpoint.Core.GameObjects.Entities;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.UserInterface.Windows;
 using Emberpoint.Core.GameObjects.Managers;
 
@@ -9,7 +10,6 @@ namespace Emberpoint.Core
     public static class Game
     {
         public static Player Player { get; set; }
-        public static DialogWindow DialogWindow { get; set; }
 
         private static void Main()
         {
@@ -30,18 +30,35 @@ namespace Emberpoint.Core
         {
             if (!UserInterfaceManager.IsInitialized) return;
 
-            if (DialogWindow.IsVisible)
+            if (Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
             {
-                if (Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
-                {
-                    DialogWindow.CloseDialog();
-                }
+                UserInterfaceManager.Get<DialogWindow>().CloseDialog();
             }
 
             if (UserInterfaceManager.IsPaused) return;
 
             Player.CheckForMovementKeys();
             Player.CheckForInteractionKeys();
+
+            //Test trigger for game over state
+            if (Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.P))
+            {
+                UserInterfaceManager.Get<GameOverWindow>().Show();
+            }
+        }
+
+        public static void Reset()
+        {
+            UserInterfaceManager.IsInitialized = false;
+            foreach (var inf in UserInterfaceManager.GetAll<IUserInterface>())
+            {
+                if (inf.Equals(UserInterfaceManager.Get<MainMenuWindow>())) continue;
+                UserInterfaceManager.Remove(inf);
+            }
+
+            Player = null;
+            EntityManager.Clear();
+            ItemManager.Clear();
         }
 
         private static void Init()

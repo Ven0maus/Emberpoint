@@ -20,6 +20,14 @@ namespace Emberpoint.Core.GameObjects.Entities.Items
 
         private void _drainTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (!UserInterfaceManager.IsInitialized)
+            {
+                _drainTimer.Stop();
+                return;
+            }
+
+            if (UserInterfaceManager.IsPaused) return;
+
             if (!Battery.Drain())
             {
                 // Remove battery

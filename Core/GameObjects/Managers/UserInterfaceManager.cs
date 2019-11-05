@@ -1,6 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.UserInterface.Windows;
-using SadConsole;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +10,7 @@ namespace Emberpoint.Core.GameObjects.Managers
         private static readonly List<IUserInterface> Interfaces = new List<IUserInterface>();
 
         public static bool IsPaused { get; set; }
-        public static bool IsInitialized { get; private set; }
+        public static bool IsInitialized { get; set; }
 
         public static void Initialize()
         {
@@ -27,6 +26,10 @@ namespace Emberpoint.Core.GameObjects.Managers
             // Initialize dialog window
             var dialogWindow = new DialogWindow(Constants.Map.Width, 6);
             Add(dialogWindow);
+
+            // Initialize game over window
+            var gameOverWindow = new GameOverWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
+            Add(gameOverWindow);
 
             // Initialize inventory
             var inventory = new InventoryWindow(Constants.GameWindowWidth / 3, 15);
@@ -53,7 +56,7 @@ namespace Emberpoint.Core.GameObjects.Managers
 
         public static IEnumerable<T> GetAll<T>()
         {
-            return Interfaces.OfType<T>();
+            return Interfaces.OfType<T>().ToArray();
         }
     }
 }

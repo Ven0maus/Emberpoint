@@ -41,6 +41,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 _textConsole.Cursor.Print(" " + line);
                 _textConsole.Cursor.Print("\r\n");
             }
+            Update();
             IsVisible = true;
         }
 
