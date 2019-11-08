@@ -75,9 +75,6 @@ namespace Emberpoint.Core
             // Makes buttons look better
             Settings.UseDefaultExtendedFont = true;
 
-            // Intialize default keybindings
-            KeybindingsManager.InitializeDefaultKeybindings();
-
             // Shows the main menu
             _mainMenuWindow = MainMenuWindow.Show();
         }
