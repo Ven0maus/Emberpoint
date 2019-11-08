@@ -6,16 +6,17 @@ using SadConsole;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class MapWindow : Console, IUserInterface
+    public class MapWindow : ScrollingConsole, IUserInterface
     {
         public Console Console
         {
             get { return this; }
         }
 
-        public MapWindow(int width, int height) : base(width, height)
+        public MapWindow(int width, int height) : base(width, height, Global.FontDefault.Master.GetFont(Font.FontSizes.Four), new Rectangle(0, 0, 15, 7))
         {
-            Position = new Point(5, 3);
+            Position = new Point(1, 1);
+
             Global.CurrentScreen.Children.Add(this);
         }
 
@@ -27,6 +28,11 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             // After map is created, we calibrate the light engine
             GridManager.Grid.CalibrateLightEngine();
+        }
+
+        public void CenterOnEntity(IEntity entity)
+        {
+            this.CenterViewPortOnPoint(entity.Position);
         }
 
         public void Update()

@@ -35,6 +35,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         {
             ObjectId = EntityManager.GetUniqueId();
 
+            Font = Global.FontDefault.Master.GetFont(Font.FontSizes.Four);
             Animation.CurrentFrame[0].Foreground = foreground;
             Animation.CurrentFrame[0].Background = background;
             Animation.CurrentFrame[0].Glyph = glyph;
@@ -50,8 +51,10 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             FieldOfView.Calculate(Position, FieldOfViewRadius);
 
             // Only update visual for player entity
-            if (this is Player)
+            if (this is Player player)
             {
+                // Center viewpoint on player
+                player.MapWindow.CenterOnEntity(player);
                 GridManager.Grid.DrawFieldOfView(this);
             }
         }
