@@ -30,10 +30,10 @@ namespace Emberpoint.Core.GameObjects.Entities
             }
         }
 
-        public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character, 1, 1)
+        public Player() : base(Constants.Player.Foreground, Color.Black, Constants.Player.Character, 1, 1)
         {
             FieldOfViewRadius = 0; // TODO: needs to be 0 but map should stay dark
-
+   
             Components.Add(new EntityViewSyncComponent());
         }
 
