@@ -12,6 +12,8 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class MainMenuWindow : ControlsConsole, IUserInterface
     {
+        public OptionsWindow OptionsWindow { get; private set; }
+
         public SadConsole.Console Console
         {
             get { return this; }
@@ -31,14 +33,14 @@ namespace Emberpoint.Core.UserInterface.Windows
                 Colors = new SadConsole.Themes.Colors
                 {
                     ControlBack = Color.Black,
-                    Text = Color.Yellow,
-                    TextDark = Color.Orange,
-                    TextBright = Color.LightYellow,
-                    TextFocused = Color.Yellow,
-                    TextLight = Color.LightYellow,
-                    TextSelected = Color.Yellow,
-                    TextSelectedDark = Color.Orange,
-                    TitleText = Color.Purple
+                    Text = Color.WhiteSmoke,
+                    TextDark = Color.AntiqueWhite,
+                    TextBright = Color.White,
+                    TextFocused = Color.White,
+                    TextLight = Color.WhiteSmoke,
+                    TextSelected = Color.White,
+                    TextSelectedDark = Color.AntiqueWhite,
+                    TitleText = Color.WhiteSmoke
                 }
             };
             consoleTheme.ButtonTheme.Colors.RebuildAppearances();
@@ -118,7 +120,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Add(exitButton);
         }
 
-        public static void Show()
+        public static MainMenuWindow Show()
         {
             var mainMenu = UserInterfaceManager.Get<MainMenuWindow>();
             if (mainMenu == null)
@@ -134,8 +136,8 @@ namespace Emberpoint.Core.UserInterface.Windows
                 mainMenu.IsCursorDisabled = false;
             }
             Global.CurrentScreen = mainMenu;
-            
             Game.Reset();
+            return mainMenu;
         }
 
         public static void Hide(SadConsole.Console transitionConsole)
@@ -145,16 +147,13 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 return;
             }
-            else
-            {
-                mainMenu.IsVisible = false;
-                mainMenu.IsFocused = false;
-                mainMenu.IsCursorDisabled = true;
-            }
+
+            mainMenu.IsVisible = false;
+            mainMenu.IsFocused = false;
+            mainMenu.IsCursorDisabled = true;
 
             Global.CurrentScreen = transitionConsole;
         }
-
 
         private void Transition(SadConsole.Console transitionConsole)
         {
@@ -170,11 +169,17 @@ namespace Emberpoint.Core.UserInterface.Windows
             Transition(UserInterfaceManager.Get<GameWindow>().Console);
 
             // Instantiate player in the middle of the map
-            Game.Player = EntityManager.Create<Player>(GridManager.Grid.GetFirstCell(a => a.LightProperties.Brightness > 0f && a.CellProperties.Walkable).Position);
+            Game.Player = EntityManager.Create<Player>(GridManager.Grid
+                .GetFirstCell(a => a.LightProperties.Brightness > 0f && a.CellProperties.Walkable).Position);
             Game.Player.Initialize();
 
             // Show a tutorial dialog window.
-            UserInterfaceManager.Get<DialogWindow>().ShowDialog("Tutorial", new string[] { "Welcome to Emberpoint.", "To turn on your flashlight, press 'F'.", "Press 'Enter' to continue." });
+            UserInterfaceManager.Get<DialogWindow>().ShowDialog("Tutorial", new[]
+            {
+                "Welcome to Emberpoint.",
+                "To turn on your flashlight, press '" + KeybindingsManager.GetKeybinding(Keybindings.Flashlight) + "'.",
+                "Press 'Enter' to continue."
+            });
         }
 
         public void ButtonPressContributors(object sender, EventArgs args)
@@ -184,7 +189,18 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void ButtonPressOptions(object sender, EventArgs args)
         {
-            // TODO
+            if (OptionsWindow == null)
+            {
+                OptionsWindow = new OptionsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
+                UserInterfaceManager.Add(OptionsWindow);
+            }
+            else
+            {
+                OptionsWindow.IsVisible = true;
+            }
+
+            // Transition to options window
+            Hide(OptionsWindow);
         }
 
         public void ButtonPressExit(object sender, EventArgs args)

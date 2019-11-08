@@ -33,7 +33,7 @@ namespace Emberpoint.Core.GameObjects.Entities
 
         public void CheckForInteractionKeys()
         {
-            if (Global.KeyboardState.IsKeyPressed(Constants.Keybindings.FlashlightKey))
+            if (Global.KeyboardState.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Flashlight)))
             {
                 var flashLight = Game.Player.Inventory.GetItemOfType<Flashlight>();
                 if (flashLight != null)
@@ -45,19 +45,19 @@ namespace Emberpoint.Core.GameObjects.Entities
 
         public void CheckForMovementKeys()
         {
-            if (Global.KeyboardState.IsKeyPressed(Keys.Z) || Global.KeyboardState.IsKeyPressed(Keys.Up)) 
+            if (Global.KeyboardState.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Movement_Up))) 
             {
                 MoveTowards(Position.Translate(0, -1)); // Move up
             }
-            else if (Global.KeyboardState.IsKeyPressed(Keys.S) || Global.KeyboardState.IsKeyPressed(Keys.Down))
+            else if (Global.KeyboardState.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Movement_Down)))
             {
                 MoveTowards(Position.Translate(0, 1)); // Move down
             }
-            else if (Global.KeyboardState.IsKeyPressed(Keys.Q) || Global.KeyboardState.IsKeyPressed(Keys.Left))
+            else if (Global.KeyboardState.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Movement_Left)))
             {
                 MoveTowards(Position.Translate(-1, 0)); // Move left
             }
-            else if (Global.KeyboardState.IsKeyPressed(Keys.D) || Global.KeyboardState.IsKeyPressed(Keys.Right))
+            else if (Global.KeyboardState.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Movement_Right)))
             {
                 MoveTowards(Position.Translate(1, 0)); // Move right
             }

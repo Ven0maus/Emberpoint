@@ -1,4 +1,5 @@
-﻿using SadConsole;
+﻿using System.Linq;
+using SadConsole;
 using Microsoft.Xna.Framework;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
@@ -9,6 +10,7 @@ namespace Emberpoint.Core
 {
     public static class Game
     {
+        private static MainMenuWindow _mainMenuWindow;
         public static Player Player { get; set; }
 
         private static void Main()
@@ -28,31 +30,38 @@ namespace Emberpoint.Core
 
         private static void Update(GameTime gameTime)
         {
-            if (!UserInterfaceManager.IsInitialized) return;
+            if (_mainMenuWindow?.OptionsWindow != null && _mainMenuWindow.OptionsWindow.WaitingForAnyKeyPress)
+            {
+                if (Global.KeyboardState.KeysPressed.Any())
+                {
+                    _mainMenuWindow.OptionsWindow.ChangeKeybinding(Global.KeyboardState.KeysPressed.First().Key);
+                }
+            }
+
+            if (!UserInterfaceManager.IsInitialized || UserInterfaceManager.IsPaused) return;
 
             if (Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
             {
                 UserInterfaceManager.Get<DialogWindow>().CloseDialog();
             }
 
-            if (UserInterfaceManager.IsPaused) return;
-
             Player.CheckForMovementKeys();
             Player.CheckForInteractionKeys();
-
-            //Test trigger for game over state
-            if (Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.P))
-            {
-                UserInterfaceManager.Get<GameOverWindow>().Show();
-            }
         }
 
         public static void Reset()
         {
             UserInterfaceManager.IsInitialized = false;
+
+            var skipInterfaces = new []
+            {
+                UserInterfaceManager.Get<MainMenuWindow>() as IUserInterface,
+                UserInterfaceManager.Get<OptionsWindow>() as IUserInterface, 
+            };
+
             foreach (var inf in UserInterfaceManager.GetAll<IUserInterface>())
             {
-                if (inf.Equals(UserInterfaceManager.Get<MainMenuWindow>())) continue;
+                if (skipInterfaces.Contains(inf)) continue;
                 UserInterfaceManager.Remove(inf);
             }
 
@@ -66,8 +75,11 @@ namespace Emberpoint.Core
             // Makes buttons look better
             Settings.UseDefaultExtendedFont = true;
 
+            // Intialize default keybindings
+            KeybindingsManager.InitializeDefaultKeybindings();
+
             // Shows the main menu
-            MainMenuWindow.Show();
+            _mainMenuWindow = MainMenuWindow.Show();
         }
     }
 }

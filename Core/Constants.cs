@@ -24,11 +24,6 @@ namespace Emberpoint.Core
             public static Color Foreground = Color.White;
             public const int FieldOfViewRadius = 4;
         }
-        
-        public static class Keybindings
-        {
-            public static Keys FlashlightKey = Keys.F;
-        }
 
         public static class Items
         {
