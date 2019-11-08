@@ -44,9 +44,6 @@ namespace Emberpoint.Core
             {
                 UserInterfaceManager.Get<DialogWindow>().CloseDialog();
             }
-
-            Player.CheckForMovementKeys();
-            Player.CheckForInteractionKeys();
         }
 
         public static void Reset()

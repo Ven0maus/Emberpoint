@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.Extensions;
+﻿using System;
+using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Entities.Items;
 using Emberpoint.Core.GameObjects.Managers;
@@ -34,6 +35,18 @@ namespace Emberpoint.Core.GameObjects.Entities
             FieldOfViewRadius = 0; // TODO: needs to be 0 but map should stay dark
 
             Components.Add(new EntityViewSyncComponent());
+        }
+
+        public override void Update(TimeSpan timeElapsed)
+        {
+            // Check movement keys for the player
+            CheckForMovementKeys();
+
+            // Check any interaction keys for the player
+            CheckForInteractionKeys();
+
+            // Call base to update correctly
+            base.Update(timeElapsed);
         }
 
         public void Initialize()
