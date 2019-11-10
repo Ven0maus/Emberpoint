@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Entities;
+using Emberpoint.Core.GameObjects.Entities.Items;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using GoRogue;
@@ -55,13 +56,18 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             {
                 // Center viewpoint on player
                 player.MapWindow.CenterOnEntity(player);
-                GridManager.Grid.DrawFieldOfView(this);
+
+                // Draw unexplored tiles when flashlight is on
+                var flashLight = player.Inventory.GetItemOfType<Flashlight>();
+                bool discoverUnexploredTiles = flashLight != null && flashLight.LightOn;
+                GridManager.Grid.DrawFieldOfView(this, discoverUnexploredTiles);
             }
         }
 
         public bool CanMoveTowards(Point position)
         {
-            return GridManager.Grid.InBounds(position) && GridManager.Grid.GetCell(position).CellProperties.Walkable && !EntityManager.EntityExistsAt(position);
+            var cell = GridManager.Grid.GetCell(position);
+            return GridManager.Grid.InBounds(position) && cell.CellProperties.Walkable && !EntityManager.EntityExistsAt(position) && cell.CellProperties.IsExplored;
         }
 
         public void RenderObject(Console console)

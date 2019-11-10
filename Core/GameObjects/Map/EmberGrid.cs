@@ -33,7 +33,8 @@ namespace Emberpoint.Core.GameObjects.Map
                 {
                     for (int y = 0; y < GridSizeY; y++)
                     {
-                        _fieldOfView[x, y] = !GetCell(x, y).CellProperties.BlocksFov;
+                        var cell = GetCell(x, y);
+                        _fieldOfView[x, y] = !cell.CellProperties.BlocksFov;
                     }
                 }
                 return _fieldOfView;
@@ -83,7 +84,8 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 for (int y = 0; y < GridSizeY; y++)
                 {
-                    _fieldOfView[x, y] = !GetCell(x, y).CellProperties.BlocksFov;
+                    var cell = GetCell(x, y);
+                    _fieldOfView[x, y] = !cell.CellProperties.BlocksFov;
                 }
             }
         }
@@ -184,7 +186,8 @@ namespace Emberpoint.Core.GameObjects.Map
         /// <param name="y"></param>
         private void UpdateFieldOfView(int x, int y)
         {
-            FieldOfView[x, y] = !GetNonClonedCell(x, y).CellProperties.BlocksFov;
+            var cell = GetNonClonedCell(x, y);
+            FieldOfView[x, y] = !cell.CellProperties.BlocksFov;
         }
 
         /// <summary>
@@ -196,18 +199,36 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 for (int y = 0; y < GridSizeY; y++)
                 {
-                    FieldOfView[x, y] = !GetNonClonedCell(x, y).CellProperties.BlocksFov;
+                    var cell = GetNonClonedCell(x, y);
+                    FieldOfView[x, y] = !cell.CellProperties.BlocksFov;
                 }
             }
         }
 
-        public void DrawFieldOfView(IEntity entity)
+        public void DrawFieldOfView(IEntity entity, bool discoverUnexploredTiles = false)
         {
             for (int x = 0; x < GridSizeX; x++)
             {
                 for (int y = 0; y < GridSizeY; y++)
                 {
                     var cell = GetNonClonedCell(x, y);
+
+                    if (discoverUnexploredTiles && !cell.CellProperties.IsExplored)
+                    {
+                        if (entity.FieldOfView.BooleanFOV[x, y])
+                        {
+                            cell.CellProperties.IsExplored = true;
+                        }
+                    }
+
+                    // Cells near light sources are automatically visible
+                    if (cell.LightProperties.Brightness > 0f && !cell.CellProperties.IsExplored)
+                    {
+                        cell.CellProperties.IsExplored = true;
+                    }
+
+                    cell.IsVisible = cell.CellProperties.IsExplored;
+
                     SetCellColors(cell, entity);
                     SetCell(cell);
                 }

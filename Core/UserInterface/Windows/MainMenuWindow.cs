@@ -172,8 +172,8 @@ namespace Emberpoint.Core.UserInterface.Windows
             Transition(UserInterfaceManager.Get<GameWindow>().Console);
 
             // Instantiate player in the middle of the map
-            Game.Player = EntityManager.Create<Player>(GridManager.Grid
-                .GetFirstCell(a => a.LightProperties.Brightness > 0f && a.CellProperties.Walkable).Position);
+            var spawnPosition = GridManager.Grid.GetFirstCell(a => a.LightProperties.Brightness > 0.3f && a.CellProperties.Walkable);
+            Game.Player = EntityManager.Create<Player>(spawnPosition.Position);
             Game.Player.Initialize();
 
             // Show a tutorial dialog window.
@@ -187,7 +187,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             dialogWindow.AddDialog("Flashlight introduction", new[]
 {
                 "The flashlight can be used to discover new tiles.",
-                "Turn on your flashlight and discover 30 new tiles.",
+                "Turn on your flashlight and discover some new tiles.",
                 "Press '" + KeybindingsManager.GetKeybinding(Keybindings.Flashlight) + "' to turn on your flashlight.",
                 "Press 'Enter' to exit dialog."
             });

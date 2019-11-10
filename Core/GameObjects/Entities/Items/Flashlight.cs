@@ -60,6 +60,11 @@ namespace Emberpoint.Core.GameObjects.Entities.Items
                 Game.Player.FieldOfViewRadius = Constants.Player.FieldOfViewRadius;
                 EntityManager.RecalculatFieldOfView(Game.Player);
 
+                // Discover new tiles when turning on the flashlight
+                var flashLight = Game.Player.Inventory.GetItemOfType<Flashlight>();
+                bool discoverUnexploredTiles = flashLight != null && flashLight.LightOn;
+                GridManager.Grid.DrawFieldOfView(Game.Player, discoverUnexploredTiles);
+
                 // Start drain timer
                 _drainTimer.Start();
             }

@@ -40,6 +40,7 @@ namespace Emberpoint.Core.GameObjects.Map
                 ForegroundFov = Color.Lerp(Foreground, Color.Black, .5f),
                 Walkable = true,
                 BlocksFov = false,
+                IsExplored = false
             };
 
             Foreground = Color.White;
@@ -57,6 +58,7 @@ namespace Emberpoint.Core.GameObjects.Map
                 ForegroundFov = fov,
                 Walkable = true,
                 BlocksFov = false,
+                IsExplored = false
             };
 
             Position = position;
@@ -75,6 +77,7 @@ namespace Emberpoint.Core.GameObjects.Map
                 ForegroundFov = fov,
                 Walkable = true,
                 BlocksFov = false,
+                IsExplored = false
             };
 
             Position = position;
@@ -97,6 +100,7 @@ namespace Emberpoint.Core.GameObjects.Map
             Position = cell.Position;
             CellProperties.Walkable = cell.CellProperties.Walkable;
             CellProperties.BlocksFov = cell.CellProperties.BlocksFov;
+            CellProperties.IsExplored = cell.CellProperties.IsExplored;
 
             LightProperties.Brightness = cell.LightProperties.Brightness;
             LightProperties.LightRadius = cell.LightProperties.LightRadius;
@@ -117,6 +121,7 @@ namespace Emberpoint.Core.GameObjects.Map
                     NormalForeground = this.CellProperties.NormalForeground,
                     Walkable = this.CellProperties.Walkable,
                     BlocksFov = this.CellProperties.BlocksFov,
+                    IsExplored = this.CellProperties.IsExplored
                 },
 
                 Position = this.Position,
@@ -177,6 +182,7 @@ namespace Emberpoint.Core.GameObjects.Map
             public Color NormalForeground { get; set; }
             public Color ForegroundFov { get; set; }
             public bool BlocksFov { get; set; }
+            public bool IsExplored { get; set; }
         }
     }
 }
