@@ -40,10 +40,6 @@ namespace Tests
         public void EntityManager_EntityExistsAt_True()
         {
             var entity = EntityManager.Create<EntityManagerTests.TestEntity>(new Point(0, 0));
-            var cell = _grid.GetCell(0, 1);
-            cell.CellProperties.Walkable = false;
-            _grid.SetCell(cell, true);
-
             Assert.IsTrue(EntityManager.EntityExistsAt(0,0));
         }
 
@@ -53,8 +49,6 @@ namespace Tests
         private class TestEntity : IEntity
         {
             public Point Position { get; set; }
-
-            public EventHandler<Entity.EntityMovedEventArgs> Moved;
 
             public int FieldOfViewRadius { get; set; } = 0;
 
@@ -70,40 +64,26 @@ namespace Tests
             public TestEntity()
             {
                 ObjectId = EntityManager.GetUniqueId();
-                Moved += OnMove;
             }
-
-            private void OnMove(object sender, Entity.EntityMovedEventArgs args)
+            
+            public void ResetFieldOfView()
             {
-                if (FieldOfViewRadius > 0)
-                {
-                    // Re-calculate the field of view
-                    FieldOfView.Calculate(Position, FieldOfViewRadius);
-                }
-            }
-
-            public bool CanMoveTowards(Point position)
-            {
-                return _grid.InBounds(position) && _grid.GetCell(position).CellProperties.Walkable &&
-                       !EntityManager.EntityExistsAt(position);
+                _fieldOfView = null;
             }
 
             public void MoveTowards(Point position, bool checkCanMove = true)
             {
-                if (checkCanMove && !CanMoveTowards(position)) return;
-                var prevPos = Position;
-                Position = position;
-                Moved.Invoke(this, new Entity.EntityMovedEventArgs(null, prevPos));
+                throw new NotImplementedException();
+            }
+
+            public bool CanMoveTowards(Point position)
+            {
+                throw new NotImplementedException();
             }
 
             public void RenderObject(Console console)
             {
                 throw new NotImplementedException();
-            }
-
-            public void ResetFieldOfView()
-            {
-                _fieldOfView = null;
             }
 
             public void UnRenderObject()
