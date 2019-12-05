@@ -30,3 +30,5 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+/TestResults
+/Matus_DESKTOP-SSVD3GF 2019-12-01 20_33_02.coveragexml
