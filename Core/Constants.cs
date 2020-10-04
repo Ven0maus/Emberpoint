@@ -35,6 +35,7 @@ namespace Emberpoint.Core
             public static string SpecialCharactersPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "SpecialCharactersConfig.json");
             public static string BlueprintsPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints");
             public static string BlueprintsConfigPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "Config");
+            public const string BlueprintTiles = "BlueprintTiles";
         }
 
         private static string GetApplicationRoot()

@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Blueprints;
+using Emberpoint.Core.GameObjects.Blueprints.Objects;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
@@ -23,7 +24,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public void Initialize()
         {
             // Initialize grid and render it on the map
-            GridManager.InitializeBlueprint<GroundFloorBlueprint>();
+            GridManager.InitializeBlueprint<BasementBlueprint>();
             GridManager.Grid.RenderObject(this);
 
             // After map is created, we calibrate the light engine
