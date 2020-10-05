@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+using SadConsole;
 using System;
 using System.IO;
 
@@ -16,6 +16,7 @@ namespace Emberpoint.Core
         {
             public const int Width = 70;
             public const int Height = 30;
+            public const Font.FontSizes Size = Font.FontSizes.Four;
         }
 
         public static class Player

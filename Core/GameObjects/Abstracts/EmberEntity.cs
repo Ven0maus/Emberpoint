@@ -44,7 +44,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             Moved += OnMove;
         }
 
-        private void OnMove(object sender, EntityMovedEventArgs args)
+        public virtual void OnMove(object sender, EntityMovedEventArgs args)
         {
             if (this is IItem) return;
 

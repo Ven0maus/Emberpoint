@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Entities.Items;
@@ -30,11 +31,59 @@ namespace Emberpoint.Core.GameObjects.Entities
             }
         }
 
+        private FovWindow _fovObjectsWindow;
+
         public Player() : base(Constants.Player.Foreground, Color.Black, Constants.Player.Character, 1, 1)
         {
             FieldOfViewRadius = 0; // TODO: needs to be 0 but map should stay dark
    
             Components.Add(new EntityViewSyncComponent());
+        }
+
+        public override void OnMove(object sender, EntityMovedEventArgs args)
+        {
+            base.OnMove(sender, args);
+
+            if (Game.Player != null)
+            {
+                UpdateFovWindow();
+            }
+        }
+
+        private void UpdateFovWindow()
+        {
+            var fovObjectsWindow = _fovObjectsWindow ?? (_fovObjectsWindow = UserInterfaceManager.Get<FovWindow>());
+
+            var prevFov = Game.Player.FieldOfViewRadius;
+            // Get all unique characters visible in the fov radius and display them in the fovObjectsWindow
+            // The fov is bigger for certain cells with brightness
+            Game.Player.FieldOfViewRadius = Constants.Player.FieldOfViewRadius + 3;
+            EntityManager.RecalculatFieldOfView(Game.Player, false);
+
+            // Get first the further bright cells
+            var farBrightCells = GridManager.Grid.GetCellsInFov(this).Where(a => a.LightProperties.Brightness > 0f).Select(a => (char)a.Glyph).ToList();
+
+            Game.Player.FieldOfViewRadius = Constants.Player.FieldOfViewRadius;
+            EntityManager.RecalculatFieldOfView(Game.Player, false);
+
+            // Get normal visible cells
+            var normalCells = GridManager.Grid.GetCellsInFov(this).Select(a => (char)a.Glyph).ToList();
+            normalCells.AddRange(farBrightCells);
+
+            // Actual cells we see
+            var cells = normalCells.Distinct().ToList();
+
+            // Reset player fov
+            Game.Player.FieldOfViewRadius = prevFov;
+            EntityManager.RecalculatFieldOfView(Game.Player, false);
+
+            // Add to the fov window
+            foreach (var cell in cells)
+            {
+                fovObjectsWindow.Add(cell, false);
+            }
+            fovObjectsWindow.RemoveAllExcept(cells);
+            fovObjectsWindow.UpdateText();
         }
 
         public override void Update(TimeSpan timeElapsed)
@@ -56,6 +105,8 @@ namespace Emberpoint.Core.GameObjects.Entities
 
             // Center viewport on player
             MapWindow.CenterOnEntity(this);
+
+            UpdateFovWindow();
         }
 
         public void CheckForInteractionKeys()

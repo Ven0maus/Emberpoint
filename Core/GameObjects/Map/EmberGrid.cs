@@ -205,6 +205,23 @@ namespace Emberpoint.Core.GameObjects.Map
             }
         }
 
+        public List<EmberCell> GetCellsInFov(IEntity entity)
+        {
+            var cells = new List<EmberCell>();
+            for (int x = 0; x < GridSizeX; x++)
+            {
+                for (int y = 0; y < GridSizeY; y++)
+                {
+                    var cell = GetNonClonedCell(x, y);
+                    if (entity.FieldOfView.BooleanFOV[x, y] && cell.CellProperties.IsExplored)
+                    {
+                        cells.Add(cell);
+                    }
+                }
+            }
+            return cells;
+        }
+
         public void DrawFieldOfView(IEntity entity, bool discoverUnexploredTiles = false)
         {
             for (int x = 0; x < GridSizeX; x++)

@@ -76,12 +76,11 @@ namespace Emberpoint.Core.GameObjects.Managers
             return GetEntityAt<IEntity>(position) != null;
         }
 
-        public static void RecalculatFieldOfView(IEntity entity)
+        public static void RecalculatFieldOfView(IEntity entity, bool redrawFov = true)
         {
             entity.FieldOfView.Calculate(entity.Position, entity.FieldOfViewRadius);
-            if (entity is Player)
+            if (entity is Player && redrawFov)
                 GridManager.Grid.DrawFieldOfView(entity);
-
         }
 
         public static void RecalculatFieldOfView()

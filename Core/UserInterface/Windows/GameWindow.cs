@@ -11,7 +11,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             SadConsole.Game.Instance.Window.Title = Constants.GameTitle;
 
             // Print the game title at the  top
-            Print(Width / 2 - Constants.GameTitle.Length / 2, 1, Constants.GameTitle);
+            Print((int)System.Math.Round((Width / 2) / 1.5f) - Constants.GameTitle.Length / 2, 1, Constants.GameTitle);
 
             // Set the current screen to the game window
             Global.CurrentScreen = this;

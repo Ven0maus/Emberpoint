@@ -15,14 +15,17 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public Blueprint()
         {
+            var blueprintPath = Path.Combine(Constants.Blueprint.BlueprintsPath, Constants.Blueprint.BlueprintTiles + ".txt");
             var blueprintConfigPath = Path.Combine(Constants.Blueprint.BlueprintsConfigPath, Constants.Blueprint.BlueprintTiles + ".json");
             var config = JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(blueprintConfigPath));
 
-            if (!File.Exists(blueprintConfigPath))
-                throw new Exception("Blueprint config file was not found for " + Constants.Blueprint.BlueprintTiles);
+            if (!File.Exists(blueprintConfigPath) || !File.Exists(blueprintPath))
+                throw new Exception("Blueprint config file(s) were not found for " + Constants.Blueprint.BlueprintTiles);
 
-            GridSizeX = config.GridSizeX;
-            GridSizeY = config.GridSizeY;
+            var blueprint = File.ReadAllText(blueprintPath).Replace("\r", "").Split('\n');
+
+            GridSizeX = blueprint.Max(a => a.Length);
+            GridSizeY = blueprint.Length;
         }
 
         /// <summary>
@@ -62,9 +65,9 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             var blueprint = File.ReadAllText(blueprintPath).Replace("\r", "").Split('\n');
 
             var cells = new List<T>();
-            for (int y=0; y < config.GridSizeY; y++)
+            for (int y=0; y < GridSizeY; y++)
             {
-                for (int x = 0; x < config.GridSizeX; x++)
+                for (int x = 0; x < GridSizeX; x++)
                 {
                     char? charValue;
 
@@ -119,31 +122,29 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                 return (Color)prop.GetValue(null, null);
             return default;
         }
+    }
 
-        [Serializable]
-        private class BlueprintConfig
-        {
+    [Serializable]
+    internal class BlueprintConfig
+    {
 #pragma warning disable 0649
-            public int GridSizeX;
-            public int GridSizeY;
-            public BlueprintTile[] Tiles;
+        public BlueprintTile[] Tiles;
 #pragma warning restore 0649
-        }
+    }
 
-        [Serializable]
-        private class BlueprintTile
-        {
+    [Serializable]
+    internal class BlueprintTile
+    {
 #pragma warning disable 0649
-            public char Glyph;
-            public string Name;
-            public bool Walkable;
-            public string Foreground;
-            public bool BlocksFov;
-            public bool EmitsLight;
-            public string LightColor;
-            public int LightRadius;
-            public float Brightness;
+        public char Glyph;
+        public string Name;
+        public bool Walkable;
+        public string Foreground;
+        public bool BlocksFov;
+        public bool EmitsLight;
+        public string LightColor;
+        public int LightRadius;
+        public float Brightness;
 #pragma warning restore 0649
-        }
     }
 }

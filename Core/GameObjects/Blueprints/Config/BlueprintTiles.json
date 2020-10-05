@@ -1,6 +1,4 @@
 {
-  "gridSizeX": 70,
-  "gridSizeY": 30,
   "tiles": [
     {
       "glyph" : ".",

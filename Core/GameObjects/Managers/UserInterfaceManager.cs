@@ -36,6 +36,9 @@ namespace Emberpoint.Core.GameObjects.Managers
             Add(inventory);
             inventory.Initialize();
 
+            var fovWindow = new FovWindow(Constants.GameWindowWidth / 3, 12);
+            Add(fovWindow);
+
             IsInitialized = true;
         }
 

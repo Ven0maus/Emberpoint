@@ -18,7 +18,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             get { return this; }
         }
 
-        private int _maxLineRows;
+        private readonly int _maxLineRows;
         private readonly List<IItem> _inventory;
 
         public InventoryWindow(int width, int height) : base(width, height)
@@ -33,7 +33,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 Position = new Point(2, 1),
             };
 
-            Position = new Point(Constants.Map.Width + 7, 3);
+            Position = new Point(Constants.Map.Width + 7, 1);
 
             Children.Add(_textConsole);
             Global.CurrentScreen.Children.Add(this);
