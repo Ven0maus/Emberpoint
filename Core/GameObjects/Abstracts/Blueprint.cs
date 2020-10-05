@@ -15,14 +15,17 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public Blueprint()
         {
+            var blueprintPath = Path.Combine(Constants.Blueprint.BlueprintsPath, GetType().Name + ".txt");
             var blueprintConfigPath = Path.Combine(Constants.Blueprint.BlueprintsConfigPath, GetType().Name + ".json");
             var config = JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(blueprintConfigPath));
 
-            if (!File.Exists(blueprintConfigPath))
-                throw new Exception("Blueprint config file was not found for " + GetType().Name);
+            if (!File.Exists(blueprintConfigPath) || !File.Exists(blueprintPath))
+                throw new Exception("Blueprint config file(s) were not found for " + GetType().Name);
 
-            GridSizeX = config.GridSizeX;
-            GridSizeY = config.GridSizeY;
+            var blueprint = File.ReadAllText(blueprintPath).Replace("\r", "").Split('\n');
+
+            GridSizeX = blueprint.Max(a => a.Length);
+            GridSizeY = blueprint.Length;
         }
 
         /// <summary>
@@ -54,9 +57,9 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             var blueprint = File.ReadAllText(blueprintPath).Replace("\r", "").Split('\n');
 
             var cells = new List<T>();
-            for (int y=0; y < config.GridSizeY; y++)
+            for (int y=0; y < GridSizeY; y++)
             {
-                for (int x = 0; x < config.GridSizeX; x++)
+                for (int x = 0; x < GridSizeX; x++)
                 {
                     var charValue = blueprint[y][x];
                     var position = new Point(x, y);
@@ -109,8 +112,6 @@ namespace Emberpoint.Core.GameObjects.Abstracts
     internal class BlueprintConfig
     {
 #pragma warning disable 0649
-        public int GridSizeX;
-        public int GridSizeY;
         public BlueprintTile[] Tiles;
 #pragma warning restore 0649
     }
