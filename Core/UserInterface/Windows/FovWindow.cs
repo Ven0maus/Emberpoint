@@ -44,7 +44,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             var name = GridManager.Grid.Blueprint.GetType().Name;
             var blueprintPath = Path.Combine(Constants.Blueprint.BlueprintsPath, name + ".txt");
-            var blueprintConfigPath = Path.Combine(Constants.Blueprint.BlueprintsConfigPath, name + ".json");
+            var blueprintConfigPath = Path.Combine(Constants.Blueprint.BlueprintsConfigPath, Constants.Blueprint.BlueprintTiles + ".json");
 
             if (!File.Exists(blueprintPath) || !File.Exists(blueprintConfigPath) || !File.Exists(Constants.Blueprint.SpecialCharactersPath))
                 return new Dictionary<char, BlueprintTile>();

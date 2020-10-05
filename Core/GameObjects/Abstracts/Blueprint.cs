@@ -15,7 +15,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public Blueprint()
         {
-            var blueprintPath = Path.Combine(Constants.Blueprint.BlueprintsPath, Constants.Blueprint.BlueprintTiles + ".txt");
+            var blueprintPath = Path.Combine(Constants.Blueprint.BlueprintsPath, GetType().Name + ".txt");
             var blueprintConfigPath = Path.Combine(Constants.Blueprint.BlueprintsConfigPath, Constants.Blueprint.BlueprintTiles + ".json");
             var config = JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(blueprintConfigPath));
 
