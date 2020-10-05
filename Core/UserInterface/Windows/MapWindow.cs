@@ -1,5 +1,4 @@
 ﻿using Emberpoint.Core.GameObjects.Blueprints;
-using Emberpoint.Core.GameObjects.Blueprints.Objects;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;

@@ -47,13 +47,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
             var config = JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(blueprintConfigPath));
             var tiles = config.Tiles.ToDictionary(a => (char?) a.Glyph, a => a);
-            var nullTile = new BlueprintTile
-            {
-                Glyph = ' ',
-                Foreground = "BurlyWood",
-                Name = null,
-                Walkable = false
-            };
+            var nullTile = BlueprintTile.Null();
 
             foreach (var tile in tiles)
             {
@@ -146,5 +140,17 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public int LightRadius;
         public float Brightness;
 #pragma warning restore 0649
+        public static BlueprintTile Null()
+        {
+            var nullTile = new BlueprintTile
+            {
+                Glyph = ' ',
+                Foreground = "BurlyWood",
+                Name = null,
+                Walkable = false
+            };
+
+            return nullTile;
+        }
     }
 }
