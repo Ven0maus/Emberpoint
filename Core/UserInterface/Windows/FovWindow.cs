@@ -68,7 +68,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             if (_charObjects.ContainsKey(character)) return;
 
             // Retrieve character name from the config
-            var tile = _blueprintTiles[character];
+            if (!_blueprintTiles.TryGetValue(character, out BlueprintTile tile)) return;
             var glyphColor = GetColorByString(tile.Foreground);
 
             _charObjects.Add(character, new CharObj
