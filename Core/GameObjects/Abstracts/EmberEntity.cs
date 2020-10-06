@@ -36,7 +36,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         {
             ObjectId = EntityManager.GetUniqueId();
 
-            Font = Global.FontDefault.Master.GetFont(Font.FontSizes.Four);
+            Font = Global.FontDefault.Master.GetFont(Constants.Map.Size);
             Animation.CurrentFrame[0].Foreground = foreground;
             Animation.CurrentFrame[0].Background = background;
             Animation.CurrentFrame[0].Glyph = glyph;

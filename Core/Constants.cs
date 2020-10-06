@@ -16,7 +16,9 @@ namespace Emberpoint.Core
         {
             public const int Width = 70;
             public const int Height = 30;
-            public const Font.FontSizes Size = Font.FontSizes.Four;
+
+            // Note: changing the size, means you must also adapt the map's viewport rectangle size.
+            public const Font.FontSizes Size = Font.FontSizes.Three;
         }
 
         public static class Player

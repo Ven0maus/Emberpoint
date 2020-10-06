@@ -13,10 +13,9 @@ namespace Emberpoint.Core.UserInterface.Windows
             get { return this; }
         }
 
-        public MapWindow(int width, int height) : base(width, height, Global.FontDefault.Master.GetFont(Constants.Map.Size), new Rectangle(0, 0, 18, 7))
+        public MapWindow(int width, int height) : base(width, height, Global.FontDefault.Master.GetFont(Constants.Map.Size), new Rectangle(0, 0, 23, 10))
         {
             Position = new Point(1, 1);
-
             Global.CurrentScreen.Children.Add(this);
         }
 
