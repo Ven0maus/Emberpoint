@@ -89,15 +89,21 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                     if (charValue !=null && !tiles.TryGetValue(charValue, out tile)) 
                         throw new Exception("Glyph '" + charValue + "' was not present in the config file for blueprint: " + name);
                     var foregroundColor = GetColorByString(tile.Foreground);
+                    var backgroundColor = tile.Background != null ? GetColorByString(tile.Background) : Color.Black;
                     var cell = new T()
                     {
                         Glyph = tile.Glyph,
                         Position = position,
+#pragma warning disable CS0618 // Type or member is obsolete
                         Foreground = foregroundColor,
+                        Background = backgroundColor,
+#pragma warning restore CS0618 // Type or member is obsolete
                         CellProperties = new EmberCell.EmberCellProperties
                         {
                             NormalForeground = foregroundColor,
+                            NormalBackground = backgroundColor,
                             ForegroundFov = Color.Lerp(foregroundColor, Color.Black, .5f),
+                            BackgroundFov = Color.Lerp(backgroundColor, Color.Black, .5f),
                             Walkable = tile.Walkable,
                             Name = tile.Name,
                             BlocksFov = tile.BlocksFov,
@@ -146,6 +152,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public string Name;
         public bool Walkable;
         public string Foreground;
+        public string Background;
         public bool BlocksFov;
         public bool EmitsLight;
         public string LightColor;
@@ -158,6 +165,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             {
                 Glyph = ' ',
                 Foreground = "BurlyWood",
+                Background = "Black",
                 Name = null,
                 Walkable = false
             };

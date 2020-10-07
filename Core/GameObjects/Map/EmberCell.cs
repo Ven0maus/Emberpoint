@@ -15,22 +15,32 @@ namespace Emberpoint.Core.GameObjects.Map
 
         public Point Position { get; set; }
 
+        // Force obsoletion, so we use CellProperties instead.
+        [Obsolete("Use CellProperties.NormalForeground instead.")]
+        public new Color Foreground;
+        [Obsolete("Use CellProperties.NormalBackground instead.")]
+        public new Color Background;
+
         public EmberCell() 
         {
             CellProperties = new EmberCellProperties
             {
                 NormalForeground = Color.White,
-                ForegroundFov = Color.Lerp(Foreground, Color.Black, .5f),
+                NormalBackground = Color.Black,
+                ForegroundFov = Color.Lerp(Color.White, Color.Black, .5f),
+                BackgroundFov = Color.Black,
                 Walkable = true,
                 BlocksFov = false,
                 IsExplored = false
             };
 
-            Foreground = Color.White;
-            Background = Color.Black;
-            Glyph = '.';
-
+            Glyph = ' ';
             LightProperties = new LightEngineProperties();
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            Foreground = CellProperties.NormalForeground;
+            Background = CellProperties.NormalBackground;
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         public EmberCell(Point position, int glyph, Color foreground, Color fov)
@@ -38,7 +48,9 @@ namespace Emberpoint.Core.GameObjects.Map
             CellProperties = new EmberCellProperties
             {
                 NormalForeground = foreground,
+                NormalBackground = Color.Black,
                 ForegroundFov = fov,
+                BackgroundFov = Color.Black,
                 Walkable = true,
                 BlocksFov = false,
                 IsExplored = false
@@ -46,18 +58,23 @@ namespace Emberpoint.Core.GameObjects.Map
 
             Position = position;
             Glyph = glyph;
+
+#pragma warning disable CS0618 // Type or member is obsolete
             Foreground = foreground;
             Background = Color.Black;
+#pragma warning restore CS0618 // Type or member is obsolete
 
             LightProperties = new LightEngineProperties();
         }
 
-        public EmberCell(Point position, int glyph, Color foreground, Color fov, Color background)
+        public EmberCell(Point position, int glyph, Color foreground, Color foregroundFov, Color background, Color backgroundFov)
         {
             CellProperties = new EmberCellProperties
             {
                 NormalForeground = foreground,
-                ForegroundFov = fov,
+                NormalBackground = background,
+                ForegroundFov = foregroundFov,
+                BackgroundFov = backgroundFov,
                 Walkable = true,
                 BlocksFov = false,
                 IsExplored = false
@@ -65,8 +82,11 @@ namespace Emberpoint.Core.GameObjects.Map
 
             Position = position;
             Glyph = glyph;
+
+#pragma warning disable CS0618 // Type or member is obsolete
             Foreground = foreground;
             Background = background;
+#pragma warning restore CS0618 // Type or member is obsolete
 
             LightProperties = new LightEngineProperties();
         }
@@ -76,10 +96,12 @@ namespace Emberpoint.Core.GameObjects.Map
             // Does foreground, background, glyph, mirror, decorators
             CopyAppearanceFrom(cell);
 
-            CellProperties.ForegroundFov = cell.CellProperties.ForegroundFov;
             IsVisible = cell.IsVisible;
             CellProperties.Name = cell.CellProperties.Name;
             CellProperties.NormalForeground = cell.CellProperties.NormalForeground;
+            CellProperties.NormalBackground = cell.CellProperties.NormalBackground;
+            CellProperties.ForegroundFov = cell.CellProperties.ForegroundFov;
+            CellProperties.BackgroundFov = cell.CellProperties.BackgroundFov;
             Position = cell.Position;
             CellProperties.Walkable = cell.CellProperties.Walkable;
             CellProperties.BlocksFov = cell.CellProperties.BlocksFov;
@@ -98,10 +120,11 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 CellProperties = new EmberCellProperties()
                 {
-                    ForegroundFov = this.CellProperties.ForegroundFov,
-
                     Name = this.CellProperties.Name,
                     NormalForeground = this.CellProperties.NormalForeground,
+                    NormalBackground = this.CellProperties.NormalBackground,
+                    ForegroundFov = this.CellProperties.ForegroundFov,
+                    BackgroundFov = this.CellProperties.BackgroundFov,
                     Walkable = this.CellProperties.Walkable,
                     BlocksFov = this.CellProperties.BlocksFov,
                     IsExplored = this.CellProperties.IsExplored
@@ -126,6 +149,8 @@ namespace Emberpoint.Core.GameObjects.Map
 
         public EmberCell GetClosestLightSource()
         {
+            // Return itself when this is a light source.
+            if (LightProperties.EmitsLight) return this;
             if (LightProperties.LightSources == null) return null;
             if (LightProperties.LightSources.Count == 1) return LightProperties.LightSources[0];
             EmberCell closest = null;
@@ -139,6 +164,7 @@ namespace Emberpoint.Core.GameObjects.Map
                     closest = source;
                 }
             }
+
             return closest;
         }
 
@@ -162,16 +188,6 @@ namespace Emberpoint.Core.GameObjects.Map
             return 0;
         }
 
-        public static bool operator ==(EmberCell lhs, EmberCell rhs)
-        {
-            return lhs.Equals(rhs);
-        }
-
-        public static bool operator !=(EmberCell lhs, EmberCell rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
-
         public class LightEngineProperties
         {
             public List<EmberCell> LightSources { get; set; }
@@ -187,6 +203,8 @@ namespace Emberpoint.Core.GameObjects.Map
             public string Name { get; set; }
             public Color NormalForeground { get; set; }
             public Color ForegroundFov { get; set; }
+            public Color NormalBackground { get; set; }
+            public Color BackgroundFov { get; set; }
             public bool BlocksFov { get; set; }
             public bool IsExplored { get; set; }
         }

@@ -4,6 +4,7 @@ using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 using SadConsole;
@@ -18,7 +19,7 @@ namespace Emberpoint.Core.GameObjects.Entities
         {
             get
             {
-                return _inventory ?? (_inventory = UserInterfaceManager.Get<InventoryWindow>());
+                return _inventory ??= UserInterfaceManager.Get<InventoryWindow>();
             }
         }
 
@@ -27,13 +28,13 @@ namespace Emberpoint.Core.GameObjects.Entities
         {
             get
             {
-                return _mapWindow ?? (_mapWindow = UserInterfaceManager.Get<MapWindow>());
+                return _mapWindow ??= UserInterfaceManager.Get<MapWindow>();
             }
         }
 
         private FovWindow _fovObjectsWindow;
 
-        public Player() : base(Constants.Player.Foreground, Color.Black, Constants.Player.Character, 1, 1)
+        public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character, 1, 1)
         {
             FieldOfViewRadius = 0;
             Components.Add(new EntityViewSyncComponent());
@@ -41,6 +42,10 @@ namespace Emberpoint.Core.GameObjects.Entities
 
         public override void OnMove(object sender, EntityMovedEventArgs args)
         {
+            // Handles flashlight lights
+            GridManager.Grid.LightEngine.HandleFlashlight(this);
+
+            // OnMove will redraw fov, and flashlight needs to be handled before that
             base.OnMove(sender, args);
 
             // Update visible objects in fov window
@@ -49,7 +54,7 @@ namespace Emberpoint.Core.GameObjects.Entities
 
         private void UpdateFovWindow()
         {
-            var fovObjectsWindow = _fovObjectsWindow ?? (_fovObjectsWindow = UserInterfaceManager.Get<FovWindow>());
+            var fovObjectsWindow = _fovObjectsWindow ??= UserInterfaceManager.Get<FovWindow>();
 
             var prevFov = FieldOfViewRadius;
             // Get all unique characters visible in the fov radius and display them in the fovObjectsWindow

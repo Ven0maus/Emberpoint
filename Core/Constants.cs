@@ -25,13 +25,15 @@ namespace Emberpoint.Core
         {
             public const char Character = '@';
             public static Color Foreground = Color.White;
-            public const int FieldOfViewRadius = 4;
+            public const int FieldOfViewRadius = Items.FlashlightRadius;
             public const int DiscoverLightsRadius = 8;
         }
 
         public static class Items
         {
             public const int BatteryMaxPower = 60;
+            public const float FlashlightBrightness = 0.5f;
+            public const int FlashlightRadius = 5;
         }
 
         public static class Blueprint

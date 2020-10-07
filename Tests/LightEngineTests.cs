@@ -64,6 +64,16 @@ namespace Tests
         }
 
         [Test]
+        public void EmittingCellsUnset_NoBrightnessCells_Left()
+        {
+            SetLightCell(1, 1, 5);
+            Assert.IsTrue(_grid.GetCell(1, 1).LightProperties.Brightness > 0f);
+            UnsetLightCell(1, 1);
+            Assert.IsTrue(_grid.GetCell(1, 1).LightProperties.Brightness == 0f);
+            Assert.IsTrue(_grid.GetCells(a => a.LightProperties.Brightness > 0f).Count() == 0);
+        }
+
+        [Test]
         public void SetEmittingCell_AdjacentCells_UpdatedCorrectly()
         {
             var cell = SetLightCell(10, 10, 4);
@@ -216,7 +226,7 @@ namespace Tests
                     if (fov2.BooleanFOV[x, y])
                     {
                         Assert.IsTrue(points2.TryGetValue(new Point(x, y), out EmberCell value));
-                        if (value.LightProperties.LightSources == null)
+                        if (value.LightProperties.LightSources == null && !value.LightProperties.EmitsLight)
                         {
                             someCellsAreUnset = true;
                             Assert.IsTrue(value.LightProperties.Brightness == 0f);

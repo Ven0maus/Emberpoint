@@ -51,16 +51,16 @@ namespace Emberpoint.Core.GameObjects.Map
         {
             get
             {
-                return _map ?? (_map = UserInterfaceManager.Get<MapWindow>());
+                return _map ??= UserInterfaceManager.Get<MapWindow>();
             }
         }
 
         private LightEngine<EmberCell> _lightEngine;
-        protected LightEngine<EmberCell> LightEngine
+        public LightEngine<EmberCell> LightEngine
         {
             get
             {
-                return _lightEngine ?? (_lightEngine = new LightEngine<EmberCell>());
+                return _lightEngine ??= new LightEngine<EmberCell>();
             }
         }
 
@@ -166,15 +166,18 @@ namespace Emberpoint.Core.GameObjects.Map
             return Cells[y * GridSizeX + x];
         }
 
-        public void SetCell(EmberCell cell, bool calculateEntitiesFov = false)
+        public void SetCell(EmberCell cell, bool calculateEntitiesFov = false, bool adjustLights = true)
         {
             var originalCell = Cells[cell.Position.Y * GridSizeX + cell.Position.X];
 
             // Update the map fov values if the walkable is changed
             bool updateFieldOfView = originalCell.CellProperties.BlocksFov != cell.CellProperties.BlocksFov;
 
-            // Adjust neighboring cell light levels if this object gives of light
-            LightEngine.AdjustLightLevels(cell, originalCell);
+            // Adjust the lights of the tiles
+            if (adjustLights)
+            {
+                LightEngine.AdjustLights(cell, originalCell.Clone());
+            }
 
             // Copy the new cell data
             originalCell.CopyFrom(cell);
@@ -256,7 +259,9 @@ namespace Emberpoint.Core.GameObjects.Map
             // Actual cells we see
             foreach (var lightCell in cellsThatEmitLight)
             {
-                lightCell.CellProperties.IsExplored = true;
+                var cell = GetNonClonedCell(lightCell.Position.X, lightCell.Position.Y);
+                cell.CellProperties.IsExplored = true;
+                cell.IsVisible = true;
             }
 
             // Reset entity fov
@@ -281,7 +286,7 @@ namespace Emberpoint.Core.GameObjects.Map
                     }
 
                     // Cells near light sources are automatically visible
-                    if (cell.LightProperties.Brightness > 0f && !cell.CellProperties.IsExplored && 
+                    if (cell.LightProperties.Brightness > 0f && !cell.LightProperties.EmitsLight && !cell.CellProperties.IsExplored && 
                         cell.LightProperties.LightSources.Any(a => a.CellProperties.IsExplored))
                     {
                         cell.CellProperties.IsExplored = true;
@@ -289,7 +294,7 @@ namespace Emberpoint.Core.GameObjects.Map
 
                     cell.IsVisible = cell.CellProperties.IsExplored;
 
-                    SetCellColors(cell, entity);
+                    SetCellColors(cell);
                     SetCell(cell);
                 }
             }
@@ -301,41 +306,21 @@ namespace Emberpoint.Core.GameObjects.Map
             }
         }
 
-        public void SetCellColors(EmberCell cell, IEntity entity)
+        public void SetCellColors(EmberCell cell)
         {
-            // If the cell is in the field of view
-            if (entity == null || (entity.FieldOfViewRadius > 0 && entity.FieldOfView.BooleanFOV[cell.Position]))
+            if (cell.LightProperties.Brightness > 0f)
             {
-                if (cell.LightProperties.Brightness > 0f && cell.LightProperties.LightSources != null)
-                    cell.Foreground = Color.Lerp(cell.GetClosestLightSource().LightProperties.LightColor, Color.White, cell.LightProperties.Brightness);
-                else
-                    cell.Foreground = cell.CellProperties.NormalForeground;
+                var closestLightSource = cell.GetClosestLightSource();
+                Color lightSourceColor = closestLightSource?.LightProperties.LightColor ?? Color.White;
+#pragma warning disable CS0618 // Type or member is obsolete
+                cell.Foreground = Color.Lerp(cell.CellProperties.NormalForeground, lightSourceColor, cell.LightProperties.Brightness);
+                cell.Background = Color.Lerp(cell.CellProperties.NormalBackground, lightSourceColor, cell.LightProperties.Brightness / 3f);
             }
             else
             {
-                if (cell.LightProperties.Brightness > 0f && cell.LightProperties.LightSources != null)
-                    cell.Foreground = Color.Lerp(Color.Lerp(cell.GetClosestLightSource().LightProperties.LightColor, Color.Black, .5f), Color.White, cell.LightProperties.Brightness);
-                else
-                    cell.Foreground = cell.CellProperties.ForegroundFov;
-            }
-        }
-
-        public void SetCellColors(EmberCell cell, IEntity entity, Color foreground, Color foregroundFov)
-        {
-            // If the cell is in the field of view
-            if (entity == null || (entity.FieldOfViewRadius > 0 && entity.FieldOfView.BooleanFOV[cell.Position]))
-            {
-                if (cell.LightProperties.Brightness > 0f)
-                    cell.Foreground = Color.Lerp(foreground, Color.White, cell.LightProperties.Brightness);
-                else
-                    cell.Foreground = cell.CellProperties.NormalForeground;
-            }
-            else
-            {
-                if (cell.LightProperties.Brightness > 0f)
-                    cell.Foreground = Color.Lerp(foregroundFov, Color.White, cell.LightProperties.Brightness);
-                else
-                    cell.Foreground = cell.CellProperties.ForegroundFov;
+                cell.Foreground = cell.CellProperties.ForegroundFov;
+                cell.Background = cell.CellProperties.BackgroundFov;
+#pragma warning restore CS0618 // Type or member is obsolete
             }
         }
 

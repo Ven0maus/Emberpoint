@@ -3,15 +3,9 @@
     {
       "glyph" : " ",
       "name" : null,
-      "walkable" : false,
-	  "foreground" : "BurlyWood",
-	  "blocksfov" : true
-    },
-    {
-      "glyph" : ".",
-      "name" : "Floor",
       "walkable" : true,
 	  "foreground" : "BurlyWood",
+      "background" : "Black",
 	  "blocksfov" : false
     },
     {
@@ -57,9 +51,9 @@
 	  "blocksfov" : false
     },
 	{
-      "glyph" : "&",
+      "glyph" : ".",
       "name" : "Lamp",
-      "walkable" : false,
+      "walkable" : true,
 	  "foreground" : "LightYellow",
 	  "blocksfov" : false,
 	  "EmitsLight" : true,

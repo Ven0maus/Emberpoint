@@ -19,19 +19,28 @@ namespace Tests.TestObjects.Grids
             {
                 for (var y = 0; y < height; y++)
                 {
-                    cells[y * width + x] = new EmberCell
+                    var cell = new EmberCell
                     {
+#pragma warning disable CS0618 // Type or member is obsolete
                         Background = Color.Black,
                         Foreground = Color.Gray,
-                        Glyph = '.',
-
-                        CellProperties = new EmberCell.EmberCellProperties
-                        {
-                            Name = "floor",
-                            Walkable = true
-                        },
-                        Position = new Point(x, y),
+#pragma warning restore CS0618 // Type or member is obsolete
+                        Glyph = ' ',
+                        Position = new Point(x, y)
                     };
+                    cell.CellProperties = new EmberCell.EmberCellProperties
+                    {
+                        Name = null,
+                        Walkable = true,
+                        BlocksFov = false,
+#pragma warning disable CS0618 // Type or member is obsolete
+                        NormalForeground = cell.Foreground,
+                        NormalBackground = cell.Background,
+                        ForegroundFov = Color.Lerp(cell.Foreground, Color.Black, .5f),
+                        BackgroundFov = cell.Background
+#pragma warning restore CS0618 // Type or member is obsolete
+                    };
+                    cells[y * width + x] = cell;
                 }
             }
             return new BaseGrid(width, height, cells);

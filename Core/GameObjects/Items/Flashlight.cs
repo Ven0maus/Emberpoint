@@ -15,10 +15,10 @@ namespace Emberpoint.Core.GameObjects.Items
         public Flashlight() : base('F', Color.LightSkyBlue, 1, 1)
         {
             _drainTimer = new Timer(1000);
-            _drainTimer.Elapsed += _drainTimer_Elapsed;
+            _drainTimer.Elapsed += DrainTimer_Elapsed;
         }
 
-        private void _drainTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void DrainTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (!UserInterfaceManager.IsInitialized)
             {
@@ -47,6 +47,9 @@ namespace Emberpoint.Core.GameObjects.Items
 
             LightOn = !LightOn;
 
+            // Handles flashlight lights
+            GridManager.Grid.LightEngine.HandleFlashlight(Game.Player);
+
             if (!LightOn)
             {
                 Game.Player.FieldOfViewRadius = 0;
@@ -57,8 +60,8 @@ namespace Emberpoint.Core.GameObjects.Items
             }
             else
             {
-                Game.Player.FieldOfViewRadius = Constants.Player.FieldOfViewRadius;
-                EntityManager.RecalculatFieldOfView(Game.Player);
+                Game.Player.FieldOfViewRadius = Constants.Items.FlashlightRadius;
+                EntityManager.RecalculatFieldOfView(Game.Player, false);
 
                 // Discover new tiles when turning on the flashlight
                 var flashLight = Game.Player.Inventory.GetItemOfType<Flashlight>();

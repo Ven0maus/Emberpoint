@@ -18,7 +18,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         {
             get
             {
-                return _fieldOfView ?? (_fieldOfView = new FOV(GridManager.Grid.FieldOfView));
+                return _fieldOfView ??= new FOV(GridManager.Grid.FieldOfView);
             }
         }
 
