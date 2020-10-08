@@ -24,31 +24,30 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Set the XNA container's title
             SadConsole.Game.Instance.Window.Title = Constants.GameTitle;
 
-            // Set custom theme
-            var consoleTheme = SadConsole.Themes.Library.Default.Clone();
-            consoleTheme.Colors.ControlHostBack = Color.Black;
-            consoleTheme.Colors.Text = Color.White;
-            consoleTheme.ButtonTheme = new ButtonLinesTheme
-            {
-                Colors = new SadConsole.Themes.Colors
-                {
-                    ControlBack = Color.Black,
-                    Text = Color.WhiteSmoke,
-                    TextDark = Color.AntiqueWhite,
-                    TextBright = Color.White,
-                    TextFocused = Color.White,
-                    TextLight = Color.WhiteSmoke,
-                    TextSelected = Color.White,
-                    TextSelectedDark = Color.AntiqueWhite,
-                    TitleText = Color.WhiteSmoke
-                }
-            };
-            consoleTheme.ButtonTheme.Colors.RebuildAppearances();
-            consoleTheme.Colors.RebuildAppearances();
+            var colors = Colors.CreateDefault();
+            colors.ControlBack = Color.Black;
+            colors.Text = Color.White;
+            colors.TitleText = Color.White;
+            colors.ControlHostBack = Color.White;
+            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
+            colors.RebuildAppearances();
 
-            // Set the new theme
-            Theme = consoleTheme;
+            // Set the new theme colors         
+            ThemeColors = colors;
 
+            // Add it to the children of the main console
+            Global.CurrentScreen.Children.Add(this);
+        }
+
+        protected override void OnInvalidate()
+        {
+            base.OnInvalidate();
+
+            DrawGameTitle();
+        }
+
+        private void DrawGameTitle()
+        {
             string[] titleFragments = @"
  _____             _                                _         _   
 |  ___|           | |                              (_)       | |  
@@ -59,22 +58,19 @@ namespace Emberpoint.Core.UserInterface.Windows
                                      | |                          
                                      |_|                          
 "
-            .Replace("\r", string.Empty).Split('\n');
+.Replace("\r", string.Empty).Split('\n');
 
             int startPosX = (Constants.GameWindowWidth / 2) - (titleFragments.OrderByDescending(a => a.Length).First().Length / 2);
             int startPosY = 4;
 
             // Print title fragments
-            for (int y=0; y < titleFragments.Length; y++)
+            for (int y = 0; y < titleFragments.Length; y++)
             {
-                for (int x=0; x < titleFragments[y].Length; x++)
+                for (int x = 0; x < titleFragments[y].Length; x++)
                 {
                     Print(startPosX + x, startPosY + y, new ColoredGlyph(titleFragments[y][x], Color.White, Color.Transparent));
                 }
             }
-
-            // Add it to the children of the main console
-            Global.CurrentScreen.Children.Add(this);
         }
 
         public void InitializeButtons()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
@@ -18,30 +19,22 @@ namespace Emberpoint.Core.UserInterface.Windows
         public OptionsWindow(int width, int height) : base(width, height)
         {
             // Set custom theme
-            var consoleTheme = Library.Default.Clone();
-            consoleTheme.Colors.ControlHostBack = Color.Black;
-            consoleTheme.Colors.Text = Color.White;
-            consoleTheme.ButtonTheme = new ButtonLinesTheme
-            {
-                Colors = new Colors
-                {
-                    ControlBack = Color.Black,
-                    Text = Color.WhiteSmoke,
-                    TextDark = Color.AntiqueWhite,
-                    TextBright = Color.White,
-                    TextFocused = Color.White,
-                    TextLight = Color.WhiteSmoke,
-                    TextSelected = Color.White,
-                    TextSelectedDark = Color.AntiqueWhite,
-                    TitleText = Color.WhiteSmoke
-                }
-            };
-            consoleTheme.ButtonTheme.Colors.RebuildAppearances();
-            consoleTheme.Colors.RebuildAppearances();
+            var colors = Colors.CreateDefault();
+            colors.ControlBack = Color.Black;
+            colors.Text = Color.White;
+            colors.TitleText = Color.White;
+            colors.ControlHostBack = Color.White;
+            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
+            colors.RebuildAppearances();
 
-            // Set the new theme
-            Theme = consoleTheme;
+            // Set the new theme colors         
+            ThemeColors = colors;
 
+            InitializeButtons();
+        }
+
+        private void InitializeButtons()
+        {
             // Setup UI for the buttons
             CreateKeybindingButtons();
 
@@ -59,7 +52,18 @@ namespace Emberpoint.Core.UserInterface.Windows
                 MainMenuWindow.Show();
             };
             Add(backButton);
+        }
 
+        protected override void OnInvalidate()
+        {
+            base.OnInvalidate();
+
+            DrawWindowTitle();
+            DrawButtonNames();
+        }
+
+        private void DrawWindowTitle()
+        {
             var titleFragments = @"
  _   __           _     _           _ _                 
 | | / /          | |   (_)         | (_)                
@@ -86,6 +90,21 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
         }
 
+        private void DrawButtonNames()
+        {
+            var buttons = Controls.OfType<Button>();
+            var keybindings = KeybindingsManager.GetKeybindings()
+                .Select(a => a.Key.ToString())
+                .ToList();
+            foreach (var button in buttons)
+            {
+                if (keybindings.Contains(button.Name))
+                {
+                    Print(button.Position.X + 12, button.Position.Y + 1, button.Name.ToString().Replace("_", " "), Color.White);
+                }
+            }
+        }
+
         private void CreateKeybindingButtons()
         {
             var bindings = KeybindingsManager.GetKeybindings();
@@ -106,7 +125,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                     if (columns == maxColumns)
                     {
                         // Show paging when the need arises?
-                        throw new System.Exception("Exceeded max keybindings limit (16)");
+                        throw new Exception("Exceeded max keybindings limit (16)");
                     }
                 }
 
@@ -123,8 +142,6 @@ namespace Emberpoint.Core.UserInterface.Windows
                 // Add key re-arrange method
                 button.Click += TriggerKeybindingChangeCheck;
                 Add(button);
-
-                Print(pos.X + 12, row + 1, key.ToString(), Color.White);
                 row += 3;
                 total++;
             }

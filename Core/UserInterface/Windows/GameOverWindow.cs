@@ -13,40 +13,33 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         public GameOverWindow(int width, int height) : base(width, height)
         {
-            var consoleTheme = Library.Default.Clone();
-            consoleTheme.Colors.ControlHostBack = Color.Black;
-            consoleTheme.Colors.Text = Color.White;
-            consoleTheme.ButtonTheme = new ButtonLinesTheme
-            {
-                Colors = new Colors
-                {
-                    ControlBack = Color.Black,
-                    Text = Color.Yellow,
-                    TextDark = Color.Orange,
-                    TextBright = Color.LightYellow,
-                    TextFocused = Color.Yellow,
-                    TextLight = Color.LightYellow,
-                    TextSelected = Color.Yellow,
-                    TextSelectedDark = Color.Orange,
-                    TitleText = Color.Purple
-                }
-            };
-            consoleTheme.ButtonTheme.Colors.RebuildAppearances();
-            consoleTheme.Colors.RebuildAppearances();
+            var colors = Colors.CreateDefault();
+            colors.ControlBack = Color.Black;
+            colors.Text = Color.White;
+            colors.TitleText = Color.White;
+            colors.ControlHostBack = Color.White;
+            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
+            colors.RebuildAppearances();
 
-            // Set the new theme
-            Theme = consoleTheme;
+            // Set the new theme colors         
+            ThemeColors = colors;
 
             IsVisible = false;
 
             Global.CurrentScreen.Children.Add(this);
 
-            DrawGameOverTitle();
             InitializeButtons();
         }
 
+        protected override void OnInvalidate()
+        {
+            base.OnInvalidate();
+
+            DrawGameOverTitle();
+        }
+
         public Console Console => this;
-        public void Show()
+        public static void Show()
         {
             foreach (var inf in UserInterfaceManager.GetAll<IUserInterface>())
             {
@@ -59,6 +52,11 @@ namespace Emberpoint.Core.UserInterface.Windows
 
                 inf.IsVisible = false;
             }
+        }
+
+        public static void Hide()
+        {
+            UserInterfaceManager.Get<GameOverWindow>().IsVisible = false;
         }
        
         private void InitializeButtons()
