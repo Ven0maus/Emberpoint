@@ -35,79 +35,67 @@ namespace Emberpoint.Core.GameObjects.Map
         {
             if (newCell.LightProperties.EmitsLight == oldCell.LightProperties.EmitsLight) return;
 
-            var fov = new FOV(GridManager.Grid.FieldOfView);
-
             if (newCell.LightProperties.EmitsLight)
-            {
-                // Cell emits light
                 CalculateLightSource(newCell);
-            }
             else
+                UnsetLightSource(newCell);
+        }
+
+        private void UnsetLightSource(EmberCell lightSource)
+        {
+            // Retrieve all cells that were affected by newCell
+            var cells = GetCellsAffectedByLightSource(lightSource);
+
+            var lightSourcesToRecalculate = new List<EmberCell>();
+            foreach (var cell in cells)
             {
-                // No longer emits light
-                var cells = GridManager.Grid
-                    .GetCells(a => a.Position == newCell.Position || (a.LightProperties.LightSources != null && a.LightProperties.LightSources.Any(a => a.Position == newCell.Position)))
-                    .ToList();
-
-                var lightSourcesToRecalculate = new List<EmberCell>();
-                foreach (var cell in cells)
+                // Push over our properties because cell is the old state that isn't modified yet
+                if (cell.Equals(lightSource))
                 {
-                    if (cell.LightProperties.EmitsLight)
-                    {
-                        // Unset ourself
-                        if (cell.Position == newCell.Position)
-                        {
-                            cell.LightProperties = newCell.LightProperties;
-                            cell.CellProperties = newCell.CellProperties;
-                        }
-
-                        // Remove ourself from any light sources
-                        if (cell.LightProperties.LightSources != null)
-                        {
-                            RemoveFromCellLightSources(cell, newCell);
-                        }
-                    }
-                    else
-                    {
-                        RemoveFromCellLightSources(cell, newCell);
-                    }
-
-                    if (cell.LightProperties.LightSources != null)
-                    {
-                        foreach (var source in cell.LightProperties.LightSources)
-                        {
-                            lightSourcesToRecalculate.Add(source);
-                        }
-                    }
-
-                    if (!cell.LightProperties.EmitsLight)
-                    {
-                        cell.LightProperties.Brightness = 0f;
-                        cell.LightProperties.LightColor = default;
-                    }
-
-                    GridManager.Grid.SetCellColors(cell);
-                    //GridManager.Grid.SetCellColors(cell, cell.CellProperties.NormalForeground, cell.CellProperties.NormalBackground);
-                    GridManager.Grid.SetCell(cell, false, false);
+                    cell.LightProperties = lightSource.LightProperties;
+                    cell.CellProperties = lightSource.CellProperties;
                 }
 
-                lightSourcesToRecalculate = lightSourcesToRecalculate
-                    .Distinct()
-                    .ToList();
+                // Remove the lightsource from this cell
+                RemoveFromCellLightSources(cell, lightSource);
 
-                foreach (var lightSource in lightSourcesToRecalculate)
+                // Add remaining lightsources to be recalculated
+                if (cell.LightProperties.LightSources != null)
+                    lightSourcesToRecalculate.AddRange(cell.LightProperties.LightSources);
+
+                // If the cell itself is not a lightsource we reset the brightness and color
+                if (!cell.LightProperties.EmitsLight)
                 {
-                    CalculateLightSource(lightSource);
+                    cell.LightProperties.Brightness = 0f;
+                    cell.LightProperties.LightColor = default;
                 }
 
-                newCell.LightProperties = GridManager.Grid.GetCell(newCell.Position).LightProperties;
+                GridManager.Grid.SetCellColors(cell);
+                GridManager.Grid.SetCell(cell, false, false);
             }
+
+            // Calculate light source for the remaining light sources
+            foreach (var source in lightSourcesToRecalculate.Distinct())
+            {
+                CalculateLightSource(source);
+            }
+
+            // Make sure we set the new version of newCell's LightProperties incase they have changed during recalculation.
+            lightSource.LightProperties = GridManager.Grid.GetCell(lightSource.Position).LightProperties;
+        }
+
+        private List<EmberCell> GetCellsAffectedByLightSource(EmberCell cell)
+        {
+            return GridManager.Grid
+                .GetCells(a => a.Position == cell.Position || (a.LightProperties.LightSources != null && a.LightProperties.LightSources.Any(a => a.Equals(cell))))
+                .ToList();
         }
 
         private void RemoveFromCellLightSources(EmberCell cell, EmberCell newCell)
         {
-            cell.LightProperties.LightSources.RemoveAll(a => a.Position == newCell.Position);
-            if (!cell.LightProperties.LightSources.Any())
+            cell.LightProperties.LightSources?.RemoveAll(a => a.Equals(newCell));
+            if (cell.LightProperties.LightSources != null && 
+                !cell.LightProperties.LightSources.Any())
             {
                 cell.LightProperties.Brightness = 0f;
                 cell.LightProperties.LightColor = default;
@@ -162,7 +150,6 @@ namespace Emberpoint.Core.GameObjects.Map
                     lightedCell.Item1.LightProperties.Brightness = brightness;
 
                 GridManager.Grid.SetCellColors(lightedCell.Item1);
-                //GridManager.Grid.SetCellColors(lightedCell.Item1, newCell.LightProperties.LightColor, lightedCell.Item1.CellProperties.NormalBackground);
                 GridManager.Grid.SetCell(lightedCell.Item1, false, false);
             }
         }
