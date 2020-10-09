@@ -22,13 +22,13 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         private Console _renderedConsole;
 
-        public EmberItem(int glyph, Color foregroundColor, int width = 1, int height = 1) : base(width, height)
+        public EmberItem(int glyph, Color foregroundColor, int width = 1, int height = 1, string name = null) : base(width, height)
         {
             ObjectId = ItemManager.GetUniqueId();
             ItemManager.Add(this);
 
             Amount = 1;
-            Name = GetType().Name;
+            Name = name ?? GetType().Name;
             Animation.CurrentFrame[0].Foreground = foregroundColor;
             Animation.CurrentFrame[0].Background = Color.Transparent;
             Animation.CurrentFrame[0].Glyph = glyph;
@@ -57,7 +57,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public bool Equals(IItem other)
         {
             // First two lines are just optimizations
-            if (ReferenceEquals(null, other)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return Name.Equals(other.Name);

@@ -1,5 +1,5 @@
 ﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.GameObjects.Entities.Items;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
@@ -18,7 +18,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             get { return this; }
         }
 
-        private int _maxLineRows;
+        private readonly int _maxLineRows;
         private readonly List<IItem> _inventory;
 
         public InventoryWindow(int width, int height) : base(width, height)
@@ -33,7 +33,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 Position = new Point(2, 1),
             };
 
-            Position = new Point(Constants.Map.Width + 7, 3);
+            Position = new Point(Constants.Map.Width + 7, 1);
 
             Children.Add(_textConsole);
             Global.CurrentScreen.Children.Add(this);
@@ -52,13 +52,6 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 item.PickUp();
             }
-        }
-
-        public void Update()
-        {
-            // Tell's sadconsole to redraw this console
-            _textConsole.IsDirty = true;
-            IsDirty = true;
         }
 
         public void AddInventoryItem(IItem item)
@@ -147,8 +140,6 @@ namespace Emberpoint.Core.UserInterface.Windows
                     _textConsole.Cursor.Print(item.DisplayName);
                 }
             }
-
-            Update();
         }
     }
 }

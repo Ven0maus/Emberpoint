@@ -3,7 +3,7 @@ using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 
-namespace Emberpoint.Core.GameObjects.Entities.Items
+namespace Emberpoint.Core.GameObjects.Items
 {
     public class Battery : EmberItem
     {
@@ -25,16 +25,20 @@ namespace Emberpoint.Core.GameObjects.Entities.Items
 
             if (Power == 0)
             {
+                var dialogWindow = UserInterfaceManager.Get<DialogWindow>();
                 // Check if we have more than one battery
                 if (Amount > 1)
                 {
                     Game.Player.Inventory.RemoveInventoryItem<Battery>(1);
                     Power = Constants.Items.BatteryMaxPower;
 
-                    UserInterfaceManager.Get<DialogWindow>().ShowDialog("Battery depleted.", new[] { "A battery has been depleted!", "Press enter to hide this message." });
+                    dialogWindow.AddDialog("Battery depleted.", new[] { "A battery has been depleted!", "Press enter to hide this message." });
+                    dialogWindow.ShowNext();
                     return true;
                 }
-                UserInterfaceManager.Get<DialogWindow>().ShowDialog("Battery depleted.", new[] { "You ran out of batteries!", "Press enter to hide this message." });
+
+                dialogWindow.AddDialog("Battery depleted.", new[] { "You ran out of batteries!", "Press enter to hide this message." });
+                dialogWindow.ShowNext();
                 return false;
             }
             return true;

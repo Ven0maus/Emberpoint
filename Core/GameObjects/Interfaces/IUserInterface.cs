@@ -8,7 +8,5 @@ namespace Emberpoint.Core.GameObjects.Interfaces
         bool IsVisible { get; set; }
         bool IsDirty { get; set; }
         SadConsole.Console Console { get; }
-
-        void Update();
     }
 }

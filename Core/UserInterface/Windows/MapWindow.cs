@@ -6,16 +6,16 @@ using SadConsole;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class MapWindow : Console, IUserInterface
+    public class MapWindow : ScrollingConsole, IUserInterface
     {
         public Console Console
         {
             get { return this; }
         }
 
-        public MapWindow(int width, int height) : base(width, height)
+        public MapWindow(int width, int height) : base(width, height, Global.FontDefault.Master.GetFont(Constants.Map.Size), new Rectangle(0, 0, 23, 10))
         {
-            Position = new Point(5, 3);
+            Position = new Point(1, 1);
             Global.CurrentScreen.Children.Add(this);
         }
 
@@ -24,14 +24,18 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Initialize grid and render it on the map
             GridManager.InitializeBlueprint<GroundFloorBlueprint>();
             GridManager.Grid.RenderObject(this);
-
-            // After map is created, we calibrate the light engine
-            GridManager.Grid.CalibrateLightEngine();
         }
 
+        public void CenterOnEntity(IEntity entity)
+        {
+            this.CenterViewPortOnPoint(entity.Position);
+        }
+
+        /// <summary>
+        /// Call this method when you change the cell colors on the cell objects.
+        /// </summary>
         public void Update()
         {
-            // Tell's sadconsole to redraw this console
             IsDirty = true;
         }
     }

@@ -1,12 +1,11 @@
 {
-  "gridSizeX": 70,
-  "gridSizeY": 30,
   "tiles": [
     {
-      "glyph" : ".",
-      "name" : "Floor",
+      "glyph" : " ",
+      "name" : null,
       "walkable" : true,
 	  "foreground" : "BurlyWood",
+      "background" : "Black",
 	  "blocksfov" : false
     },
     {
@@ -52,9 +51,9 @@
 	  "blocksfov" : false
     },
 	{
-      "glyph" : "&",
+      "glyph" : ".",
       "name" : "Lamp",
-      "walkable" : false,
+      "walkable" : true,
 	  "foreground" : "LightYellow",
 	  "blocksfov" : false,
 	  "EmitsLight" : true,

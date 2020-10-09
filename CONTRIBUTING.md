@@ -26,7 +26,7 @@ The whole purpose behind this project is to get people contributing however larg
 
 In general, the contribution workflow looks like this:
 
-- Open an issue in the [issue tracker](https://github.com/Venom0us/Emberpoint/issues).
+- Be assigned to an existing issue or open a new issue in the [issue tracker](https://github.com/Venom0us/Emberpoint/issues).
 - Fork the repo.
 - Make sure all tests, linting, and type-checking pass.
 - Submit a pull request, referencing any issues it addresses.

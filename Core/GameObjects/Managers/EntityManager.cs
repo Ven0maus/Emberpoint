@@ -1,6 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Map;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -15,18 +16,27 @@ namespace Emberpoint.Core.GameObjects.Managers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="position"></param>
+        /// <param name="grid">Custom grid, for tests</param>
         /// <returns></returns>
-        public static T Create<T>(Point position) where T : IEntity, new()
+        public static T Create<T>(Point position, EmberGrid grid = null) where T : IEntity
         {
             if (EntityExistsAt(position))
             {
                 return default;
             }
 
-            var entity = new T()
+            T entity;
+            if (grid != null)
             {
-                Position = position
-            };
+                entity = (T)Activator.CreateInstance(typeof(T), grid);
+                entity.Position = position;
+            }
+            else
+            {
+                entity = Activator.CreateInstance<T>();
+                entity.Position = position;
+            }
+
             EntityDatabase.Entities.Add(entity.ObjectId, entity);
             return entity;
         }
@@ -76,12 +86,11 @@ namespace Emberpoint.Core.GameObjects.Managers
             return GetEntityAt<IEntity>(position) != null;
         }
 
-        public static void RecalculatFieldOfView(IEntity entity)
+        public static void RecalculatFieldOfView(IEntity entity, bool redrawFov = true)
         {
             entity.FieldOfView.Calculate(entity.Position, entity.FieldOfViewRadius);
-            if (entity is Player)
+            if (entity is Player && redrawFov)
                 GridManager.Grid.DrawFieldOfView(entity);
-
         }
 
         public static void RecalculatFieldOfView()

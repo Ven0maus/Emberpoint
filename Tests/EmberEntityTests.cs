@@ -1,24 +1,20 @@
-﻿using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.GameObjects.Map;
-using GoRogue;
+﻿using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
-using System;
-using static SadConsole.Entities.Entity;
-using Console = SadConsole.Console;
+using Tests.TestObjects.Entities;
+using Tests.TestObjects.Grids;
 
 namespace Tests
 {
     [TestFixture]
     public class EmberEntityTests
     {
-        private static EmberGrid _grid;
+        protected BaseGrid _grid;
 
         [SetUp]
         public void SetUp()
         {
-            _grid = EmberGridTests.BuildCustomGrid(10, 10);
+            _grid = BaseGrid.Create(10, 10);
         }
 
         [TearDown]
@@ -32,8 +28,8 @@ namespace Tests
         {
             var entities = new[]
             {
-                EntityManager.Create<TestEntity>(new Point(0, 0)),
-                EntityManager.Create<TestEntity>(new Point(1, 0)),
+                EntityManager.Create<BaseEntity>(new Point(0, 0)),
+                EntityManager.Create<BaseEntity>(new Point(1, 0)),
             };
 
             Assert.AreEqual(0, entities[0].ObjectId);
@@ -43,7 +39,7 @@ namespace Tests
         [Test]
         public void Entity_CanMoveTowards_IsCorrect()
         {
-            var entity = EntityManager.Create<TestEntity>(new Point(0, 0));
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
             var cell = _grid.GetCell(0, 1);
             cell.CellProperties.Walkable = false;
             _grid.SetCell(cell, true);
@@ -55,7 +51,7 @@ namespace Tests
         [Test]
         public void Entity_MoveTowards_PositionChangeIsCorrect()
         {
-            var entity = EntityManager.Create<TestEntity>(new Point(0, 0));
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
             var cell = _grid.GetCell(0, 1);
             cell.CellProperties.Walkable = false;
             _grid.SetCell(cell, true);
@@ -69,7 +65,7 @@ namespace Tests
         [Test]
         public void Entity_IsFieldOfView_Correct()
         {
-            var entity = EntityManager.Create<TestEntity>(new Point(0, 0));
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
             entity.FieldOfViewRadius = 5;
             entity.FieldOfView.Calculate(entity.Position, entity.FieldOfViewRadius);
 
@@ -83,70 +79,12 @@ namespace Tests
             Assert.IsFalse(entity.FieldOfView.BooleanFOV[3, 0]);
         }
 
-        /// <summary>
-        /// Mock of the entity class
-        /// </summary>
-        private class TestEntity : IEntity
+        [Test]
+        public void Entity_CellContainsEntity_Correct()
         {
-            public Point Position { get; set; }
-
-            public EventHandler<EntityMovedEventArgs> Moved;
-
-            public int FieldOfViewRadius { get; set; } = 0;
-
-            private FOV _fieldOfView;
-            public FOV FieldOfView
-            {
-                get
-                {
-                    return _fieldOfView ?? (_fieldOfView = new FOV(_grid.FieldOfView));
-                }
-            }
-
-            public int ObjectId { get; }
-
-            public TestEntity()
-            {
-                ObjectId = EntityManager.GetUniqueId();
-                Moved += OnMove;
-            }
-
-            private void OnMove(object sender, EntityMovedEventArgs args)
-            {
-                if (FieldOfViewRadius > 0)
-                {
-                    // Re-calculate the field of view
-                    FieldOfView.Calculate(Position, FieldOfViewRadius);
-                }
-            }
-
-            public bool CanMoveTowards(Point position)
-            {
-                return _grid.InBounds(position) && _grid.GetCell(position).CellProperties.Walkable && !EntityManager.EntityExistsAt(position);
-            }
-
-            public void MoveTowards(Point position, bool checkCanMove = true)
-            {
-                if (checkCanMove && !CanMoveTowards(position)) return;
-                var prevPos = Position;
-                Position = position;
-                Moved.Invoke(this, new EntityMovedEventArgs(null, prevPos));
-            }
-
-            public void RenderObject(Console console)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void ResetFieldOfView()
-            {
-                _fieldOfView = null;
-            }
-
-            public void UnRenderObject()
-            {
-                throw new NotImplementedException();
-            }
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            Assert.IsTrue(_grid.ContainsEntity(entity.Position));
+            Assert.IsTrue(_grid.GetCell(entity.Position).ContainsEntity());
         }
     }
 }

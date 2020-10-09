@@ -1,46 +1,19 @@
-﻿using Emberpoint.Core;
-using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.GameObjects.Map;
+﻿using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using Tests.TestObjects.Grids;
 
 namespace Tests
 {
     [TestFixture]
     public class EmberGridTests
     {
-        protected EmberGrid _grid;
-
-        public static EmberGrid BuildCustomGrid(int width, int height)
-        {
-            // Build a custom cell grid
-            var cells = new EmberCell[width * height];
-            for (var x = 0; x < width; x++)
-            {
-                for (var y = 0; y < height; y++)
-                {
-                    cells[y * width + x] = new EmberCell
-                    {
-                        Background = Color.Black,
-                        Foreground = Color.Gray,
-                        Glyph = '.',
-
-                        CellProperties = new EmberCell.EmberCellProperties
-                        {
-                            Name = "floor",
-                            Walkable = true
-                        },
-                        Position = new Point(x, y),
-                    };
-                }
-            }
-            return new EmberGrid(width, height, cells);
-        }
+        protected BaseGrid _grid;
 
         [SetUp]
         protected virtual void Setup()
         {
-            _grid = BuildCustomGrid(10, 10);
+            _grid = BaseGrid.Create(10, 10);
             GridManager.InitializeCustomGrid(_grid);
         }
 

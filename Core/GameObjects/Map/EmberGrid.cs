@@ -13,14 +13,8 @@ namespace Emberpoint.Core.GameObjects.Map
 {
     public class EmberGrid : IRenderable
     {
-        private EmberCell[] _cells;
-        private EmberCell[] Cells
-        {
-            get
-            {
-                return _cells ?? (_cells = Blueprint.GetCells());
-            }
-        }
+        private readonly EmberCell[] _cells;
+        protected EmberCell[] Cells => _cells;
 
         private ArrayMap<bool> _fieldOfView;
         public ArrayMap<bool> FieldOfView
@@ -33,7 +27,8 @@ namespace Emberpoint.Core.GameObjects.Map
                 {
                     for (int y = 0; y < GridSizeY; y++)
                     {
-                        _fieldOfView[x, y] = !GetCell(x, y).CellProperties.BlocksFov;
+                        var cell = GetNonClonedCell(x, y);
+                        _fieldOfView[x, y] = !cell.CellProperties.BlocksFov;
                     }
                 }
                 return _fieldOfView;
@@ -46,20 +41,20 @@ namespace Emberpoint.Core.GameObjects.Map
         public Blueprint<EmberCell> Blueprint { get; }
 
         private MapWindow _map;
-        private MapWindow Map
+        protected MapWindow Map
         {
             get
             {
-                return _map ?? (_map = UserInterfaceManager.Get<MapWindow>());
+                return _map ??= UserInterfaceManager.Get<MapWindow>();
             }
         }
 
         private LightEngine<EmberCell> _lightEngine;
-        private LightEngine<EmberCell> LightEngine
+        public LightEngine<EmberCell> LightEngine
         {
             get
             {
-                return _lightEngine ?? (_lightEngine = new LightEngine<EmberCell>());
+                return _lightEngine ??= new LightEngine<EmberCell>();
             }
         }
 
@@ -70,6 +65,9 @@ namespace Emberpoint.Core.GameObjects.Map
             GridSizeX = blueprint.GridSizeX;
             GridSizeY = blueprint.GridSizeY;
             Blueprint = blueprint;
+
+            // Initialize cells
+            _cells = Blueprint.GetCells();
         }
 
         public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells)
@@ -83,7 +81,8 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 for (int y = 0; y < GridSizeY; y++)
                 {
-                    _fieldOfView[x, y] = !GetCell(x, y).CellProperties.BlocksFov;
+                    var cell = GetNonClonedCell(x, y);
+                    _fieldOfView[x, y] = !cell.CellProperties.BlocksFov;
                 }
             }
         }
@@ -94,21 +93,6 @@ namespace Emberpoint.Core.GameObjects.Map
         public void CalibrateLightEngine()
         {
             LightEngine.Calibrate(Cells);
-        }
-
-        public EmberCell GetFirstCell(Func<EmberCell, bool> criteria)
-        {
-            for (int x=0; x < GridSizeX; x++)
-            {
-                for (int y = 0; y < GridSizeY; y++)
-                {
-                    if (criteria.Invoke(GetNonClonedCell(x,y)))
-                    {
-                        return GetCell(x, y);
-                    }
-                }
-            }
-            return null;
         }
 
         public IEnumerable<EmberCell> GetCells(Func<EmberCell, bool> criteria)
@@ -136,25 +120,58 @@ namespace Emberpoint.Core.GameObjects.Map
         }
 
         /// <summary>
+        /// Retrieves the first cell that matches the given criteria.
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        public EmberCell GetCell(Func<EmberCell, bool> criteria)
+        {
+            for (int x = 0; x < GridSizeX; x++)
+            {
+                for (int y = 0; y < GridSizeY; y++)
+                {
+                    if (criteria.Invoke(GetNonClonedCell(x, y)))
+                    {
+                        return GetCell(x, y);
+                    }
+                }
+            }
+            return null;
+        }
+
+        public bool ContainsEntity(Point position)
+        {
+            return EntityManager.EntityExistsAt(position.X, position.Y);
+        }
+
+        public bool ContainsEntity(int x, int y)
+        {
+            return EntityManager.EntityExistsAt(x, y);
+        }
+
+        /// <summary>
         /// Use this when updating multiple cells at a time for performance.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        private EmberCell GetNonClonedCell(int x, int y)
+        protected EmberCell GetNonClonedCell(int x, int y)
         {
             return Cells[y * GridSizeX + x];
         }
 
-        public void SetCell(EmberCell cell, bool calculateEntitiesFov = false)
+        public void SetCell(EmberCell cell, bool calculateEntitiesFov = false, bool adjustLights = true)
         {
             var originalCell = Cells[cell.Position.Y * GridSizeX + cell.Position.X];
 
             // Update the map fov values if the walkable is changed
             bool updateFieldOfView = originalCell.CellProperties.BlocksFov != cell.CellProperties.BlocksFov;
 
-            // Adjust neighboring cell light levels if this object gives of light
-            LightEngine.AdjustLightLevels(cell, originalCell);
+            // Adjust the lights of the tiles
+            if (adjustLights)
+            {
+                LightEngine.AdjustLightSource(cell, originalCell.Clone());
+            }
 
             // Copy the new cell data
             originalCell.CopyFrom(cell);
@@ -182,9 +199,10 @@ namespace Emberpoint.Core.GameObjects.Map
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void UpdateFieldOfView(int x, int y)
+        protected void UpdateFieldOfView(int x, int y)
         {
-            FieldOfView[x, y] = !GetNonClonedCell(x, y).CellProperties.BlocksFov;
+            var cell = GetNonClonedCell(x, y);
+            FieldOfView[x, y] = !cell.CellProperties.BlocksFov;
         }
 
         /// <summary>
@@ -196,62 +214,128 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 for (int y = 0; y < GridSizeY; y++)
                 {
-                    FieldOfView[x, y] = !GetNonClonedCell(x, y).CellProperties.BlocksFov;
+                    var cell = GetNonClonedCell(x, y);
+                    FieldOfView[x, y] = !cell.CellProperties.BlocksFov;
                 }
             }
         }
 
-        public void DrawFieldOfView(IEntity entity)
+        public IEnumerable<EmberCell> GetCellsInFov(IEntity entity)
         {
+            var cells = new List<EmberCell>();
             for (int x = 0; x < GridSizeX; x++)
             {
                 for (int y = 0; y < GridSizeY; y++)
                 {
                     var cell = GetNonClonedCell(x, y);
-                    SetCellColors(cell, entity);
+                    if (entity.FieldOfView.BooleanFOV[x, y])
+                        cells.Add(cell);
+                }
+            }
+            return cells;
+        }
+
+        public IEnumerable<EmberCell> GetCellsInFov(IEntity entity, int fovRadius)
+        {
+            var originalFov = entity.FieldOfViewRadius;
+
+            entity.FieldOfViewRadius = fovRadius;
+            EntityManager.RecalculatFieldOfView(entity, false);
+
+            var cells = GetCellsInFov(entity).ToList();
+
+            entity.FieldOfViewRadius = originalFov;
+            EntityManager.RecalculatFieldOfView(entity, false);
+
+            return cells;
+        }
+
+        public IEnumerable<EmberCell> GetExploredCellsInFov(IEntity entity)
+        {
+            return GetCellsInFov(entity).Where(cell => cell.CellProperties.IsExplored);
+        }
+
+        public IEnumerable<EmberCell> GetExploredCellsInFov(IEntity entity, int fovRadius)
+        {
+            return GetCellsInFov(entity, fovRadius).Where(cell => cell.CellProperties.IsExplored);
+        }
+
+        public void DrawFieldOfView(IEntity entity, bool discoverUnexploredTiles = false)
+        {
+            // Check if there is a lightsource nearby, then explore all cells enlighted by it automatically
+            var prevFov = entity.FieldOfViewRadius;
+
+            entity.FieldOfViewRadius = Constants.Player.DiscoverLightsRadius;
+            EntityManager.RecalculatFieldOfView(entity, false);
+
+            // Get cells that emit light
+            var cellsThatEmitLight = GridManager.Grid.GetCellsInFov(entity)
+                .Where(a => a.LightProperties.EmitsLight && !a.CellProperties.IsExplored)
+                .ToList();
+
+            // Actual cells we see
+            foreach (var lightCell in cellsThatEmitLight)
+            {
+                var cell = GetNonClonedCell(lightCell.Position.X, lightCell.Position.Y);
+                cell.CellProperties.IsExplored = true;
+                cell.IsVisible = true;
+            }
+
+            // Reset entity fov
+            if (prevFov != entity.FieldOfViewRadius)
+            {
+                entity.FieldOfViewRadius = prevFov;
+                EntityManager.RecalculatFieldOfView(entity, false);
+            }
+
+            for (int x = 0; x < GridSizeX; x++)
+            {
+                for (int y = 0; y < GridSizeY; y++)
+                {
+                    var cell = GetNonClonedCell(x, y);
+
+                    if (discoverUnexploredTiles && !cell.CellProperties.IsExplored)
+                    {
+                        if (entity.FieldOfView.BooleanFOV[x, y])
+                        {
+                            cell.CellProperties.IsExplored = true;
+                        }
+                    }
+
+                    // Cells near light sources are automatically visible
+                    if (cell.LightProperties.Brightness > 0f && !cell.LightProperties.EmitsLight && !cell.CellProperties.IsExplored && 
+                        cell.LightProperties.LightSources.Any(a => a.CellProperties.IsExplored))
+                    {
+                        cell.CellProperties.IsExplored = true;
+                    }  
+
+                    cell.IsVisible = cell.CellProperties.IsExplored;
+
+                    SetCellColors(cell);
                     SetCell(cell);
                 }
             }
 
             // Redraw the map
-            Map.Update();
-        }
-
-        public void SetCellColors(EmberCell cell, IEntity entity)
-        {
-            // If the cell is in the field of view
-            if (entity == null || (entity.FieldOfViewRadius > 0 && entity.FieldOfView.BooleanFOV[cell.Position]))
+            if (Map != null)
             {
-                if (cell.LightProperties.Brightness > 0f && cell.LightProperties.LightSources != null)
-                    cell.Foreground = Color.Lerp(cell.GetClosestLightSource().LightProperties.LightColor, Color.White, cell.LightProperties.Brightness);
-                else
-                    cell.Foreground = cell.CellProperties.NormalForeground;
-            }
-            else
-            {
-                if (cell.LightProperties.Brightness > 0f && cell.LightProperties.LightSources != null)
-                    cell.Foreground = Color.Lerp(Color.Lerp(cell.GetClosestLightSource().LightProperties.LightColor, Color.Black, .5f), Color.White, cell.LightProperties.Brightness);
-                else
-                    cell.Foreground = cell.CellProperties.ForegroundFov;
+                Map.Update();
             }
         }
 
-        public void SetCellColors(EmberCell cell, IEntity entity, Color foreground, Color foregroundFov)
+        public void SetCellColors(EmberCell cell)
         {
-            // If the cell is in the field of view
-            if (entity == null || (entity.FieldOfViewRadius > 0 && entity.FieldOfView.BooleanFOV[cell.Position]))
+            if (cell.LightProperties.Brightness > 0f)
             {
-                if (cell.LightProperties.Brightness > 0f)
-                    cell.Foreground = Color.Lerp(foreground, Color.White, cell.LightProperties.Brightness);
-                else
-                    cell.Foreground = cell.CellProperties.NormalForeground;
+                var closestLightSource = cell.GetClosestLightSource();
+                Color lightSourceColor = closestLightSource?.LightProperties.LightColor ?? Color.White;
+                cell.Foreground = Color.Lerp(cell.CellProperties.NormalForeground, lightSourceColor, cell.LightProperties.Brightness);
+                cell.Background = Color.Lerp(cell.CellProperties.NormalBackground, lightSourceColor, cell.LightProperties.Brightness / 3f);
             }
             else
             {
-                if (cell.LightProperties.Brightness > 0f)
-                    cell.Foreground = Color.Lerp(foregroundFov, Color.White, cell.LightProperties.Brightness);
-                else
-                    cell.Foreground = cell.CellProperties.ForegroundFov;
+                cell.Foreground = cell.CellProperties.ForegroundFov;
+                cell.Background = cell.CellProperties.BackgroundFov;
             }
         }
 
