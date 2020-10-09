@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Tests
 {
     [TestFixture]
-    class ExtensionsTests
+    public class ExtensionsTests
     {
         [Test]
         public void MonoGameExtension_PointTranslate_Correct()
