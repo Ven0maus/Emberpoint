@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using SadConsole;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Emberpoint.Core.GameObjects.Map
@@ -14,6 +13,7 @@ namespace Emberpoint.Core.GameObjects.Map
     {
         public EmberCellProperties CellProperties { get; set; }
         public LightEngineProperties LightProperties { get; set; }
+        public EmberEffectProperties EffectProperties { get; set; }
 
         public Point Position { get; set; }
 
@@ -32,6 +32,7 @@ namespace Emberpoint.Core.GameObjects.Map
 
             Glyph = ' ';
             LightProperties = new LightEngineProperties();
+            EffectProperties = new EmberEffectProperties();
             Foreground = CellProperties.NormalForeground;
             Background = CellProperties.NormalBackground;
         }
@@ -54,6 +55,7 @@ namespace Emberpoint.Core.GameObjects.Map
             Foreground = foreground;
             Background = Color.Black;
             LightProperties = new LightEngineProperties();
+            EffectProperties = new EmberEffectProperties();
         }
 
         public EmberCell(Point position, int glyph, Color foreground, Color foregroundFov, Color background, Color backgroundFov)
@@ -74,6 +76,7 @@ namespace Emberpoint.Core.GameObjects.Map
             Foreground = foreground;
             Background = background;
             LightProperties = new LightEngineProperties();
+            EffectProperties = new EmberEffectProperties();
         }
 
         public void CopyFrom(EmberCell cell)
@@ -81,22 +84,28 @@ namespace Emberpoint.Core.GameObjects.Map
             // Does foreground, background, glyph, mirror, decorators
             CopyAppearanceFrom(cell);
 
-            IsVisible = cell.IsVisible;
+            // Base properties
+            Position = cell.Position;
+
+            // Ember cell properties
             CellProperties.Name = cell.CellProperties.Name;
             CellProperties.NormalForeground = cell.CellProperties.NormalForeground;
             CellProperties.NormalBackground = cell.CellProperties.NormalBackground;
             CellProperties.ForegroundFov = cell.CellProperties.ForegroundFov;
             CellProperties.BackgroundFov = cell.CellProperties.BackgroundFov;
-            Position = cell.Position;
             CellProperties.Walkable = cell.CellProperties.Walkable;
             CellProperties.BlocksFov = cell.CellProperties.BlocksFov;
             CellProperties.IsExplored = cell.CellProperties.IsExplored;
 
+            // Light engine properties
             LightProperties.Brightness = cell.LightProperties.Brightness;
             LightProperties.LightRadius = cell.LightProperties.LightRadius;
             LightProperties.EmitsLight = cell.LightProperties.EmitsLight;
             LightProperties.LightColor = cell.LightProperties.LightColor;
             LightProperties.LightSources = cell.LightProperties.LightSources;
+
+            // Ember Effect Properties
+            EffectProperties.EntityMovementEffects = cell.EffectProperties.EntityMovementEffects;
         }
 
         public new EmberCell Clone()
@@ -116,7 +125,6 @@ namespace Emberpoint.Core.GameObjects.Map
                 },
 
                 Position = this.Position,
-                IsVisible = this.IsVisible,
 
                 LightProperties = new LightEngineProperties
                 {
@@ -125,6 +133,11 @@ namespace Emberpoint.Core.GameObjects.Map
                     EmitsLight = this.LightProperties.EmitsLight,
                     LightColor = this.LightProperties.LightColor,
                     LightSources = this.LightProperties.LightSources
+                },
+
+                EffectProperties = new EmberEffectProperties
+                {
+                    EntityMovementEffects = this.EffectProperties.EntityMovementEffects,
                 }
             };
             // Does foreground, background, glyph, mirror, decorators
@@ -198,6 +211,9 @@ namespace Emberpoint.Core.GameObjects.Map
                     sb.AppendLine($"<LightSource>: [X] {lightSource.Position.X} [Y] {lightSource.Position.Y}");
                 }
             }
+            sb.AppendLine();
+            sb.AppendLine("[EffectProperties]");
+            sb.AppendLine($"<MovementEffects>: {(EffectProperties.EntityMovementEffects != null ? EffectProperties.EntityMovementEffects.Count : 0)}");
             sb.AppendLine("[---------------------]");
             return sb.ToString();
         }
@@ -221,6 +237,17 @@ namespace Emberpoint.Core.GameObjects.Map
             public Color BackgroundFov { get; set; }
             public bool BlocksFov { get; set; }
             public bool IsExplored { get; set; }
+        }
+
+        public class EmberEffectProperties
+        {
+            public List<Action<IEntity>> EntityMovementEffects { get; set; }
+
+            public void AddMovementEffect(Action<IEntity> action)
+            {
+                if (EntityMovementEffects == null) EntityMovementEffects = new List<Action<IEntity>>();
+                EntityMovementEffects.Add(action);
+            }
         }
     }
 }

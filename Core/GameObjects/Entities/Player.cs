@@ -43,14 +43,14 @@ namespace Emberpoint.Core.GameObjects.Entities
 
         public override void Update(TimeSpan timeElapsed)
         {
+            // Call base to update correctly
+            base.Update(timeElapsed);
+
             // Check movement keys for the player
             CheckForMovementKeys();
 
             // Check any interaction keys for the player
             CheckForInteractionKeys();
-
-            // Call base to update correctly
-            base.Update(timeElapsed);
         }
 
         public void Initialize()
