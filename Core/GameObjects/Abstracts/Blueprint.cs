@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Tests")]
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
     public abstract class Blueprint<T> where T : EmberCell, new()

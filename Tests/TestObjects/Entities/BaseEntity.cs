@@ -34,15 +34,12 @@ namespace Tests.TestObjects.Entities
         private FOV _fieldOfView;
         public FOV FieldOfView
         {
-            get
-            {
-                return _fieldOfView ?? (_fieldOfView = new FOV(_grid.FieldOfView));
-            }
+            get => _fieldOfView ??= new FOV(_grid.FieldOfView);
         }
 
         public int ObjectId { get; }
 
-        private EmberGrid _grid;
+        private readonly EmberGrid _grid;
 
         public BaseEntity()
         {
