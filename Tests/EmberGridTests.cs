@@ -1,6 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using System.Linq;
 using Tests.TestObjects.Grids;
 
 namespace Tests
@@ -40,7 +41,7 @@ namespace Tests
         public void CanRetrieveNeighborsOfCell()
         {
             var cell = _grid.GetCell(0, 0);
-            Assert.AreEqual(_grid.GetNeighbors(cell).Length, 3);
+            Assert.AreEqual(_grid.GetNeighbors(cell).Count(), 3);
         }
 
         [Test]

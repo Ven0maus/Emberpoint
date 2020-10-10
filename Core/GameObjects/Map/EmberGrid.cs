@@ -339,14 +339,12 @@ namespace Emberpoint.Core.GameObjects.Map
             }
         }
 
-        public EmberCell[] GetNeighbors(EmberCell cell)
+        public IEnumerable<EmberCell> GetNeighbors(EmberCell cell)
         {
             int x = cell.Position.X;
             int y = cell.Position.Y;
-
             var points = new List<Point>();
-            if (!InBounds(x, y)) return Array.Empty<EmberCell>();
-
+            if (!InBounds(x, y)) return Enumerable.Empty<EmberCell>();
             if (InBounds(x + 1, y)) points.Add(new Point(x + 1, y));
             if (InBounds(x - 1, y)) points.Add(new Point(x - 1, y));
             if (InBounds(x, y + 1)) points.Add(new Point(x, y + 1));
@@ -355,8 +353,7 @@ namespace Emberpoint.Core.GameObjects.Map
             if (InBounds(x - 1, y - 1)) points.Add(new Point(x - 1, y - 1));
             if (InBounds(x + 1, y - 1)) points.Add(new Point(x + 1, y - 1));
             if (InBounds(x - 1, y + 1)) points.Add(new Point(x - 1, y + 1));
-
-            return points.Select(a => GetCell(a)).ToArray();
+            return points.Select(a => GetCell(a));
         }
 
         public bool InBounds(int x, int y)
