@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Emberpoint.Core.Extensions;
+﻿using System.Collections.Generic;
 using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
+using GoRogue;
 using Microsoft.Xna.Framework;
-using SadConsole;
 using SadConsole.Components;
+using SadConsole.Input;
 
 namespace Emberpoint.Core.GameObjects.Entities
 {
@@ -41,16 +39,36 @@ namespace Emberpoint.Core.GameObjects.Entities
             _fovObjectsWindow.Update(this);
         }
 
-        public override void Update(TimeSpan timeElapsed)
+        public override bool ProcessKeyboard(Keyboard info)
         {
-            // Call base to update correctly
-            base.Update(timeElapsed);
+            bool keyHandled = false;
 
-            // Check movement keys for the player
-            CheckForMovementKeys();
+            // Simplified way to check if any key we care about is pressed and set movement direction.
+            foreach (var key in _playerMovements.Keys)
+            {
+                var binding = KeybindingsManager.GetKeybinding(key);
+                if (info.IsKeyPressed(binding))
+                {
+                    var moveDirection = _playerMovements[key];
+                    MoveTowards(moveDirection);
+                    keyHandled = true;
+                    break;
+                }
+            }
 
-            // Check any interaction keys for the player
-            CheckForInteractionKeys();
+            //If this will grow in the future, we may want to add a Dictionary<Keybindings, EmberItem>
+            // to efficiently retrieve and activate items.
+            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Flashlight)))
+            {
+                var flashLight = Game.Player.Inventory.GetItemOfType<Flashlight>();
+                flashLight?.Switch();
+                keyHandled = true;
+            }
+
+            if (keyHandled)
+                return true;
+            else
+                return base.ProcessKeyboard(info);
         }
 
         public void Initialize()
@@ -58,40 +76,23 @@ namespace Emberpoint.Core.GameObjects.Entities
             // Draw player on the map
             RenderObject(MapWindow);
 
+            // Make sure we check for input
+            IsFocused = true;
+
             // Center viewport on player
             MapWindow.CenterOnEntity(this);
 
+            // Show the nearby objects in the fov window
             _fovObjectsWindow.Update(this);
         }
 
-        public void CheckForInteractionKeys()
+        private readonly Dictionary<Keybindings, Direction> _playerMovements = 
+        new Dictionary<Keybindings, Direction>
         {
-            //If this will grow in the future, we may want to add a Dictionary<Keybindings, EmberItem>
-            // to efficiently retrieve and activate items.
-            if (Global.KeyboardState.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Flashlight)))
-            {
-                var flashLight = Game.Player.Inventory.GetItemOfType<Flashlight>();
-                flashLight?.Switch();
-            }
-        }
-
-        public void CheckForMovementKeys()
-        {
-            foreach (var movementKey in _playerMovements.Keys
-                .Where(key => Global.KeyboardState.IsKeyPressed(KeybindingsManager.GetKeybinding(key))))
-            {
-                var (x, y) = _playerMovements[movementKey];
-                MoveTowards(Position.Translate(x, y));
-            }
-        }
-
-        private readonly Dictionary<Keybindings, (int x, int y)> _playerMovements = 
-        new Dictionary<Keybindings, (int x, int y)>
-        {
-            {Keybindings.Movement_Up, (0, -1)},
-            {Keybindings.Movement_Down, (0, 1)},
-            {Keybindings.Movement_Left, (-1, 0)},
-            {Keybindings.Movement_Right, (1, 0)}
+            {Keybindings.Movement_Up, Direction.UP},
+            {Keybindings.Movement_Down, Direction.DOWN},
+            {Keybindings.Movement_Left, Direction.LEFT},
+            {Keybindings.Movement_Right, Direction.RIGHT}
         };
     }
 }

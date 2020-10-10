@@ -106,6 +106,12 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             Position = position;
         }
 
+        public void MoveTowards(Direction position, bool checkCanMove = true)
+        {
+            var pos = Position;
+            MoveTowards(pos += position, checkCanMove);
+        }
+
         public void UnRenderObject()
         {
             if (_renderedConsole != null)
