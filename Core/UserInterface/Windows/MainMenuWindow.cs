@@ -140,7 +140,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             return mainMenu;
         }
 
-        public static void Hide(SadConsole.Console transitionConsole)
+        private static void Hide(SadConsole.Console transitionConsole)
         {
             var mainMenu = UserInterfaceManager.Get<MainMenuWindow>();
             if (mainMenu == null)
@@ -155,7 +155,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Global.CurrentScreen = transitionConsole;
         }
 
-        private void Transition(SadConsole.Console transitionConsole)
+        public static void Transition(SadConsole.Console transitionConsole)
         {
             Hide(transitionConsole);
         }
@@ -204,7 +204,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
 
             // Transition to contributors window
-            Hide(ContributorsWindow);
+            Transition(ContributorsWindow);
         }
 
         public void ButtonPressOptions(object sender, EventArgs args)
@@ -220,7 +220,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
 
             // Transition to options window
-            Hide(OptionsWindow);
+            Transition(OptionsWindow);
         }
 
         public void ButtonPressExit(object sender, EventArgs args)
