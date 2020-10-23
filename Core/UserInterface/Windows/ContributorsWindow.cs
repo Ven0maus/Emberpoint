@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Themes;
@@ -31,6 +27,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             ThemeColors = colors;
 
             InitializeBackButton();
+            DrawContributors();
         }
 
         private void InitializeBackButton()
@@ -56,7 +53,6 @@ namespace Emberpoint.Core.UserInterface.Windows
             base.OnInvalidate();
 
             DrawWindowTitle();
-            DrawContributors();
         }
 
         private void DrawWindowTitle()
@@ -87,20 +83,16 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         private void DrawContributors()
         {
-            List<string> contributors = new List<string>(new string[]
-                { "Venom0us",
-                  "MattHaluska",
-                  "Smartis2812",
-                  "maratmugninov",
-                  "agit15" });
-
-            var row = 12;
-
-            foreach (var contributor in contributors)
+            var listbox = new ListBox(20, 6)
             {
-                Print(49, row, contributor.ToString(), Color.White);
-                row += 3;
-            }
+                Position = new Point(49, 12)
+            };
+            listbox.Items.Add("Venom0us");
+            listbox.Items.Add("MattHaluska");
+            listbox.Items.Add("Smartis2812");
+            listbox.Items.Add("maratmugninov");
+            listbox.Items.Add("agit15");
+            Add(listbox);
         }
     }
 }
