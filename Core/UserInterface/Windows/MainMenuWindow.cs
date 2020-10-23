@@ -12,6 +12,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class MainMenuWindow : ControlsConsole, IUserInterface
     {
+        public ContributorsWindow ContributorsWindow { get; set; }
         public OptionsWindow OptionsWindow { get; private set; }
 
         public SadConsole.Console Console
@@ -192,7 +193,18 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void ButtonPressContributors(object sender, EventArgs args)
         {
-            // TODO
+            if (ContributorsWindow == null)
+            {
+                ContributorsWindow = new ContributorsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
+                UserInterfaceManager.Add(ContributorsWindow);
+            }
+            else
+            {
+                ContributorsWindow.IsVisible = true;
+            }
+
+            // Transition to contributors window
+            Hide(ContributorsWindow);
         }
 
         public void ButtonPressOptions(object sender, EventArgs args)
