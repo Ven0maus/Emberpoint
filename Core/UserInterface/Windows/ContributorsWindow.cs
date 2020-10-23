@@ -83,15 +83,23 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         private void DrawContributors()
         {
-            var listbox = new ListBox(20, 6)
+            string[] contributors = new[]
+            {
+                "Venom0us",
+                "MattHaluska",
+                "Smartis2812",
+                "maratmugninov",
+                "agit15",
+            };
+
+            var listbox = new ListBox(contributors.Max(a => a.Length) + 5, Constants.GameWindowHeight / 2)
             {
                 Position = new Point(49, 12)
             };
-            listbox.Items.Add("Venom0us");
-            listbox.Items.Add("MattHaluska");
-            listbox.Items.Add("Smartis2812");
-            listbox.Items.Add("maratmugninov");
-            listbox.Items.Add("agit15");
+
+            foreach (var contributor in contributors)
+                listbox.Items.Add(contributor);
+
             Add(listbox);
         }
     }
