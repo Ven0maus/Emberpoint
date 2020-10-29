@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core;
+using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
@@ -49,6 +50,8 @@ namespace Tests.TestObjects.Windows
             foreach (var character in characters)
             {
                 if (!_blueprintTiles.TryGetValue(character, out var tile) || tile.Name == null) continue;
+                var glyphColor = MonoGameExtensions.GetColorByString(tile.Foreground);
+                if (glyphColor.A == 0) continue; // Don't render transparent tiles on the fov window
                 yield return new KeyValuePair<char, CharObj>(character, new CharObj(tile.Glyph, tile.Name));
             }
         }
