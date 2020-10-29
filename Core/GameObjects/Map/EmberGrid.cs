@@ -329,7 +329,9 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 var closestLightSource = cell.GetClosestLightSource();
                 Color lightSourceColor = closestLightSource?.LightProperties.LightColor ?? Color.White;
-                cell.Foreground = Color.Lerp(cell.CellProperties.NormalForeground, lightSourceColor, cell.LightProperties.Brightness);
+                if (cell.CellProperties.NormalForeground != Color.Transparent)
+                    cell.Foreground = Color.Lerp(cell.CellProperties.NormalForeground, lightSourceColor, cell.LightProperties.Brightness);
+                if (cell.CellProperties.NormalBackground != Color.Transparent)
                 cell.Background = Color.Lerp(cell.CellProperties.NormalBackground, lightSourceColor, cell.LightProperties.Brightness / 3f);
             }
             else

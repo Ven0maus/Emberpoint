@@ -12,7 +12,7 @@
       "glyph": "#",
       "name": "Wall",
       "walkable": false,
-      "foreground": "#000042",
+      "foreground": "Transparent",
       "background": "#000042",
       "blocksfov": true
     },

@@ -103,8 +103,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                         {
                             NormalForeground = foregroundColor,
                             NormalBackground = backgroundColor,
-                            ForegroundFov = Color.Lerp(foregroundColor, Color.Black, .5f),
-                            BackgroundFov = Color.Lerp(backgroundColor, Color.Black, .5f),
+                            ForegroundFov = foregroundColor == Color.Transparent ? Color.Transparent : Color.Lerp(foregroundColor, Color.Black, .5f),
+                            BackgroundFov = backgroundColor == Color.Transparent ? Color.Transparent : Color.Lerp(backgroundColor, Color.Black, .5f),
                             Walkable = tile.Walkable,
                             Name = tile.Name,
                             BlocksFov = tile.BlocksFov,
