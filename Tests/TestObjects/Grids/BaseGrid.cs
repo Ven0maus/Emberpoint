@@ -33,8 +33,8 @@ namespace Tests.TestObjects.Grids
                         BlocksFov = false,
                         NormalForeground = cell.Foreground,
                         NormalBackground = cell.Background,
-                        ForegroundFov = Color.Lerp(cell.Foreground, Color.Black, .5f),
-                        BackgroundFov = cell.Background
+                        ForegroundFov = cell.Foreground == Color.Transparent ? Color.Transparent : Color.Lerp(cell.Foreground, Color.Black, .5f),
+                        BackgroundFov = cell.Background == Color.Transparent ? Color.Transparent : Color.Lerp(cell.Foreground, Color.Black, .5f)
                     };
                     cells[y * width + x] = cell;
                 }

@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.GameObjects.Map;
+﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Map;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using System;
@@ -90,8 +91,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                     BlueprintTile tile = nullTile;
                     if (charValue !=null && !tiles.TryGetValue(charValue, out tile)) 
                         throw new Exception("Glyph '" + charValue + "' was not present in the config file for blueprint: " + name);
-                    var foregroundColor = GetColorByString(tile.Foreground);
-                    var backgroundColor = tile.Background != null ? GetColorByString(tile.Background) : Color.Black;
+                    var foregroundColor = MonoGameExtensions.GetColorByString(tile.Foreground);
+                    var backgroundColor = tile.Background != null ? MonoGameExtensions.GetColorByString(tile.Background) : Color.Black;
                     var cell = new T()
                     {
                         Glyph = tile.Glyph,
@@ -102,8 +103,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                         {
                             NormalForeground = foregroundColor,
                             NormalBackground = backgroundColor,
-                            ForegroundFov = Color.Lerp(foregroundColor, Color.Black, .5f),
-                            BackgroundFov = Color.Lerp(backgroundColor, Color.Black, .5f),
+                            ForegroundFov = foregroundColor == Color.Transparent ? Color.Transparent : Color.Lerp(foregroundColor, Color.Black, .5f),
+                            BackgroundFov = backgroundColor == Color.Transparent ? Color.Transparent : Color.Lerp(backgroundColor, Color.Black, .5f),
                             Walkable = tile.Walkable,
                             Name = tile.Name,
                             BlocksFov = tile.BlocksFov,
@@ -118,21 +119,13 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
                     if (!string.IsNullOrWhiteSpace(tile.LightColor))
                     {
-                        cell.LightProperties.LightColor = GetColorByString(tile.LightColor);
+                        cell.LightProperties.LightColor = MonoGameExtensions.GetColorByString(tile.LightColor);
                     }
 
                     cells.Add(cell);
                 }
             }
             return cells.ToArray();
-        }
-
-        private Color GetColorByString(string value)
-        {
-            var prop = typeof(Color).GetProperty(value);
-            if (prop != null)
-                return (Color)prop.GetValue(null, null);
-            return default;
         }
     }
 

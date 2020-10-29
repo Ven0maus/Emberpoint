@@ -4,62 +4,64 @@
       "glyph" : " ",
       "name" : null,
       "walkable" : true,
-	  "foreground" : "BurlyWood",
+	    "foreground" : "BurlyWood",
       "background" : "Black",
-	  "blocksfov" : false
+	    "blocksfov" : false
     },
     {
-      "glyph" : "#",
-      "name" : "Wall",
-      "walkable" : false,
-	  "foreground" : "DarkGray",
-	  "blocksfov" : true
+      "glyph": "#",
+      "name": "Wall",
+      "walkable": false,
+      "foreground": "Transparent",
+      "background": "#000042",
+      "blocksfov": true
     },
-	{
-      "glyph" : "+",
-      "name" : "Door",
-      "walkable" : true,
-	  "foreground" : "LightBlue",
-	  "blocksfov" : true
+    {
+      "glyph": "+",
+      "name": "Door",
+      "walkable": true,
+      "foreground": "White",
+      "background": "#2f2f2f",
+      "blocksfov": true
     },
-	{
-      "glyph" : ">",
-      "name" : "Stairs Up",
-      "walkable" : true,
-	  "foreground" : "Bisque",
-	  "blocksfov" : true
+    {
+      "glyph": ">",
+      "name": "Stairs Up",
+      "walkable": true,
+      "foreground": "Bisque",
+      "blocksfov": true
     },
 	{
       "glyph" : "<",
       "name" : "Stairs Down",
       "walkable" : true,
-	  "foreground" : "Bisque",
-	  "blocksfov" : true
+	    "foreground" : "Bisque",
+	    "blocksfov" : true
     },
 	{
       "glyph" : "G",
       "name" : "Gargoyle Statue",
       "walkable" : false,
-	  "foreground" : "Ivory",
-	  "blocksfov" : true
+	    "foreground" : "Ivory",
+	    "blocksfov" : true
     },
 	{
       "glyph" : "|",
       "name" : "Pillar",
       "walkable" : false,
-	  "foreground" : "LightSlateGray",
-	  "blocksfov" : false
+	    "foreground" : "LightSlateGray",
+	    "blocksfov" : false
     },
 	{
       "glyph" : ".",
       "name" : "Lamp",
       "walkable" : true,
-	  "foreground" : "LightYellow",
-	  "blocksfov" : false,
-	  "EmitsLight" : true,
-	  "Brightness" : 0.5,
-	  "LightRadius" : 5,
-	  "LightColor" : "BlanchedAlmond"
+	    "foreground" : "LightYellow",
+	    "blocksfov" : false,
+	    "EmitsLight" : true,
+	    "Brightness" : 0.5,
+	    "LightRadius" : 5,
+	    "LightColor" : "BlanchedAlmond"
     }
   ]
 }

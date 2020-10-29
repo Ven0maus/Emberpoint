@@ -2,6 +2,7 @@
 using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tests.TestObjects.Entities;
@@ -59,33 +60,33 @@ namespace Tests
         [Test]
         public void CorrectGlyphs_AreShown()
         {
-            var expectedResult = new[] { '#' };
+            var expectedResult = Array.Empty<char>();
             _fovWindow.Update(_entity);
             Assert.IsTrue(_fovWindow.SequenceEqual(expectedResult, out IEnumerable<char> result), GetExpectedMessage(expectedResult, result));
 
             AddGlyphToGrid('G', "Gargoyle Statue", 3, 2);
 
             _fovWindow.Update(_entity);
-            expectedResult = new[] { '#', 'G' };
+            expectedResult = new[] { 'G' };
             Assert.IsTrue(_fovWindow.SequenceEqual(expectedResult, out result), GetExpectedMessage(expectedResult, result));
 
             AddGlyphToGrid('>', "Stairs up", 4, 3);
 
             _fovWindow.Update(_entity);
-            expectedResult = new[] { '#', 'G', '>' };
+            expectedResult = new[] { 'G', '>' };
             Assert.IsTrue(_fovWindow.SequenceEqual(expectedResult, out result), GetExpectedMessage(expectedResult, result));
         }
 
         [Test]
         public void CorrectGlyphs_AreShown_WhenExploredLightNearby()
         {
-            var expectedResult = new[] { '#' };
+            var expectedResult = Array.Empty<char>();
             _entity.MoveTowards(new Point(10, 1));
 
             _fovWindow.Update(_entity);
             Assert.IsTrue(_fovWindow.SequenceEqual(expectedResult, out IEnumerable<char> result), GetExpectedMessage(expectedResult, result));
 
-            expectedResult = new[] { '#', '.' };
+            expectedResult = new[] { '.' };
             _entity.MoveTowards(new Point(10, 2));
 
             _fovWindow.Update(_entity);
