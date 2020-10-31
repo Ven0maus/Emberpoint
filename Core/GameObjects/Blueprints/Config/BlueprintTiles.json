@@ -1,6 +1,6 @@
 {
   "tiles": [
-    {
+  {
       "glyph" : " ",
       "name" : null,
       "walkable" : true,
@@ -8,7 +8,7 @@
       "background" : "Black",
 	    "blocksfov" : false
     },
-    {
+  {
       "glyph": "#",
       "name": "Wall",
       "walkable": false,
@@ -16,7 +16,7 @@
       "background": "#000042",
       "blocksfov": true
     },
-    {
+  {
       "glyph": "+",
       "name": "Door",
       "walkable": true,
@@ -24,7 +24,7 @@
       "background": "#2f2f2f",
       "blocksfov": true
     },
-    {
+  {
       "glyph": ">",
       "name": "Stairs Up",
       "walkable": true,
@@ -45,7 +45,49 @@
 	    "foreground" : "Ivory",
 	    "blocksfov" : true
     },
-	{
+  {
+      "glyph": "D",
+      "name": "Desk",
+      "walkable": false,
+      "foreground": "Brown",
+      "blocksfov": false
+    },
+  {
+      "glyph": "B",
+      "name": "Bookcase",
+      "walkable": false,
+      "foreground": "Brown",
+      "blocksfov": true
+    },
+  {
+      "glyph": "b",
+      "name": "Bed",
+      "walkable": false,
+      "foreground": "Red",
+      "blocksfov": false
+    },
+  {
+      "glyph": "C",
+      "name": "Carpet",
+      "walkable": true,
+      "foreground": "Red",
+      "blocksfov": false
+    },
+  {
+      "glyph": "c",
+      "name": "Chair",
+      "walkable": false,
+      "foreground": "Black",
+      "blocksfov": false
+    },
+  {
+      "glyph": "W",
+      "name": "Wardrobe",
+      "walkable": false,
+      "foreground": "Brown",
+      "blocksfov": true
+    },
+  {
       "glyph" : "|",
       "name" : "Pillar",
       "walkable" : false,
