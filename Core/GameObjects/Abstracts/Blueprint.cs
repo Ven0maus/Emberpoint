@@ -54,14 +54,14 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             var blueprintPath = Path.Combine(BlueprintPath, name + ".txt");
             var blueprintConfigPath = Path.Combine(Constants.Blueprint.BlueprintsConfigPath, Constants.Blueprint.BlueprintTiles + ".json");
 
-            if (!File.Exists(blueprintPath) || !File.Exists(blueprintConfigPath) || !File.Exists(Constants.Blueprint.SpecialCharactersPath)) 
+            if (!File.Exists(blueprintPath) || !File.Exists(blueprintConfigPath) || !File.Exists(Constants.Blueprint.SpecialCharactersPath))
                 return Array.Empty<T>();
 
             var specialConfig = JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(Constants.Blueprint.SpecialCharactersPath));
             var specialChars = specialConfig.Tiles.ToDictionary(a => a.Glyph, a => a);
 
             var config = JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(blueprintConfigPath));
-            var tiles = config.Tiles.ToDictionary(a => (char?) a.Glyph, a => a);
+            var tiles = config.Tiles.ToDictionary(a => (char?)a.Glyph, a => a);
             var nullTile = BlueprintTile.Null();
 
             foreach (var tile in tiles)
@@ -74,7 +74,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             var blueprint = File.ReadAllText(blueprintPath).Replace("\r", "").Split('\n');
 
             var cells = new List<T>();
-            for (int y=0; y < GridSizeY; y++)
+            for (int y = 0; y < GridSizeY; y++)
             {
                 for (int x = 0; x < GridSizeX; x++)
                 {
@@ -83,13 +83,15 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                     if (y >= blueprint.Length || x >= blueprint[y].Length)
                     {
                         charValue = null;
-                    } else {
+                    }
+                    else
+                    {
                         charValue = blueprint[y][x];
                     }
-                    
+
                     var position = new Point(x, y);
                     BlueprintTile tile = nullTile;
-                    if (charValue !=null && !tiles.TryGetValue(charValue, out tile)) 
+                    if (charValue != null && !tiles.TryGetValue(charValue, out tile))
                         throw new Exception("Glyph '" + charValue + "' was not present in the config file for blueprint: " + name);
                     var foregroundColor = MonoGameExtensions.GetColorByString(tile.Foreground);
                     var backgroundColor = tile.Background != null ? MonoGameExtensions.GetColorByString(tile.Background) : Color.Black;
@@ -106,6 +108,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                             ForegroundFov = foregroundColor == Color.Transparent ? Color.Transparent : Color.Lerp(foregroundColor, Color.Black, .5f),
                             BackgroundFov = backgroundColor == Color.Transparent ? Color.Transparent : Color.Lerp(backgroundColor, Color.Black, .5f),
                             Walkable = tile.Walkable,
+                            Interactable = tile.Interactable,
                             Name = tile.Name,
                             BlocksFov = tile.BlocksFov,
                         },
@@ -144,6 +147,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public char Glyph;
         public string Name;
         public bool Walkable;
+        public bool Interactable;
         public string Foreground;
         public string Background;
         public bool BlocksFov;

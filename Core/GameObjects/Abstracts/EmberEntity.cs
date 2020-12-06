@@ -5,6 +5,8 @@ using Emberpoint.Core.GameObjects.Managers;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using System.Diagnostics;
+using Emberpoint.Core.UserInterface.Windows;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
@@ -85,6 +87,33 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             ExecuteMovementEffects(args);
         }
 
+        public Point GetInteractedCell(Point position)
+        {
+            if (CanInteract(Position.X, Position.Y - 1))
+            {
+                return new Point(position.X, position.Y - 1);
+            }
+            if (CanInteract(Position.X, Position.Y + 1))
+            {
+                return new Point(position.X, position.Y + 1);
+            }
+            if (CanInteract(Position.X + 1, Position.Y))
+            {
+                return new Point(position.X + 1, position.Y);
+            }
+            if (CanInteract(Position.X - 1, Position.Y))
+            {
+                return new Point(position.X - 1, position.Y);
+            }
+            return position;
+        }
+        public bool CanInteract(int x, int y)
+        {
+            Point position = new Point(x, y);
+            if (Health == 0) return false;
+            var cell = GridManager.Grid.GetCell(position);
+            return GridManager.Grid.InBounds(position) && cell.CellProperties.Interactable && !EntityManager.EntityExistsAt(position) && cell.CellProperties.IsExplored;
+        }
         public bool CanMoveTowards(Point position)
         {
             if (Health == 0) return false;
@@ -99,6 +128,13 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             console.Children.Add(this);
         }
 
+        public void CheckInteraction(InteractionWindow interaction)
+        {
+            if (CanInteract(Position.X, Position.Y - 1) || CanInteract(Position.X, Position.Y + 1) || CanInteract(Position.X + 1, Position.Y) || CanInteract(Position.X - 1, Position.Y))
+            {
+                interaction.PrintMessage(Constants.ObjectInteraction);
+            }
+        }
         public void MoveTowards(Point position, bool checkCanMove = true)
         {
             if (Health == 0) return;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
@@ -18,11 +19,15 @@ namespace Emberpoint.Core.GameObjects.Entities
         private MapWindow _mapWindow;
         public MapWindow MapWindow => _mapWindow ??= UserInterfaceManager.Get<MapWindow>();
 
+        private InteractionManager interactionManager;
         private readonly FovWindow _fovObjectsWindow;
+        private readonly InteractionWindow _interaction;
 
         public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character, 1, 1)
         {
             FieldOfViewRadius = 0;
+            _interaction = UserInterfaceManager.Get<InteractionWindow>();
+            interactionManager = new InteractionManager(_interaction, this);
             _fovObjectsWindow = UserInterfaceManager.Get<FovWindow>();
             Components.Add(new EntityViewSyncComponent());
         }
@@ -50,10 +55,22 @@ namespace Emberpoint.Core.GameObjects.Entities
                 if (info.IsKeyPressed(binding))
                 {
                     var moveDirection = _playerMovements[key];
+                    _interaction.PrintMessage(Constants.EmptyMessage);
                     MoveTowards(moveDirection);
+                    CheckInteraction(_interaction);
                     keyHandled = true;
                     break;
                 }
+            }
+
+            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)))
+            {
+                Point position = GetInteractedCell(Position);
+                if (!position.Equals(Position))
+                {
+                    interactionManager.HandleInteraction(position);
+                }
+                keyHandled = true;
             }
 
             //If this will grow in the future, we may want to add a Dictionary<Keybindings, EmberItem>
@@ -86,7 +103,7 @@ namespace Emberpoint.Core.GameObjects.Entities
             _fovObjectsWindow.Update(this);
         }
 
-        private readonly Dictionary<Keybindings, Direction> _playerMovements = 
+        private readonly Dictionary<Keybindings, Direction> _playerMovements =
         new Dictionary<Keybindings, Direction>
         {
             {Keybindings.Movement_Up, Direction.UP},
