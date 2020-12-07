@@ -62,6 +62,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             // Default stats
             MaxHealth = 100;
 
+            Facing = Direction.DOWN;
+
             Moved += OnMove;
         }
 
@@ -142,18 +144,39 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             }
             return false;
         }
-        public void MoveTowards(Point position, bool checkCanMove = true)
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null)
         {
             if (Health == 0) return;
+
+            // Set correct facing direction regardless if we can move or not
+            SetFacingDirection(position, direction);
+
             if (checkCanMove && !CanMoveTowards(position)) return;
+
             Position = position;
         }
 
         public void MoveTowards(Direction position, bool checkCanMove = true)
         {
             var pos = Position;
-            Facing = position;
             MoveTowards(pos += position, checkCanMove);
+        }
+
+        private void SetFacingDirection(Point newPosition, Direction direction)
+        {
+            // Set facing direction
+            var prevPos = Position;
+            var difference = newPosition - prevPos;
+            if (difference.X == 1 && difference.Y == 0)
+                Facing = Direction.RIGHT;
+            else if (difference.X == -1 && difference.Y == 0)
+                Facing = Direction.LEFT;
+            else if (difference.X == 0 && difference.Y == 1)
+                Facing = Direction.DOWN;
+            else if (difference.X == 0 && difference.Y == -1)
+                Facing = Direction.UP;
+            else
+                Facing = direction ?? Direction.DOWN;
         }
 
         public void UnRenderObject()

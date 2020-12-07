@@ -1,5 +1,4 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
-using GoRogue;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using Tests.TestObjects.Entities;
@@ -89,66 +88,130 @@ namespace Tests
         }
 
         [Test]
-        public void Entity_CellIntegrationFacingDown_Correct()
-        {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
-            var cell = _grid.GetCell(0, 1);
-            cell.CellProperties.Interactable = true;
-            cell.CellProperties.IsExplored = true;
-            _grid.SetCell(cell);
-            Assert.IsFalse(entity.CheckInteraction(Direction.RIGHT));
-            Assert.IsFalse(entity.CheckInteraction(Direction.UP));
-            Assert.IsTrue(entity.CheckInteraction(Direction.DOWN));
-            Assert.IsFalse(entity.CheckInteraction(Direction.LEFT));
-        }
-        [Test]
-        public void Entity_CellIntegrationFacingUp_Correct()
-        {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 1), _grid);
-            var cell = _grid.GetCell(0, 0);
-            cell.CellProperties.Interactable = true;
-            cell.CellProperties.IsExplored = true;
-            _grid.SetCell(cell);
-            Assert.IsFalse(entity.CheckInteraction(Direction.RIGHT));
-            Assert.IsTrue(entity.CheckInteraction(Direction.UP));
-            Assert.IsFalse(entity.CheckInteraction(Direction.DOWN));
-            Assert.IsFalse(entity.CheckInteraction(Direction.LEFT));
-        }
-        [Test]
-        public void Entity_CellIntegrationFacingLeft_Correct()
-        {
-            var entity = EntityManager.Create<BaseEntity>(new Point(1, 0), _grid);
-            var cell = _grid.GetCell(0, 0);
-            cell.CellProperties.Interactable = true;
-            cell.CellProperties.IsExplored = true;
-            _grid.SetCell(cell);
-            Assert.IsFalse(entity.CheckInteraction(Direction.RIGHT));
-            Assert.IsFalse(entity.CheckInteraction(Direction.UP));
-            Assert.IsFalse(entity.CheckInteraction(Direction.DOWN));
-            Assert.IsTrue(entity.CheckInteraction(Direction.LEFT));
-        }
-        [Test]
         public void Entity_CellIntegrationFacingRight_Correct()
         {
             var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
-            var cell = _grid.GetCell(1, 0);
+            entity.MoveTowards(new Point(1, 0), false);
+            var cell = _grid.GetCell(2, 0);
             cell.CellProperties.Interactable = true;
             cell.CellProperties.IsExplored = true;
             _grid.SetCell(cell);
-            Assert.IsTrue(entity.CheckInteraction(Direction.RIGHT));
-            Assert.IsFalse(entity.CheckInteraction(Direction.UP));
-            Assert.IsFalse(entity.CheckInteraction(Direction.DOWN));
-            Assert.IsFalse(entity.CheckInteraction(Direction.LEFT));
+
+            // We are facing the interactable cell, we should be able to interact
+            Assert.IsTrue(entity.CheckInteraction());
+
+            // Unset interactable
+            cell.CellProperties.Interactable = false;
+            _grid.SetCell(cell);
+
+            // Set tile to the left interactable, but don't face left
+            cell = _grid.GetCell(0, 0);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+
+            // We are not facing the interactable cell, we should not be able to interact
+            Assert.IsFalse(entity.CheckInteraction());
+        }
+
+        [Test]
+        public void Entity_CellIntegrationFacingLeft_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(2, 0), _grid);
+            entity.MoveTowards(new Point(1, 0), false);
+            var cell = _grid.GetCell(0, 0);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+            _grid.SetCell(cell);
+
+            // We are facing the interactable cell, we should be able to interact
+            Assert.IsTrue(entity.CheckInteraction());
+
+            // Unset interactable
+            cell.CellProperties.Interactable = false;
+            _grid.SetCell(cell);
+
+            // Set tile to the right interactable, but don't face right
+            cell = _grid.GetCell(2, 0);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+
+            // We are not facing the interactable cell, we should not be able to interact
+            Assert.IsFalse(entity.CheckInteraction());
+        }
+
+        [Test]
+        public void Entity_CellIntegrationFacingUp_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 2), _grid);
+            entity.MoveTowards(new Point(0, 1), false);
+            var cell = _grid.GetCell(0, 0);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+            _grid.SetCell(cell);
+
+            // We are facing the interactable cell, we should be able to interact
+            Assert.IsTrue(entity.CheckInteraction());
+
+            // Unset interactable
+            cell.CellProperties.Interactable = false;
+            _grid.SetCell(cell);
+
+            // Set tile downwards interactable, but don't face down
+            cell = _grid.GetCell(0, 2);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+
+            // We are not facing the interactable cell, we should not be able to interact
+            Assert.IsFalse(entity.CheckInteraction());
+        }
+
+        [Test]
+        public void Entity_CellIntegrationFacingDown_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            entity.MoveTowards(new Point(0, 1), false);
+            var cell = _grid.GetCell(0, 2);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+            _grid.SetCell(cell);
+
+            // We are facing the interactable cell, we should be able to interact
+            Assert.IsTrue(entity.CheckInteraction());
+
+            // Unset interactable
+            cell.CellProperties.Interactable = false;
+            _grid.SetCell(cell);
+
+            // Set tile downwards interactable, but don't face down
+            cell = _grid.GetCell(0, 0);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+
+            // We are not facing the interactable cell, we should not be able to interact
+            Assert.IsFalse(entity.CheckInteraction());
         }
 
         [Test]
         public void Entity_CellIntegrationNotExplored_Correct()
         {
             var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
-            var cell = _grid.GetCell(1, 0);
+            entity.MoveTowards(new Point(1, 0)); // facing right
+            var cell = _grid.GetCell(2, 0);
             cell.CellProperties.Interactable = true;
             _grid.SetCell(cell);
-            Assert.IsFalse(entity.CheckInteraction(Direction.RIGHT));
+            Assert.IsFalse(entity.CheckInteraction());
+        }
+
+        [Test]
+        public void Entity_CellIntegrationNotInteractable_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            entity.MoveTowards(new Point(1, 0)); // facing right
+            var cell = _grid.GetCell(2, 0);
+            cell.CellProperties.Interactable = false;
+            cell.CellProperties.IsExplored = true;
+            _grid.SetCell(cell);
+            Assert.IsFalse(entity.CheckInteraction());
         }
     }
 }
