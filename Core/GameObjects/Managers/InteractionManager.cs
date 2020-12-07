@@ -23,7 +23,10 @@ namespace Emberpoint.Core.GameObjects.Managers
             string cellName = cell.CellProperties.Name;
             switch (cellName)
             {
-                case Constants.Door:
+                case Constants.DoorClosed:
+                    HandleDoorInteraction(cell);
+                    break;
+                case Constants.DoorOpen:
                     HandleDoorInteraction(cell);
                     break;
                 default:

@@ -29,7 +29,13 @@ namespace Emberpoint.Core.UserInterface.Windows
             Print(3, 0, "Objects", Color.Orange);
             _charObjects = new Dictionary<char, CharObj>();
             _blueprintTiles = GetTilesFromConfig();
-            _blueprintTiles.Add('=', new BlueprintTile() { Name = "Door", Glyph = '=', Foreground = "White" }) ;
+            _blueprintTiles.Add('=', new BlueprintTile() 
+            { 
+                Name = Constants.DoorOpen,
+                Glyph = '=',
+                Foreground = "White",
+                BlocksFov = false
+            });
             _maxLineRows = Height - 2;
 
             _textConsole = new Console(Width - 2, Height - 2)

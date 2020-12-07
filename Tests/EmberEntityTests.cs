@@ -89,7 +89,46 @@ namespace Tests
         }
 
         [Test]
-        public void Entity_CellIntegration_Correct()
+        public void Entity_CellIntegrationFacingDown_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var cell = _grid.GetCell(0, 1);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+            _grid.SetCell(cell);
+            Assert.IsFalse(entity.CheckInteraction(Direction.RIGHT));
+            Assert.IsFalse(entity.CheckInteraction(Direction.UP));
+            Assert.IsTrue(entity.CheckInteraction(Direction.DOWN));
+            Assert.IsFalse(entity.CheckInteraction(Direction.LEFT));
+        }
+        [Test]
+        public void Entity_CellIntegrationFacingUp_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 1), _grid);
+            var cell = _grid.GetCell(0, 0);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+            _grid.SetCell(cell);
+            Assert.IsFalse(entity.CheckInteraction(Direction.RIGHT));
+            Assert.IsTrue(entity.CheckInteraction(Direction.UP));
+            Assert.IsFalse(entity.CheckInteraction(Direction.DOWN));
+            Assert.IsFalse(entity.CheckInteraction(Direction.LEFT));
+        }
+        [Test]
+        public void Entity_CellIntegrationFacingLeft_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(1, 0), _grid);
+            var cell = _grid.GetCell(0, 0);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+            _grid.SetCell(cell);
+            Assert.IsFalse(entity.CheckInteraction(Direction.RIGHT));
+            Assert.IsFalse(entity.CheckInteraction(Direction.UP));
+            Assert.IsFalse(entity.CheckInteraction(Direction.DOWN));
+            Assert.IsTrue(entity.CheckInteraction(Direction.LEFT));
+        }
+        [Test]
+        public void Entity_CellIntegrationFacingRight_Correct()
         {
             var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
             var cell = _grid.GetCell(1, 0);

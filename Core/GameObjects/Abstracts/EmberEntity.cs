@@ -38,6 +38,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public int Glyph { get => Animation.CurrentFrame[0].Glyph; }
 
+        public Direction Facing  {get; private set; }
+
         private Console _renderedConsole;
 
         /// <summary>
@@ -86,21 +88,21 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             ExecuteMovementEffects(args);
         }
 
-        public Point GetInteractedCell(Point position, Direction facing)
+        public Point GetInteractedCell(Point position)
         {
-            if (CanInteract(Position.X, Position.Y - 1) && facing.Equals(Direction.UP))
+            if (Facing.Equals(Direction.UP) && CanInteract(Position.X, Position.Y - 1))
             {
                 return new Point(position.X, position.Y - 1);
             }
-            if (CanInteract(Position.X, Position.Y + 1) && facing.Equals(Direction.DOWN))
+            if (Facing.Equals(Direction.DOWN) && CanInteract(Position.X, Position.Y + 1))
             {
                 return new Point(position.X, position.Y + 1);
             }
-            if (CanInteract(Position.X + 1, Position.Y) && facing.Equals(Direction.RIGHT))
+            if (Facing.Equals(Direction.RIGHT) && CanInteract(Position.X + 1, Position.Y))
             {
                 return new Point(position.X + 1, position.Y);
             }
-            if (CanInteract(Position.X - 1, Position.Y) && facing.Equals(Direction.LEFT))
+            if (Facing.Equals(Direction.LEFT) && CanInteract(Position.X - 1, Position.Y))
             {
                 return new Point(position.X - 1, position.Y);
             }
@@ -127,12 +129,12 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             console.Children.Add(this);
         }
 
-        public bool CheckInteraction(InteractionWindow interaction, Direction facing)
+        public bool CheckInteraction(InteractionWindow interaction)
         {
-            if ((CanInteract(Position.X, Position.Y - 1) && facing.Equals(Direction.UP))    ||
-                (CanInteract(Position.X, Position.Y + 1) && facing.Equals(Direction.DOWN))  ||
-                (CanInteract(Position.X + 1, Position.Y) && facing.Equals(Direction.RIGHT)) ||
-                (CanInteract(Position.X - 1, Position.Y) && facing.Equals(Direction.LEFT)))
+            if (Facing.Equals(Direction.UP) && (CanInteract(Position.X, Position.Y - 1))    ||
+                (Facing.Equals(Direction.DOWN) && CanInteract(Position.X, Position.Y + 1))  ||
+                (Facing.Equals(Direction.RIGHT) && CanInteract(Position.X + 1, Position.Y)) ||
+                (Facing.Equals(Direction.LEFT) && CanInteract(Position.X - 1, Position.Y)))
             {
                 interaction.PrintMessage("Press " + KeybindingsManager.GetKeybinding(Keybindings.Interact) +
                                          " to interact with object.");
@@ -150,6 +152,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public void MoveTowards(Direction position, bool checkCanMove = true)
         {
             var pos = Position;
+            Facing = position;
             MoveTowards(pos += position, checkCanMove);
         }
 

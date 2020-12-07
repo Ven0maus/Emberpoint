@@ -18,7 +18,6 @@ namespace Emberpoint.Core.GameObjects.Entities
         private MapWindow _mapWindow;
         public MapWindow MapWindow => _mapWindow ??= UserInterfaceManager.Get<MapWindow>();
 
-        private Direction facing;
         private readonly InteractionManager interactionManager;
         private readonly FovWindow _fovObjectsWindow;
         private readonly InteractionWindow _interaction;
@@ -59,8 +58,7 @@ namespace Emberpoint.Core.GameObjects.Entities
                     var moveDirection = _playerMovements[key];
                     _interaction.PrintMessage(Constants.EmptyMessage);
                     MoveTowards(moveDirection);
-                    facing = moveDirection;
-                    InteractionStatus = CheckInteraction( _interaction, facing);
+                    InteractionStatus = CheckInteraction( _interaction);
                     keyHandled = true;
                     break;
                 }
@@ -68,7 +66,7 @@ namespace Emberpoint.Core.GameObjects.Entities
 
             if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)) && InteractionStatus)
             {
-                Point position = GetInteractedCell(Position, facing);
+                Point position = GetInteractedCell(Position);
                 interactionManager.HandleInteraction(position);
                 keyHandled = true;
             }

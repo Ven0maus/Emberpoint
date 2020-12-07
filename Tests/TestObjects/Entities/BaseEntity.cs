@@ -125,10 +125,10 @@ namespace Tests.TestObjects.Entities
 
         public bool CheckInteraction(Direction facing)
         {
-            if ((CanInteract(Position.X, Position.Y - 1) && facing.Equals(Direction.UP)) ||
-                (CanInteract(Position.X, Position.Y + 1) && facing.Equals(Direction.DOWN)) ||
-                (CanInteract(Position.X + 1, Position.Y) && facing.Equals(Direction.RIGHT)) ||
-                (CanInteract(Position.X - 1, Position.Y) && facing.Equals(Direction.LEFT)))
+            if (facing.Equals(Direction.UP) && (CanInteract(Position.X, Position.Y - 1)) ||
+               (facing.Equals(Direction.DOWN) && CanInteract(Position.X, Position.Y + 1)) ||
+               (facing.Equals(Direction.RIGHT) && CanInteract(Position.X + 1, Position.Y)) ||
+               (facing.Equals(Direction.LEFT) && CanInteract(Position.X - 1, Position.Y)))
             {
                 return true;
             }
