@@ -65,6 +65,21 @@ namespace Emberpoint.Core.GameObjects.Entities
                 keyHandled = true;
             }
 
+            // TODO: Move to seperate class
+            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.DeveloperConsole)))
+            {
+                var devConsole = UserInterfaceManager.Get<DeveloperWindow>();
+                if (devConsole.IsVisible)
+                {
+                    devConsole.Hide();
+                }
+                else
+                {
+                    devConsole.Show();
+                }
+                keyHandled = true;
+            }
+
             if (keyHandled)
                 return true;
             else
