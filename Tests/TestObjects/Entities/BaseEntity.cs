@@ -156,17 +156,27 @@ namespace Tests.TestObjects.Entities
             _fieldOfView = null;
         }
 
+        public bool GetInteractedCell(out Point cellPosition)
+        {
+            cellPosition = default;
+            var facingPosition = Position + Facing;
+            if (CanInteract(facingPosition.X, facingPosition.Y))
+            {
+                cellPosition = new Point(facingPosition.X, facingPosition.Y);
+                return true;
+            }
+            return false;
+        }
+
         public bool CheckInteraction()
         {
-            if ((Facing.Equals(Direction.UP) && CanInteract(Position.X, Position.Y - 1)) ||
-               (Facing.Equals(Direction.DOWN) && CanInteract(Position.X, Position.Y + 1)) ||
-               (Facing.Equals(Direction.RIGHT) && CanInteract(Position.X + 1, Position.Y)) ||
-               (Facing.Equals(Direction.LEFT) && CanInteract(Position.X - 1, Position.Y)))
+            if (GetInteractedCell(out _))
             {
                 return true;
             }
             return false;
         }
+
         public bool CanInteract(int x, int y)
         {
             if (Health == 0) return false;

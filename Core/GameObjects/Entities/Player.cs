@@ -64,9 +64,9 @@ namespace Emberpoint.Core.GameObjects.Entities
                 }
             }
 
-            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)) && InteractionStatus)
+            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)) 
+                && InteractionStatus && GetInteractedCell(out Point position))
             {
-                Point position = GetInteractedCell(Position);
                 interactionManager.HandleInteraction(position);
                 keyHandled = true;
             }

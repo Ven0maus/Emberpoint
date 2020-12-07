@@ -90,25 +90,16 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             ExecuteMovementEffects(args);
         }
 
-        public Point GetInteractedCell(Point position)
+        public bool GetInteractedCell(out Point cellPosition)
         {
-            if (Facing.Equals(Direction.UP) && CanInteract(Position.X, Position.Y - 1))
+            cellPosition = default;
+            var facingPosition = Position + Facing;
+            if (CanInteract(facingPosition.X, facingPosition.Y))
             {
-                return new Point(position.X, position.Y - 1);
+                cellPosition = new Point(facingPosition.X, facingPosition.Y);
+                return true;
             }
-            if (Facing.Equals(Direction.DOWN) && CanInteract(Position.X, Position.Y + 1))
-            {
-                return new Point(position.X, position.Y + 1);
-            }
-            if (Facing.Equals(Direction.RIGHT) && CanInteract(Position.X + 1, Position.Y))
-            {
-                return new Point(position.X + 1, position.Y);
-            }
-            if (Facing.Equals(Direction.LEFT) && CanInteract(Position.X - 1, Position.Y))
-            {
-                return new Point(position.X - 1, position.Y);
-            }
-            return position;
+            return false;
         }
         public bool CanInteract(int x, int y)
         {
@@ -133,10 +124,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public bool CheckInteraction(InteractionWindow interaction)
         {
-            if (Facing.Equals(Direction.UP) && (CanInteract(Position.X, Position.Y - 1))    ||
-                (Facing.Equals(Direction.DOWN) && CanInteract(Position.X, Position.Y + 1))  ||
-                (Facing.Equals(Direction.RIGHT) && CanInteract(Position.X + 1, Position.Y)) ||
-                (Facing.Equals(Direction.LEFT) && CanInteract(Position.X - 1, Position.Y)))
+            if (GetInteractedCell(out _))
             {
                 interaction.PrintMessage("Press " + KeybindingsManager.GetKeybinding(Keybindings.Interact) +
                                          " to interact with object.");
@@ -144,6 +132,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             }
             return false;
         }
+
         public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null)
         {
             if (Health == 0) return;
