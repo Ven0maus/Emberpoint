@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Emberpoint.Core.GameObjects.Entities;
+﻿using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
@@ -10,12 +7,14 @@ namespace Emberpoint.Core.GameObjects.Managers
 {
     public class InteractionManager
     {
-        private InteractionWindow interactionWindow;
+        private readonly InteractionWindow interactionWindow;
         //For possible use in the future, for example when interacting with an object, the player's hp is reduced.
-        private Player player;
+        private readonly Player player;
+        private readonly FovWindow _fovObjectsWindow;
         public InteractionManager(InteractionWindow interactionWindow, Player player)
         {
             this.interactionWindow = interactionWindow;
+            _fovObjectsWindow = UserInterfaceManager.Get<FovWindow>();
             this.player = player;
         }
         public void HandleInteraction(Point position) 
@@ -38,13 +37,17 @@ namespace Emberpoint.Core.GameObjects.Managers
             {
                 interactionWindow.PrintMessage(Constants.CloseDoor);
                 cell.CellProperties.Walkable = false;
+                cell.Glyph = '+';
             }
             else
             {
                 interactionWindow.PrintMessage(Constants.OpenDoor);
                 cell.CellProperties.Walkable = true;
+                cell.Glyph = '=';
             }
             GridManager.Grid.SetCell(cell);
+            player.MapWindow.Update();
+            _fovObjectsWindow.Update(player);
         }
 
         private void HandleDefaultInteraction(EmberCell cell)

@@ -5,7 +5,6 @@ using Emberpoint.Core.GameObjects.Managers;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using SadConsole;
-using System.Diagnostics;
 using Emberpoint.Core.UserInterface.Windows;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
@@ -87,21 +86,21 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             ExecuteMovementEffects(args);
         }
 
-        public Point GetInteractedCell(Point position)
+        public Point GetInteractedCell(Point position, Direction facing)
         {
-            if (CanInteract(Position.X, Position.Y - 1))
+            if (CanInteract(Position.X, Position.Y - 1) && facing.Equals(Direction.UP))
             {
                 return new Point(position.X, position.Y - 1);
             }
-            if (CanInteract(Position.X, Position.Y + 1))
+            if (CanInteract(Position.X, Position.Y + 1) && facing.Equals(Direction.DOWN))
             {
                 return new Point(position.X, position.Y + 1);
             }
-            if (CanInteract(Position.X + 1, Position.Y))
+            if (CanInteract(Position.X + 1, Position.Y) && facing.Equals(Direction.RIGHT))
             {
                 return new Point(position.X + 1, position.Y);
             }
-            if (CanInteract(Position.X - 1, Position.Y))
+            if (CanInteract(Position.X - 1, Position.Y) && facing.Equals(Direction.LEFT))
             {
                 return new Point(position.X - 1, position.Y);
             }
@@ -109,10 +108,10 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         }
         public bool CanInteract(int x, int y)
         {
-            Point position = new Point(x, y);
             if (Health == 0) return false;
-            var cell = GridManager.Grid.GetCell(position);
-            return GridManager.Grid.InBounds(position) && cell.CellProperties.Interactable && !EntityManager.EntityExistsAt(position) && cell.CellProperties.IsExplored;
+            if (!GridManager.Grid.InBounds(x, y)) return false;
+            var cell = GridManager.Grid.GetCell(x, y);
+            return cell.CellProperties.Interactable && !EntityManager.EntityExistsAt(x, y) && cell.CellProperties.IsExplored;
         }
         public bool CanMoveTowards(Point position)
         {
@@ -128,12 +127,18 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             console.Children.Add(this);
         }
 
-        public void CheckInteraction(InteractionWindow interaction)
+        public bool CheckInteraction(InteractionWindow interaction, Direction facing)
         {
-            if (CanInteract(Position.X, Position.Y - 1) || CanInteract(Position.X, Position.Y + 1) || CanInteract(Position.X + 1, Position.Y) || CanInteract(Position.X - 1, Position.Y))
+            if ((CanInteract(Position.X, Position.Y - 1) && facing.Equals(Direction.UP))    ||
+                (CanInteract(Position.X, Position.Y + 1) && facing.Equals(Direction.DOWN))  ||
+                (CanInteract(Position.X + 1, Position.Y) && facing.Equals(Direction.RIGHT)) ||
+                (CanInteract(Position.X - 1, Position.Y) && facing.Equals(Direction.LEFT)))
             {
-                interaction.PrintMessage(Constants.ObjectInteraction);
+                interaction.PrintMessage("Press " + KeybindingsManager.GetKeybinding(Keybindings.Interact) +
+                                         " to interact with object.");
+                return true;
             }
+            return false;
         }
         public void MoveTowards(Point position, bool checkCanMove = true)
         {

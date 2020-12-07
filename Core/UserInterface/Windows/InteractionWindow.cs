@@ -1,11 +1,7 @@
 ﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using SadConsole;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
@@ -18,14 +14,12 @@ namespace Emberpoint.Core.UserInterface.Windows
             get { return this; }
         }
 
-        private readonly int _maxLineRows;
 
         public InteractionWindow(int width, int height) : base(width, height)
         {
             this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
             Print(3, 0, "Interaction", Color.Orange);
 
-            _maxLineRows = Height - 2;
             _textConsole = new Console(Width - 2, Height - 2)
             {
                 Position = new Point(2, 1),

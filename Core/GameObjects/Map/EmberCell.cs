@@ -89,7 +89,7 @@ namespace Emberpoint.Core.GameObjects.Map
 
             // Base properties
             Position = cell.Position;
-
+            Glyph = cell.Glyph;
             // Ember cell properties
             CellProperties.Name = cell.CellProperties.Name;
             CellProperties.NormalForeground = cell.CellProperties.NormalForeground;
@@ -129,6 +129,7 @@ namespace Emberpoint.Core.GameObjects.Map
                     IsExplored = this.CellProperties.IsExplored
                 },
 
+                Glyph = this.Glyph,
                 Position = this.Position,
 
                 LightProperties = new LightEngineProperties
@@ -197,6 +198,7 @@ namespace Emberpoint.Core.GameObjects.Map
             sb.AppendLine("[EmberCell Information]");
             sb.AppendLine($"<Position>: [X] {Position.X} [Y] {Position.Y}");
             sb.AppendLine();
+            sb.AppendLine($"<Glyph>: {Glyph}");
             sb.AppendLine("[CellProperties]");
             sb.AppendLine($"<Name>: {CellProperties.Name}");
             sb.AppendLine($"<Walkable>: {CellProperties.Walkable}");

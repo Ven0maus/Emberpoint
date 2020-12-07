@@ -123,6 +123,25 @@ namespace Tests.TestObjects.Entities
             _fieldOfView = null;
         }
 
+        public bool CheckInteraction(Direction facing)
+        {
+            if ((CanInteract(Position.X, Position.Y - 1) && facing.Equals(Direction.UP)) ||
+                (CanInteract(Position.X, Position.Y + 1) && facing.Equals(Direction.DOWN)) ||
+                (CanInteract(Position.X + 1, Position.Y) && facing.Equals(Direction.RIGHT)) ||
+                (CanInteract(Position.X - 1, Position.Y) && facing.Equals(Direction.LEFT)))
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool CanInteract(int x, int y)
+        {
+            if (Health == 0) return false;
+            if (!_grid.InBounds(x, y)) return false;
+            var cell = _grid.GetCell(x, y);
+            return cell.CellProperties.Interactable && cell.CellProperties.IsExplored;
+        }
+
         public void TakeDamage(int amount)
         {
             Health -= amount;

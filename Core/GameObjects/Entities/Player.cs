@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
@@ -19,13 +18,16 @@ namespace Emberpoint.Core.GameObjects.Entities
         private MapWindow _mapWindow;
         public MapWindow MapWindow => _mapWindow ??= UserInterfaceManager.Get<MapWindow>();
 
-        private InteractionManager interactionManager;
+        private Direction facing;
+        private readonly InteractionManager interactionManager;
         private readonly FovWindow _fovObjectsWindow;
         private readonly InteractionWindow _interaction;
+        private bool InteractionStatus;
 
         public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character, 1, 1)
         {
             FieldOfViewRadius = 0;
+            InteractionStatus = false;
             _interaction = UserInterfaceManager.Get<InteractionWindow>();
             interactionManager = new InteractionManager(_interaction, this);
             _fovObjectsWindow = UserInterfaceManager.Get<FovWindow>();
@@ -57,19 +59,17 @@ namespace Emberpoint.Core.GameObjects.Entities
                     var moveDirection = _playerMovements[key];
                     _interaction.PrintMessage(Constants.EmptyMessage);
                     MoveTowards(moveDirection);
-                    CheckInteraction(_interaction);
+                    facing = moveDirection;
+                    InteractionStatus = CheckInteraction( _interaction, facing);
                     keyHandled = true;
                     break;
                 }
             }
 
-            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)))
+            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)) && InteractionStatus)
             {
-                Point position = GetInteractedCell(Position);
-                if (!position.Equals(Position))
-                {
-                    interactionManager.HandleInteraction(position);
-                }
+                Point position = GetInteractedCell(Position, facing);
+                interactionManager.HandleInteraction(position);
                 keyHandled = true;
             }
 

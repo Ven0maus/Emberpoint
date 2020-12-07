@@ -11,7 +11,6 @@ namespace Emberpoint.Core
         public const string GameTitle = "Emberpoint";
         public const string OpenDoor = "You opened the door.";
         public const string CloseDoor = "You closed the door.";
-        public const string ObjectInteraction = "Press G to interact with object.";
         public const string EmptyMessage = "";
         public const string Door = "Door";
 

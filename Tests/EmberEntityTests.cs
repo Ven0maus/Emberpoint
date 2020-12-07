@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
+using GoRogue;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using Tests.TestObjects.Entities;
@@ -85,6 +86,30 @@ namespace Tests
             var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
             Assert.IsTrue(_grid.ContainsEntity(entity.Position));
             Assert.IsTrue(_grid.GetCell(entity.Position).ContainsEntity());
+        }
+
+        [Test]
+        public void Entity_CellIntegration_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var cell = _grid.GetCell(1, 0);
+            cell.CellProperties.Interactable = true;
+            cell.CellProperties.IsExplored = true;
+            _grid.SetCell(cell);
+            Assert.IsTrue(entity.CheckInteraction(Direction.RIGHT));
+            Assert.IsFalse(entity.CheckInteraction(Direction.UP));
+            Assert.IsFalse(entity.CheckInteraction(Direction.DOWN));
+            Assert.IsFalse(entity.CheckInteraction(Direction.LEFT));
+        }
+
+        [Test]
+        public void Entity_CellIntegrationNotExplored_Correct()
+        {
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var cell = _grid.GetCell(1, 0);
+            cell.CellProperties.Interactable = true;
+            _grid.SetCell(cell);
+            Assert.IsFalse(entity.CheckInteraction(Direction.RIGHT));
         }
     }
 }
