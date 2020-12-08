@@ -1,8 +1,6 @@
 ﻿using Emberpoint.Core.UserInterface.Windows;
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using Console = SadConsole.Console;
 
 namespace Emberpoint.Core
 {
