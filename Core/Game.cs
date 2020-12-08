@@ -13,6 +13,8 @@ namespace Emberpoint.Core
     {
         private static MainMenuWindow _mainMenuWindow;
         private static DialogWindow _dialogWindow;
+        private static DeveloperWindow _developerWindow;
+
         public static Player Player { get; set; }
 
         private static void Main()
@@ -42,16 +44,17 @@ namespace Emberpoint.Core
 
             if (!UserInterfaceManager.IsInitialized || UserInterfaceManager.IsPaused) return;
 
-            if (_dialogWindow.IsVisible && Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
+            if (_dialogWindow.IsVisible && !_developerWindow.IsVisible && Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
             {
                 _dialogWindow.ShowNext();
             }
         }
 
-        private static void InitializeDialogWindow(object sender, EventArgs args)
+        private static void InitializeWindows(object sender, EventArgs args)
         {
             _dialogWindow = UserInterfaceManager.Get<DialogWindow>();
-            UserInterfaceManager.OnInitalized -= InitializeDialogWindow;
+            _developerWindow = UserInterfaceManager.Get<DeveloperWindow>();
+            UserInterfaceManager.OnInitalized -= InitializeWindows;
         }
 
         public static void Reset()
@@ -80,7 +83,7 @@ namespace Emberpoint.Core
             // Makes buttons look better
             Settings.UseDefaultExtendedFont = true;
 
-            UserInterfaceManager.OnInitalized += InitializeDialogWindow;
+            UserInterfaceManager.OnInitalized += InitializeWindows;
 
             // Shows the main menu
             _mainMenuWindow = MainMenuWindow.Show();

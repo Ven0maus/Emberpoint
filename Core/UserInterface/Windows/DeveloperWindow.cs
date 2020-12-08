@@ -47,6 +47,8 @@ namespace Emberpoint.Core.UserInterface.Windows
             Add(_textInput);
             Children.Add(_textConsole);
 
+            FocusedMode = ActiveBehavior.Push;
+
             // Middle of screen at the top
             Position = new Point((Constants.GameWindowWidth / 2) - width / 2, 1);
 
@@ -79,6 +81,17 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
 
             return base.ProcessKeyboard(info);
+        }
+
+        public override bool ProcessMouse(MouseConsoleState state)
+        {
+            if (!_textInput.DisableKeyboard && state.Mouse.LeftClicked && !_textInput.MouseBounds.Contains(state.CellPosition))
+            {
+                _textInput.DisableKeyboard = true;
+                return true;
+            }
+            
+            return base.ProcessMouse(state);
         }
 
         protected override void OnInvalidate()
