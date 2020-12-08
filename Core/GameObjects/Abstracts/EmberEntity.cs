@@ -5,6 +5,7 @@ using Emberpoint.Core.GameObjects.Managers;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using Emberpoint.Core.UserInterface.Windows;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
@@ -37,6 +38,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public int Glyph { get => Animation.CurrentFrame[0].Glyph; }
 
+        public Direction Facing  {get; private set; }
+
         private Console _renderedConsole;
 
         /// <summary>
@@ -58,6 +61,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
             // Default stats
             MaxHealth = 100;
+
+            Facing = Direction.DOWN;
 
             Moved += OnMove;
         }
@@ -85,6 +90,24 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             ExecuteMovementEffects(args);
         }
 
+        public bool GetInteractedCell(out Point cellPosition)
+        {
+            cellPosition = default;
+            var facingPosition = Position + Facing;
+            if (CanInteract(facingPosition.X, facingPosition.Y))
+            {
+                cellPosition = new Point(facingPosition.X, facingPosition.Y);
+                return true;
+            }
+            return false;
+        }
+        public bool CanInteract(int x, int y)
+        {
+            if (Health == 0) return false;
+            if (!GridManager.Grid.InBounds(x, y)) return false;
+            var cell = GridManager.Grid.GetCell(x, y);
+            return cell.CellProperties.Interactable && !EntityManager.EntityExistsAt(x, y) && cell.CellProperties.IsExplored;
+        }
         public bool CanMoveTowards(Point position)
         {
             if (Health == 0) return false;
@@ -99,10 +122,26 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             console.Children.Add(this);
         }
 
-        public void MoveTowards(Point position, bool checkCanMove = true)
+        public bool CheckInteraction(InteractionWindow interaction)
+        {
+            if (GetInteractedCell(out _))
+            {
+                interaction.PrintMessage("Press " + KeybindingsManager.GetKeybinding(Keybindings.Interact) +
+                                         " to interact with object.");
+                return true;
+            }
+            return false;
+        }
+
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null)
         {
             if (Health == 0) return;
+
+            // Set correct facing direction regardless if we can move or not
+            SetFacingDirection(position, direction);
+
             if (checkCanMove && !CanMoveTowards(position)) return;
+
             Position = position;
         }
 
@@ -110,6 +149,23 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         {
             var pos = Position;
             MoveTowards(pos += position, checkCanMove);
+        }
+
+        private void SetFacingDirection(Point newPosition, Direction direction)
+        {
+            // Set facing direction
+            var prevPos = Position;
+            var difference = newPosition - prevPos;
+            if (difference.X == 1 && difference.Y == 0)
+                Facing = Direction.RIGHT;
+            else if (difference.X == -1 && difference.Y == 0)
+                Facing = Direction.LEFT;
+            else if (difference.X == 0 && difference.Y == 1)
+                Facing = Direction.DOWN;
+            else if (difference.X == 0 && difference.Y == -1)
+                Facing = Direction.UP;
+            else
+                Facing = direction ?? Direction.DOWN;
         }
 
         public void UnRenderObject()

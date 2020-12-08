@@ -18,11 +18,17 @@ namespace Emberpoint.Core.GameObjects.Entities
         private MapWindow _mapWindow;
         public MapWindow MapWindow => _mapWindow ??= UserInterfaceManager.Get<MapWindow>();
 
+        private readonly InteractionManager interactionManager;
         private readonly FovWindow _fovObjectsWindow;
+        private readonly InteractionWindow _interaction;
+        private bool InteractionStatus;
 
         public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character, 1, 1)
         {
             FieldOfViewRadius = 0;
+            InteractionStatus = false;
+            _interaction = UserInterfaceManager.Get<InteractionWindow>();
+            interactionManager = new InteractionManager(_interaction, this);
             _fovObjectsWindow = UserInterfaceManager.Get<FovWindow>();
             Components.Add(new EntityViewSyncComponent());
         }
@@ -50,10 +56,19 @@ namespace Emberpoint.Core.GameObjects.Entities
                 if (info.IsKeyPressed(binding))
                 {
                     var moveDirection = _playerMovements[key];
+                    _interaction.PrintMessage(Constants.EmptyMessage);
                     MoveTowards(moveDirection);
+                    InteractionStatus = CheckInteraction( _interaction);
                     keyHandled = true;
                     break;
                 }
+            }
+
+            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)) 
+                && InteractionStatus && GetInteractedCell(out Point position))
+            {
+                interactionManager.HandleInteraction(position);
+                keyHandled = true;
             }
 
             //If this will grow in the future, we may want to add a Dictionary<Keybindings, EmberItem>
@@ -101,7 +116,7 @@ namespace Emberpoint.Core.GameObjects.Entities
             _fovObjectsWindow.Update(this);
         }
 
-        private readonly Dictionary<Keybindings, Direction> _playerMovements = 
+        private readonly Dictionary<Keybindings, Direction> _playerMovements =
         new Dictionary<Keybindings, Direction>
         {
             {Keybindings.Movement_Up, Direction.UP},

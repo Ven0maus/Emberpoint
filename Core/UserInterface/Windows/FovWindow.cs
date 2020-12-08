@@ -27,9 +27,15 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
             Print(3, 0, "Objects", Color.Orange);
-
             _charObjects = new Dictionary<char, CharObj>();
             _blueprintTiles = GetTilesFromConfig();
+            _blueprintTiles.Add('=', new BlueprintTile() 
+            { 
+                Name = Constants.DoorOpen,
+                Glyph = '=',
+                Foreground = "White",
+                BlocksFov = false
+            });
             _maxLineRows = Height - 2;
 
             _textConsole = new Console(Width - 2, Height - 2)
@@ -52,7 +58,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             var configs = GetConfigurations(configPaths);
             var tiles = GetBlueprintConfigValuePairs(configs);
-
+      
             return new Dictionary<char, BlueprintTile>(tiles);
         }
 
@@ -105,6 +111,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         private void DrawCharObj(CharObj charObj)
         {
+             //Debug.WriteLine(charObj.Name + ": " + charObj.Glyph);
             _textConsole.Cursor.Print(new ColoredString("[" + charObj.Glyph + "]:", charObj.GlyphColor, Color.Transparent));
             _textConsole.Cursor.Print(' ' + charObj.Name);
             _textConsole.Cursor.CarriageReturn();

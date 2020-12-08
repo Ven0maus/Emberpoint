@@ -9,6 +9,12 @@ namespace Emberpoint.Core
     {
         public static string ApplicationRoot = GetApplicationRoot();
         public const string GameTitle = "Emberpoint";
+        public const string OpenDoor = "You opened the door.";
+        public const string CloseDoor = "You closed the door.";
+        public const string EmptyMessage = "";
+        public const string DoorClosed = "Closed door";
+        public const string DoorOpen = "Open door";
+
         public const int GameWindowWidth = 120;
         public const int GameWindowHeight = 41;
 

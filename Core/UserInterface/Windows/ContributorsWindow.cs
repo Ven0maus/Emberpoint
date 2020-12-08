@@ -90,6 +90,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 "Smartis2812",
                 "maratmugninov",
                 "agit15",
+                "otogyongyosi"
             };
 
             var listbox = new ListBox(contributors.Max(a => a.Length) + 5, Constants.GameWindowHeight / 2)

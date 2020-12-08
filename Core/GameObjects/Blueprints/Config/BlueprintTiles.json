@@ -18,8 +18,9 @@
     },
   {
       "glyph": "+",
-      "name": "Door",
-      "walkable": true,
+      "name": "Closed door",
+      "walkable": false,
+      "interactable": true,
       "foreground": "White",
       "background": "#2f2f2f",
       "blocksfov": true
@@ -84,6 +85,7 @@
       "glyph": "W",
       "name": "Wardrobe",
       "walkable": false,
+      "interactable" : true,
       "foreground": "Brown",
       "blocksfov": true
     },

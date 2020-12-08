@@ -17,7 +17,7 @@ namespace Emberpoint.Core.GameObjects.Map
 
         public Point Position { get; set; }
 
-        public EmberCell() 
+        public EmberCell()
         {
             CellProperties = new EmberCellProperties
             {
@@ -26,6 +26,7 @@ namespace Emberpoint.Core.GameObjects.Map
                 ForegroundFov = Color.Lerp(Color.White, Color.Black, .5f),
                 BackgroundFov = Color.Black,
                 Walkable = true,
+                Interactable = false,
                 BlocksFov = false,
                 IsExplored = false
             };
@@ -46,6 +47,7 @@ namespace Emberpoint.Core.GameObjects.Map
                 ForegroundFov = fov,
                 BackgroundFov = Color.Black,
                 Walkable = true,
+                Interactable = false,
                 BlocksFov = false,
                 IsExplored = false
             };
@@ -67,6 +69,7 @@ namespace Emberpoint.Core.GameObjects.Map
                 ForegroundFov = foregroundFov,
                 BackgroundFov = backgroundFov,
                 Walkable = true,
+                Interactable = false,
                 BlocksFov = false,
                 IsExplored = false
             };
@@ -86,12 +89,12 @@ namespace Emberpoint.Core.GameObjects.Map
 
             // Base properties
             Position = cell.Position;
-
             // Ember cell properties
             CellProperties.Name = cell.CellProperties.Name;
             CellProperties.NormalForeground = cell.CellProperties.NormalForeground;
             CellProperties.NormalBackground = cell.CellProperties.NormalBackground;
             CellProperties.ForegroundFov = cell.CellProperties.ForegroundFov;
+            CellProperties.Interactable = cell.CellProperties.Interactable;
             CellProperties.BackgroundFov = cell.CellProperties.BackgroundFov;
             CellProperties.Walkable = cell.CellProperties.Walkable;
             CellProperties.BlocksFov = cell.CellProperties.BlocksFov;
@@ -120,6 +123,7 @@ namespace Emberpoint.Core.GameObjects.Map
                     ForegroundFov = this.CellProperties.ForegroundFov,
                     BackgroundFov = this.CellProperties.BackgroundFov,
                     Walkable = this.CellProperties.Walkable,
+                    Interactable = this.CellProperties.Interactable,
                     BlocksFov = this.CellProperties.BlocksFov,
                     IsExplored = this.CellProperties.IsExplored
                 },
@@ -192,9 +196,11 @@ namespace Emberpoint.Core.GameObjects.Map
             sb.AppendLine("[EmberCell Information]");
             sb.AppendLine($"<Position>: [X] {Position.X} [Y] {Position.Y}");
             sb.AppendLine();
+            sb.AppendLine($"<Glyph>: {Glyph}");
             sb.AppendLine("[CellProperties]");
             sb.AppendLine($"<Name>: {CellProperties.Name}");
             sb.AppendLine($"<Walkable>: {CellProperties.Walkable}");
+            sb.AppendLine($"<Interactable>: {CellProperties.Interactable}");
             sb.AppendLine($"<BlocksFov>: {CellProperties.BlocksFov}");
             sb.AppendLine($"<IsExplored>: {CellProperties.IsExplored}");
             sb.AppendLine();
@@ -230,6 +236,7 @@ namespace Emberpoint.Core.GameObjects.Map
         public class EmberCellProperties
         {
             public bool Walkable { get; set; }
+            public bool Interactable { get; set; }
             public string Name { get; set; }
             public Color NormalForeground { get; set; }
             public Color ForegroundFov { get; set; }

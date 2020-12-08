@@ -28,6 +28,8 @@ namespace Tests.TestObjects.Entities
             }
         }
 
+        public Direction Facing { get; private set; }
+
         public EventHandler<EntityMovedEventArgs> Moved;
 
         public int FieldOfViewRadius { get; set; } = 0;
@@ -62,6 +64,7 @@ namespace Tests.TestObjects.Entities
             ObjectId = EntityManager.GetUniqueId();
             Moved += OnMove;
             MaxHealth = 100; // Default stats
+            Facing = Direction.DOWN;
         }
 
         public BaseEntity(BaseGrid grid)
@@ -70,6 +73,7 @@ namespace Tests.TestObjects.Entities
             ObjectId = EntityManager.GetUniqueId();
             Moved += OnMove;
             MaxHealth = 100; // Default stats
+            Facing = Direction.DOWN;
         }
 
         private void OnMove(object sender, EntityMovedEventArgs args)
@@ -109,18 +113,76 @@ namespace Tests.TestObjects.Entities
             return _grid.InBounds(position) && _grid.GetCell(position).CellProperties.Walkable && !EntityManager.EntityExistsAt(position);
         }
 
-        public void MoveTowards(Point position, bool checkCanMove = true)
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null)
         {
             if (Health == 0) return;
+
+            // Set correct facing direction regardless if we can move or not
+            SetFacingDirection(position, direction);
+
             if (checkCanMove && !CanMoveTowards(position)) return;
             var prevPos = Position;
+
             Position = position;
+
             Moved.Invoke(this, new EntityMovedEventArgs(null, prevPos));
+        }
+
+        public void MoveTowards(Direction position, bool checkCanMove = true)
+        {
+            var pos = Position;
+            MoveTowards(pos += position, checkCanMove);
+        }
+
+        private void SetFacingDirection(Point newPosition, Direction direction)
+        {
+            // Set facing direction
+            var prevPos = Position;
+            var difference = newPosition - prevPos;
+            if (difference.X == 1 && difference.Y == 0)
+                Facing = Direction.RIGHT;
+            else if (difference.X == -1 && difference.Y == 0)
+                Facing = Direction.LEFT;
+            else if (difference.X == 0 && difference.Y == 1)
+                Facing = Direction.DOWN;
+            else if (difference.X == 0 && difference.Y == -1)
+                Facing = Direction.UP;
+            else
+                Facing = direction ?? Direction.DOWN;
         }
 
         public void ResetFieldOfView()
         {
             _fieldOfView = null;
+        }
+
+        public bool GetInteractedCell(out Point cellPosition)
+        {
+            cellPosition = default;
+            var facingPosition = Position + Facing;
+            if (CanInteract(facingPosition.X, facingPosition.Y))
+            {
+                cellPosition = new Point(facingPosition.X, facingPosition.Y);
+                return true;
+            }
+            return false;
+        }
+
+        public bool CheckInteraction()
+        {
+            if (GetInteractedCell(out _))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool CanInteract(int x, int y)
+        {
+            if (Health == 0) return false;
+            if (!_grid.InBounds(x, y)) return false;
+            var cell = _grid.GetCell(x, y);
+            return cell.CellProperties.Interactable && cell.CellProperties.IsExplored;
         }
 
         public void TakeDamage(int amount)
