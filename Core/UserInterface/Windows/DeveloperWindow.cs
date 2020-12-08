@@ -16,7 +16,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         /// <summary>
         /// Container for console text lines with color
         /// </summary>
-        public readonly struct Line
+        private readonly struct Line
         {
             public readonly string Text;
             public readonly Color Color;
@@ -175,6 +175,13 @@ namespace Emberpoint.Core.UserInterface.Windows
             return baseValue;
         }
 
+        public void ClearConsole()
+        {
+            _previousLines.Clear();
+            _textConsole.Clear();
+            _textConsole.Cursor.Position = new Point(0, 0);
+        }
+
         public override bool ProcessMouse(MouseConsoleState state)
         {
             // Lose focus if we click outside of the textbox
@@ -196,19 +203,14 @@ namespace Emberpoint.Core.UserInterface.Windows
             Print(((Width / 2) - "Developer Console".Length / 2), 0, "Developer Console", Color.Orange);
         }
 
-        public bool ParseCommand(string text, out string output)
+        private bool ParseCommand(string text, out string output)
         {
-            if (DeveloperCommands.Commands.TryGetValue(text, out DeveloperCommands.CustomFunc<bool, Console, List<Line>, string> command))
+            if (DeveloperCommands.Commands.TryGetValue(text, out DeveloperCommands.CustomFunc<bool, DeveloperWindow, string> command))
             {
-                return command(_textConsole, _previousLines, out output);
+                return command(this, out output);
             }
             output = "";
             return false;
-        }
-
-        public void ClearConsole()
-        {
-            _previousLines.Clear();
         }
     }
 }

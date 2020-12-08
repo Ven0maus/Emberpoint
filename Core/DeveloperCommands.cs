@@ -8,25 +8,23 @@ namespace Emberpoint.Core
 {
     public class DeveloperCommands
     {
-        public delegate TReturn CustomFunc<TReturn, TParam1, TParam2, TOutValue>(TParam1 param1, TParam2 param2, out TOutValue output);
+        public delegate TReturn CustomFunc<TReturn, TParam1, TOutValue>(TParam1 param1, out TOutValue output);
 
-        public static Dictionary<string, CustomFunc<bool, Console, List<DeveloperWindow.Line>, string>> Commands = CreateCommands();
+        public static Dictionary<string, CustomFunc<bool, DeveloperWindow, string>> Commands = CreateCommands();
 
-        private static Dictionary<string, CustomFunc<bool, Console, List<DeveloperWindow.Line>, string>> CreateCommands()
+        private static Dictionary<string, CustomFunc<bool, DeveloperWindow, string>> CreateCommands()
         {
-            var commands = new Dictionary<string, CustomFunc<bool, Console, List<DeveloperWindow.Line>, string>>(StringComparer.OrdinalIgnoreCase)
+            var commands = new Dictionary<string, CustomFunc<bool, DeveloperWindow, string>>(StringComparer.OrdinalIgnoreCase)
             {
                 { "clear", Clear },
             };
             return commands;
         }
 
-        private static bool Clear(Console textConsole, List<DeveloperWindow.Line> previousLines, out string output)
+        private static bool Clear(DeveloperWindow window, out string output)
         {
             output = "";
-            previousLines.Clear();
-            textConsole.Clear();
-            textConsole.Cursor.Position = new Point(0, 0);
+            window.ClearConsole();
             return true;
         }
     }
