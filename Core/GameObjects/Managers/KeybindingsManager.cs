@@ -17,7 +17,7 @@ namespace Emberpoint.Core.GameObjects.Managers
                 (Keybindings.Movement_Left, Keys.Left),
                 (Keybindings.Movement_Right, Keys.Right),
                 (Keybindings.Flashlight, Keys.F),
-                (Keybindings.Interact, Keys.G)
+                (Keybindings.Interact, Keys.G),
                 (Keybindings.DeveloperConsole, Keys.A) 
             };
 
@@ -52,7 +52,7 @@ namespace Emberpoint.Core.GameObjects.Managers
         Movement_Left,
         Movement_Right,
         Flashlight,
-        Interact
+        Interact,
         DeveloperConsole
     }
 }
