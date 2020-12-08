@@ -15,7 +15,6 @@ namespace Emberpoint.Core.UserInterface.Windows
         public Console Console => this;
         private readonly Console _textConsole;
         private readonly TextBox _textInput;
-
         private readonly List<string> _previousLines;
 
         public DeveloperWindow(int width, int height) : base(width, height)
@@ -35,13 +34,16 @@ namespace Emberpoint.Core.UserInterface.Windows
             _previousLines = new List<string>();
             _textConsole = new Console(width - 2, height - 3)
             {
-                Position = new Point(2, 1)
+                Position = new Point(1, 1)
             };
+            
+            // Disable mouse, or it will steal mouse input from DeveloperConsole
+            _textConsole.UseMouse = false;
 
             // Add input area
             _textInput = new TextBox(width - 2)
             {
-                Position = _textConsole.Position + new Point(-1, height - 3)
+                Position = _textConsole.Position + new Point(0, height - 3)
             };
 
             Add(_textInput);
@@ -71,6 +73,8 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public override bool ProcessKeyboard(Keyboard info)
         {
+            var baseValue = base.ProcessKeyboard(info);
+
             if (_textInput.DisableKeyboard && info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.DeveloperConsole)))
             {
                 if (IsVisible)
@@ -80,14 +84,28 @@ namespace Emberpoint.Core.UserInterface.Windows
                 return true;
             }
 
-            return base.ProcessKeyboard(info);
+            // Check for enter key press
+            for (int i=0; i < info.KeysPressed.Count; i++)
+            {
+                if (info.KeysPressed[i].Key == Microsoft.Xna.Framework.Input.Keys.Enter)
+                {
+                    if (!ParseCommand(_textInput.Text, out string output))
+                        _textConsole.Print(0, 0, new ColoredString("Invalid command", Color.Red, Color.Black));
+                    else
+                        _textConsole.Print(0, 0, new ColoredString(output, Color.Green, Color.Black));
+                    _textInput.Text = string.Empty;
+                    return true;
+                }
+            }
+
+            return baseValue;
         }
 
         public override bool ProcessMouse(MouseConsoleState state)
         {
             if (!_textInput.DisableKeyboard && state.Mouse.LeftClicked && !_textInput.MouseBounds.Contains(state.CellPosition))
             {
-                _textInput.DisableKeyboard = true;
+                _textInput.FocusLost();
                 return true;
             }
             
@@ -103,9 +121,10 @@ namespace Emberpoint.Core.UserInterface.Windows
             Print(((Width / 2) - "Developer Console".Length / 2), 0, "Developer Console", Color.Orange);
         }
 
-        public void ParseCommand(string text)
+        public bool ParseCommand(string text, out string output)
         {
-
+            output = "";
+            return false;
         }
 
         public void ClearConsole()
