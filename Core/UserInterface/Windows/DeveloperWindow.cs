@@ -13,11 +13,26 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class DeveloperWindow : ControlsConsole, IUserInterface
     {
+        /// <summary>
+        /// Container for console text lines with color
+        /// </summary>
+        readonly struct Line
+        {
+            public readonly string Text;
+            public readonly Color Color;
+
+            public Line(string text, Color color)
+            {
+                Text = text;
+                Color = color;
+            }
+        }
+
         public Console Console => this;
         private readonly Console _textConsole;
         private readonly TextBox _textInput;
-        private readonly List<string> _previousLines;
-        private readonly int _maxLineRows;
+        private readonly List<Line> _previousLines;
+        private readonly int _maxLineRows, _maxLineLength;
 
         public DeveloperWindow(int width, int height) : base(width, height)
         {
@@ -33,13 +48,14 @@ namespace Emberpoint.Core.UserInterface.Windows
             ThemeColors = colors;
 
             // Add text area
-            _previousLines = new List<string>();
+            _previousLines = new List<Line>();
             _textConsole = new Console(width - 2, height - 3)
             {
                 Position = new Point(1, 1)
             };
 
             _maxLineRows = _textConsole.Height -1;
+            _maxLineLength = _textConsole.Width - 1;
 
             // Disable mouse, or it will steal mouse input from DeveloperConsole
             _textConsole.UseMouse = false;
@@ -75,22 +91,52 @@ namespace Emberpoint.Core.UserInterface.Windows
             Game.Player.IsFocused = true;
         }
 
+        private IEnumerable<string> SplitToLines(string stringToSplit, int maximumLineLength)
+        {
+            var words = stringToSplit.Split(' ');
+            var line = words.First();
+            foreach (var word in words.Skip(1))
+            {
+                var test = $"{line} {word}";
+                if (test.Length > maximumLineLength)
+                {
+                    yield return line;
+                    line = word;
+                }
+                else
+                {
+                    line = test;
+                }
+            }
+            yield return line;
+        }
+
         private void WriteText(string text, Color color)
         {
             if (string.IsNullOrWhiteSpace(text)) return;
             _textConsole.Clear();
             _textConsole.Cursor.Position = new Point(0, 0);
 
-            if (_previousLines.Count == _maxLineRows)
+            // Split text in multiple lines if it exceeds max line length
+            if (text.Length > _maxLineLength)
             {
-                _previousLines.RemoveAt(0);
+                _previousLines.AddRange(SplitToLines(text, _maxLineLength).Select(a => new Line(a, color)));
+            }
+            else
+            {
+                _previousLines.Add(new Line(text, color));
             }
 
-            _previousLines.Add(text);
+            // Make sure we have only max line rows of text
+            if (_previousLines.Count >= _maxLineRows)
+            {
+                var amountToRemove = _previousLines.Count - _maxLineRows;
+                _previousLines.RemoveRange(0, amountToRemove);
+            }
 
             foreach (var line in _previousLines.Take(_maxLineRows))
             {
-                _textConsole.Cursor.Print(new ColoredString(line, color, Color.Transparent));
+                _textConsole.Cursor.Print(new ColoredString(line.Text, line.Color, Color.Transparent));
                 _textConsole.Cursor.CarriageReturn();
                 _textConsole.Cursor.LineFeed();
             }
@@ -114,11 +160,14 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 if (info.KeysPressed[i].Key == Microsoft.Xna.Framework.Input.Keys.Enter)
                 {
-                    if (!ParseCommand(_textInput.Text, out string output))
-                        WriteText(_textInput.Text, Color.Red);
+                    if (!ParseCommand(_textInput.Text, out string output) && !string.IsNullOrWhiteSpace(output))
+                        WriteText(output, Color.Red);
                     else
                         WriteText(output, Color.Green);
+
+                    // Empty textfield but make sure we can keep typing
                     _textInput.Text = string.Empty;
+                    _textInput.DisableKeyboard = false;
                     return true;
                 }
             }
@@ -149,7 +198,19 @@ namespace Emberpoint.Core.UserInterface.Windows
         public bool ParseCommand(string text, out string output)
         {
             output = "";
+            if (Match(text, "clear"))
+            {
+                _previousLines.Clear();
+                _textConsole.Clear();
+                _textConsole.Cursor.Position = new Point(0, 0);
+            }
+            
             return false;
+        }
+
+        private bool Match(string text, string expected)
+        {
+            return text.Equals(expected, System.StringComparison.OrdinalIgnoreCase);
         }
 
         public void ClearConsole()
