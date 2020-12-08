@@ -8,16 +8,11 @@ namespace Emberpoint.Core
     {
         public delegate TReturn CustomFunc<TReturn, TParam1, TOutValue>(TParam1 param1, out TOutValue output);
 
-        public static Dictionary<string, CustomFunc<bool, DeveloperWindow, string>> Commands = CreateCommands();
-
-        private static Dictionary<string, CustomFunc<bool, DeveloperWindow, string>> CreateCommands()
-        {
-            var commands = new Dictionary<string, CustomFunc<bool, DeveloperWindow, string>>(StringComparer.OrdinalIgnoreCase)
+        public static Dictionary<string, CustomFunc<bool, DeveloperWindow, string>> Commands = 
+            new Dictionary<string, CustomFunc<bool, DeveloperWindow, string>>(StringComparer.OrdinalIgnoreCase)
             {
                 { "clear", Clear },
             };
-            return commands;
-        }
 
         private static bool Clear(DeveloperWindow window, out string output)
         {
