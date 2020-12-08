@@ -5,12 +5,14 @@ using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.UserInterface.Windows;
 using Emberpoint.Core.GameObjects.Managers;
+using System;
 
 namespace Emberpoint.Core
 {
     public static class Game
     {
         private static MainMenuWindow _mainMenuWindow;
+        private static DialogWindow _dialogWindow;
         public static Player Player { get; set; }
 
         private static void Main()
@@ -40,10 +42,16 @@ namespace Emberpoint.Core
 
             if (!UserInterfaceManager.IsInitialized || UserInterfaceManager.IsPaused) return;
 
-            if (Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
+            if (_dialogWindow.IsVisible && Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
             {
-                UserInterfaceManager.Get<DialogWindow>().ShowNext();
+                _dialogWindow.ShowNext();
             }
+        }
+
+        private static void InitializeDialogWindow(object sender, EventArgs args)
+        {
+            _dialogWindow = UserInterfaceManager.Get<DialogWindow>();
+            UserInterfaceManager.OnInitalized -= InitializeDialogWindow;
         }
 
         public static void Reset()
@@ -71,6 +79,8 @@ namespace Emberpoint.Core
         {
             // Makes buttons look better
             Settings.UseDefaultExtendedFont = true;
+
+            UserInterfaceManager.OnInitalized += InitializeDialogWindow;
 
             // Shows the main menu
             _mainMenuWindow = MainMenuWindow.Show();

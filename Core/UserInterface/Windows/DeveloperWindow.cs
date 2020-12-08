@@ -57,7 +57,6 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             IsVisible = true;
             IsFocused = true;
-            _textInput.IsFocused = true;
             Game.Player.IsFocused = false;
         }
 
@@ -65,23 +64,18 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             IsVisible = false;
             IsFocused = false;
-            _textInput.IsFocused = false;
             Game.Player.IsFocused = true;
         }
 
         public override bool ProcessKeyboard(Keyboard info)
         {
-            // TODO: Move to seperate class
-            if (!_textInput.IsFocused && info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.DeveloperConsole)))
+            if (_textInput.DisableKeyboard && info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.DeveloperConsole)))
             {
                 if (IsVisible)
-                {
                     Hide();
-                }
                 else
-                {
                     Show();
-                }
+                return true;
             }
 
             return base.ProcessKeyboard(info);
