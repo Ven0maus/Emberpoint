@@ -45,7 +45,7 @@ namespace Emberpoint.Core.GameObjects.Managers
             var fovWindow = new FovWindow(Constants.GameWindowWidth / 3, 12);
             Add(fovWindow);
 
-            var developerWindow = new DeveloperWindow(Constants.GameWindowWidth / 2, 14)
+            var developerWindow = new DeveloperWindow(Constants.Map.Width, 14)
             {
                 IsVisible = false
             };

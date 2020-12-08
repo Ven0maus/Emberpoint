@@ -7,6 +7,7 @@ using SadConsole.Controls;
 using SadConsole.Input;
 using SadConsole.Themes;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
@@ -16,12 +17,13 @@ namespace Emberpoint.Core.UserInterface.Windows
         private readonly Console _textConsole;
         private readonly TextBox _textInput;
         private readonly List<string> _previousLines;
+        private readonly int _maxLineRows;
 
         public DeveloperWindow(int width, int height) : base(width, height)
         {
             // Set custom theme
             var colors = Colors.CreateDefault();
-            colors.ControlBack = Color.Black;
+            colors.ControlBack = Color.Lerp(Color.Black, Color.Transparent, 0.6f);
             colors.Text = Color.White;
             colors.TitleText = Color.White;
             colors.ControlHostBack = Color.White;
@@ -36,7 +38,9 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 Position = new Point(1, 1)
             };
-            
+
+            _maxLineRows = _textConsole.Height -1;
+
             // Disable mouse, or it will steal mouse input from DeveloperConsole
             _textConsole.UseMouse = false;
 
@@ -52,7 +56,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             FocusedMode = ActiveBehavior.Push;
 
             // Middle of screen at the top
-            Position = new Point((Constants.GameWindowWidth / 2) - width / 2, 1);
+            Position = new Point(4, 2);
 
             Global.CurrentScreen.Children.Add(this);
         }
@@ -69,6 +73,27 @@ namespace Emberpoint.Core.UserInterface.Windows
             IsVisible = false;
             IsFocused = false;
             Game.Player.IsFocused = true;
+        }
+
+        private void WriteText(string text, Color color)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return;
+            _textConsole.Clear();
+            _textConsole.Cursor.Position = new Point(0, 0);
+
+            if (_previousLines.Count == _maxLineRows)
+            {
+                _previousLines.RemoveAt(0);
+            }
+
+            _previousLines.Add(text);
+
+            foreach (var line in _previousLines.Take(_maxLineRows))
+            {
+                _textConsole.Cursor.Print(new ColoredString(line, color, Color.Transparent));
+                _textConsole.Cursor.CarriageReturn();
+                _textConsole.Cursor.LineFeed();
+            }
         }
 
         public override bool ProcessKeyboard(Keyboard info)
@@ -90,9 +115,9 @@ namespace Emberpoint.Core.UserInterface.Windows
                 if (info.KeysPressed[i].Key == Microsoft.Xna.Framework.Input.Keys.Enter)
                 {
                     if (!ParseCommand(_textInput.Text, out string output))
-                        _textConsole.Print(0, 0, new ColoredString("Invalid command", Color.Red, Color.Black));
+                        WriteText(_textInput.Text, Color.Red);
                     else
-                        _textConsole.Print(0, 0, new ColoredString(output, Color.Green, Color.Black));
+                        WriteText(output, Color.Green);
                     _textInput.Text = string.Empty;
                     return true;
                 }
