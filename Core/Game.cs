@@ -5,14 +5,12 @@ using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.UserInterface.Windows;
 using Emberpoint.Core.GameObjects.Managers;
-using System;
 
 namespace Emberpoint.Core
 {
     public static class Game
     {
         private static MainMenuWindow _mainMenuWindow;
-
         public static Player Player { get; set; }
 
         private static void Main()
