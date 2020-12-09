@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.UserInterface.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,8 @@ namespace Emberpoint.Core.GameObjects.Managers
 
         public static bool IsPaused { get; set; }
         public static bool IsInitialized { get; set; }
+
+        public static event EventHandler OnInitalized;
 
         public static void Initialize()
         {
@@ -42,7 +45,14 @@ namespace Emberpoint.Core.GameObjects.Managers
             var fovWindow = new FovWindow(Constants.GameWindowWidth / 3, 12);
             Add(fovWindow);
 
+            var developerWindow = new DeveloperWindow(Constants.Map.Width, 14)
+            {
+                IsVisible = false
+            };
+            Add(developerWindow);
+
             IsInitialized = true;
+            OnInitalized?.Invoke(null, EventArgs.Empty);
         }
 
         public static void Add<T>(T userInterface) where T : IUserInterface

@@ -64,6 +64,7 @@ namespace Emberpoint.Core.GameObjects.Entities
                 }
             }
 
+            // Handle cell interactions
             if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)) 
                 && InteractionStatus && GetInteractedCell(out Point position))
             {
@@ -77,6 +78,36 @@ namespace Emberpoint.Core.GameObjects.Entities
             {
                 var flashLight = Game.Player.Inventory.GetItemOfType<Flashlight>();
                 flashLight?.Switch();
+                keyHandled = true;
+            }
+
+            // Handle dialog window
+            if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
+            {
+                var devConsole = UserInterfaceManager.Get<DeveloperWindow>();
+                if (!devConsole.IsVisible)
+                {
+                    var dialogWindow = UserInterfaceManager.Get<DialogWindow>();
+                    if (dialogWindow.IsVisible)
+                    {
+                        dialogWindow.ShowNext();
+                        keyHandled = true;
+                    }
+                }
+            }
+
+            // Handle dev console showing
+            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.DeveloperConsole)))
+            {
+                var devConsole = UserInterfaceManager.Get<DeveloperWindow>();
+                if (devConsole.IsVisible)
+                {
+                    devConsole.Hide();
+                }
+                else
+                {
+                    devConsole.Show();
+                }
                 keyHandled = true;
             }
 

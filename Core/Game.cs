@@ -5,12 +5,14 @@ using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.UserInterface.Windows;
 using Emberpoint.Core.GameObjects.Managers;
+using System;
 
 namespace Emberpoint.Core
 {
     public static class Game
     {
         private static MainMenuWindow _mainMenuWindow;
+
         public static Player Player { get; set; }
 
         private static void Main()
@@ -36,13 +38,6 @@ namespace Emberpoint.Core
                 {
                     _mainMenuWindow.OptionsWindow.ChangeKeybinding(Global.KeyboardState.KeysPressed.First().Key);
                 }
-            }
-
-            if (!UserInterfaceManager.IsInitialized || UserInterfaceManager.IsPaused) return;
-
-            if (Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
-            {
-                UserInterfaceManager.Get<DialogWindow>().ShowNext();
             }
         }
 
