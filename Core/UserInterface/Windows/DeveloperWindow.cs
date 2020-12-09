@@ -104,7 +104,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             // TODO: Animate entrance
             IsVisible = true;
             IsFocused = true;
-            _textInput.Text = "Command";
+            _textInput.Text = "Type here..";
             _textInputInUse = false;
             _textInput.DisableKeyboard = true;
             Game.Player.IsFocused = false;
@@ -115,7 +115,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             // TODO: Animate departure
             IsVisible = false;
             IsFocused = false;
-            _textInput.Text = "Command";
+            _textInput.Text = "Type here..";
             _textInputInUse = false;
             Game.Player.IsFocused = true;
         }
@@ -216,7 +216,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Lose focus if we click outside of the textbox
             if (!_textInput.DisableKeyboard && state.Mouse.LeftClicked && !_textInput.MouseBounds.Contains(state.CellPosition))
             {
-                _textInput.Text = "Command";
+                _textInput.Text = "Type here..";
                 _textInput.FocusLost();
                 _textInputInUse = false;
                 return true;

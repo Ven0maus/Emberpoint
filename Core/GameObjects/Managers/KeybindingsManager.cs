@@ -18,7 +18,7 @@ namespace Emberpoint.Core.GameObjects.Managers
                 (Keybindings.Movement_Right, Keys.Right),
                 (Keybindings.Flashlight, Keys.F),
                 (Keybindings.Interact, Keys.G),
-                (Keybindings.DeveloperConsole, Keys.A) 
+                (Keybindings.DeveloperConsole, Keys.Tab) 
             };
 
             foreach (var binding in bindings)
