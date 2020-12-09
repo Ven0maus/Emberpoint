@@ -34,6 +34,8 @@ namespace Emberpoint.Core.UserInterface.Windows
         private readonly List<Line> _previousLines;
         private readonly int _maxLineRows, _maxLineLength;
 
+        private bool _textInputInUse = false;
+
         public DeveloperWindow(int width, int height) : base(width, height)
         {
             // Set custom theme
@@ -43,7 +45,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             colors.TitleText = Color.White;
             colors.ControlHostBack = Color.White;
             colors.RebuildAppearances();
-
+                  
             // Set the new theme colors         
             ThemeColors = colors;
 
@@ -66,7 +68,27 @@ namespace Emberpoint.Core.UserInterface.Windows
                 Position = _textConsole.Position + new Point(0, height - 3)
             };
 
+            // Textbox colors
+            var newColors = new Colors();
+            newColors.Appearance_ControlMouseDown.Background = Color.Lerp(Color.Green, Color.Transparent, 0.4f);
+            newColors.Appearance_ControlMouseDown.Foreground = Color.GreenYellow;
+            newColors.Appearance_ControlFocused.Background = Color.Lerp(Color.Green, Color.Transparent, 0.4f);
+            newColors.Appearance_ControlFocused.Foreground = Color.GreenYellow;
+            newColors.Appearance_ControlDisabled.Background = Color.Lerp(Color.Green, Color.Transparent, 0.4f);
+            newColors.Appearance_ControlDisabled.Foreground = Color.GreenYellow;
+            newColors.Appearance_ControlNormal.Background = Color.Lerp(Color.Green, Color.Transparent, 0.4f);
+            newColors.Appearance_ControlNormal.Foreground = Color.GreenYellow;
+            newColors.Appearance_ControlOver.Background = Color.Lerp(Color.Green, Color.Transparent, 0.4f);
+            newColors.Appearance_ControlOver.Foreground = Color.GreenYellow;
+            newColors.Appearance_ControlSelected.Background = Color.Lerp(Color.Green, Color.Transparent, 0.4f);
+            newColors.Appearance_ControlSelected.Foreground = Color.GreenYellow;
+            _textInput.ThemeColors = newColors;
+
             Add(_textInput);
+
+            // Make sure we have focus through parent console
+            _textInput.Parent.FocusedControl = _textInput;
+
             Children.Add(_textConsole);
 
             FocusedMode = ActiveBehavior.Push;
@@ -81,6 +103,9 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             IsVisible = true;
             IsFocused = true;
+            _textInput.Text = "Command";
+            _textInputInUse = false;
+            _textInput.DisableKeyboard = true;
             Game.Player.IsFocused = false;
         }
 
@@ -88,6 +113,8 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             IsVisible = false;
             IsFocused = false;
+            _textInput.Text = "Command";
+            _textInputInUse = false;
             Game.Player.IsFocused = true;
         }
 
@@ -158,7 +185,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Check for enter key press
             for (int i=0; i < info.KeysPressed.Count; i++)
             {
-                if (info.KeysPressed[i].Key == Microsoft.Xna.Framework.Input.Keys.Enter)
+                if (info.KeysPressed[i].Key == Microsoft.Xna.Framework.Input.Keys.Enter && _textInputInUse)
                 {
                     if (!ParseCommand(_textInput.Text, out string output) && !string.IsNullOrWhiteSpace(output))
                         WriteText(output, Color.Red);
@@ -187,8 +214,17 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Lose focus if we click outside of the textbox
             if (!_textInput.DisableKeyboard && state.Mouse.LeftClicked && !_textInput.MouseBounds.Contains(state.CellPosition))
             {
+                _textInput.Text = "Command";
                 _textInput.FocusLost();
+                _textInputInUse = false;
                 return true;
+            }
+
+            // Clear input when clicking on the field
+            if (_textInput.DisableKeyboard && state.Mouse.LeftClicked && _textInput.MouseBounds.Contains(state.CellPosition))
+            {
+                _textInput.Text = string.Empty;
+                _textInputInUse = true;
             }
             
             return base.ProcessMouse(state);

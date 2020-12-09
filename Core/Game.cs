@@ -12,8 +12,6 @@ namespace Emberpoint.Core
     public static class Game
     {
         private static MainMenuWindow _mainMenuWindow;
-        private static DialogWindow _dialogWindow;
-        private static DeveloperWindow _developerWindow;
 
         public static Player Player { get; set; }
 
@@ -41,20 +39,6 @@ namespace Emberpoint.Core
                     _mainMenuWindow.OptionsWindow.ChangeKeybinding(Global.KeyboardState.KeysPressed.First().Key);
                 }
             }
-
-            if (!UserInterfaceManager.IsInitialized || UserInterfaceManager.IsPaused) return;
-
-            if (_dialogWindow.IsVisible && !_developerWindow.IsVisible && Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
-            {
-                _dialogWindow.ShowNext();
-            }
-        }
-
-        private static void InitializeWindows(object sender, EventArgs args)
-        {
-            _dialogWindow = UserInterfaceManager.Get<DialogWindow>();
-            _developerWindow = UserInterfaceManager.Get<DeveloperWindow>();
-            UserInterfaceManager.OnInitalized -= InitializeWindows;
         }
 
         public static void Reset()
@@ -82,8 +66,6 @@ namespace Emberpoint.Core
         {
             // Makes buttons look better
             Settings.UseDefaultExtendedFont = true;
-
-            UserInterfaceManager.OnInitalized += InitializeWindows;
 
             // Shows the main menu
             _mainMenuWindow = MainMenuWindow.Show();
