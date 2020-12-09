@@ -101,6 +101,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void Show()
         {
+            // TODO: Animate entrance
             IsVisible = true;
             IsFocused = true;
             _textInput.Text = "Command";
@@ -111,6 +112,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void Hide()
         {
+            // TODO: Animate departure
             IsVisible = false;
             IsFocused = false;
             _textInput.Text = "Command";
