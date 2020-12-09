@@ -174,7 +174,6 @@ namespace Emberpoint.Core.UserInterface.Windows
         public override bool ProcessKeyboard(Keyboard info)
         {
             var baseValue = base.ProcessKeyboard(info);
-
             if (_textInput.DisableKeyboard && info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.DeveloperConsole)))
             {
                 if (IsVisible)
