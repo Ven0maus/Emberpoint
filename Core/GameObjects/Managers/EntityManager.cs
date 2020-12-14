@@ -1,5 +1,4 @@
-﻿using Emberpoint.Core.GameObjects.Abstracts;
-using Emberpoint.Core.GameObjects.Entities;
+﻿using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Map;
 using Microsoft.Xna.Framework;
@@ -54,6 +53,11 @@ namespace Emberpoint.Core.GameObjects.Managers
         public static void Clear()
         {
             EntityDatabase.Reset();
+        }
+
+        public static void ClearExceptPlayer()
+        {
+            EntityDatabase.ResetExcept(Game.Player.ObjectId);
         }
 
         public static T[] GetEntities<T>(Func<T, bool> criteria = null) where T : IEntity
@@ -119,6 +123,21 @@ namespace Emberpoint.Core.GameObjects.Managers
             {
                 Entities.Clear();
                 _currentId = 0;
+            }
+
+            public static void ResetExcept(params int[] ids)
+            {
+                var toRemove = new List<int>();
+                foreach (var entity in Entities)
+                {
+                    toRemove.Add(entity.Key);
+                }
+
+                toRemove = toRemove.Except(ids).ToList();
+                foreach (var id in toRemove)
+                    Entities.Remove(id);
+
+                _currentId = Entities.Count == 0 ? 0 : (Entities.Max(a => a.Key) + 1);
             }
         }
     }

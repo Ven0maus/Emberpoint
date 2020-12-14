@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -16,6 +17,9 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public int GridSizeX { get; private set; }
         public int GridSizeY { get; private set; }
         public string BlueprintPath { get; private set; }
+
+        public virtual Blueprint<T> StairsUpBlueprint { get; private set; }
+        public virtual Blueprint<T> StairsDownBlueprint { get; private set; }
 
         public Blueprint()
         {
@@ -119,6 +123,50 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                             Brightness = tile.Brightness
                         }
                     };
+
+                    // Set cell effect for stairs
+                    if (tile.Name != null && tile.Name.Equals("Stairs Down", StringComparison.OrdinalIgnoreCase) && StairsDownBlueprint != null)
+                    {
+                        cell.EffectProperties.AddMovementEffect((entity) =>
+                        {
+                            EntityManager.ClearExceptPlayer();
+                            GridManager.InitializeCustomCells(StairsDownBlueprint.GridSizeX, StairsDownBlueprint.GridSizeY, StairsDownBlueprint.GetCells());
+
+                            // Move player
+                            var stairsUp = GridManager.Grid.GetCells(a => a.CellProperties.Name != null && a.CellProperties.Name.Equals("Stairs Up")).FirstOrDefault();
+                            if (stairsUp == null)
+                            {
+                                throw new Exception("[" + GetType().Name + "] No stairs up available for stairs down at position: " + cell.Position);
+                            }
+                            var walkableCell = GridManager.Grid.GetNeighbors(stairsUp).FirstOrDefault(a => a.CellProperties.Walkable);
+                            if (walkableCell == null)
+                                throw new Exception("No suitable spot near stairs! found!");
+                            Game.Player.MoveTowards(walkableCell.Position, false);
+                            Game.Player.Initialize(false);
+                            // TODO: Re-initialize map?
+                        });
+                    }
+                    else if (tile.Name != null && tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) && StairsUpBlueprint != null)
+                    {
+                        cell.EffectProperties.AddMovementEffect((entity) =>
+                        {
+                            EntityManager.ClearExceptPlayer();
+                            GridManager.InitializeCustomCells(StairsUpBlueprint.GridSizeX, StairsUpBlueprint.GridSizeY, StairsUpBlueprint.GetCells());
+
+                            // Move player
+                            var stairsDown = GridManager.Grid.GetCells(a => a.CellProperties.Name != null && a.CellProperties.Name.Equals("Stairs Down")).FirstOrDefault();
+                            if (stairsDown == null)
+                            {
+                                throw new Exception("["+GetType().Name+"] No stairs down available for stairs up at position: " + cell.Position);
+                            }
+                            var walkableCell = GridManager.Grid.GetNeighbors(stairsDown).FirstOrDefault(a => a.CellProperties.Walkable);
+                            if (walkableCell == null)
+                                throw new Exception("No suitable spot near stairs! found!");
+                            Game.Player.MoveTowards(walkableCell.Position, false);
+                            Game.Player.Initialize(false);
+                            // TODO: Re-initialize map?
+                        });
+                    }
 
                     if (!string.IsNullOrWhiteSpace(tile.LightColor))
                     {
