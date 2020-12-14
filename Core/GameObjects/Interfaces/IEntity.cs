@@ -11,7 +11,7 @@ namespace Emberpoint.Core.GameObjects.Interfaces
         Point Position { get; set; }
         int Glyph { get; }
         void ResetFieldOfView();
-        void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null);
+        void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true);
         bool CanMoveTowards(Point position);
     }
 }

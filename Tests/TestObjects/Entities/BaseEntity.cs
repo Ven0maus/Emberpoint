@@ -85,9 +85,6 @@ namespace Tests.TestObjects.Entities
                     // Re-calculate the field of view
                     FieldOfView.Calculate(Position, FieldOfViewRadius);
                 }
-
-                // Check if the cell has movement effects to be executed
-                ExecuteMovementEffects(args);
             }
         }
 
@@ -113,7 +110,7 @@ namespace Tests.TestObjects.Entities
             return _grid.InBounds(position) && _grid.GetCell(position).CellProperties.Walkable && !EntityManager.EntityExistsAt(position);
         }
 
-        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null)
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true)
         {
             if (Health == 0) return;
 
@@ -125,7 +122,17 @@ namespace Tests.TestObjects.Entities
 
             Position = position;
 
-            Moved.Invoke(this, new EntityMovedEventArgs(null, prevPos));
+            if (prevPos != position)
+            {
+                var args = new EntityMovedEventArgs(null, prevPos);
+                Moved.Invoke(this, args);
+
+                if (triggerMovementEffects)
+                {
+                    // Check if the cell has movement effects to be executed
+                    ExecuteMovementEffects(args);
+                }
+            }
         }
 
         public void MoveTowards(Direction position, bool checkCanMove = true)

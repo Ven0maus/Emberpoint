@@ -85,9 +85,6 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                 bool discoverUnexploredTiles = flashLight != null && flashLight.LightOn;
                 GridManager.Grid.DrawFieldOfView(this, discoverUnexploredTiles);
             }
-
-            // Check if the cell has movement effects to be executed
-            ExecuteMovementEffects(args);
         }
 
         public bool GetInteractedCell(out Point cellPosition)
@@ -133,7 +130,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             return false;
         }
 
-        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null)
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true)
         {
             if (Health == 0) return;
 
@@ -142,7 +139,14 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
             if (checkCanMove && !CanMoveTowards(position)) return;
 
+            var oldPos = Position;
             Position = position;
+
+            if (triggerMovementEffects)
+            {
+                // Check if the cell has movement effects to be executed
+                ExecuteMovementEffects(new EntityMovedEventArgs(this, oldPos));
+            }
         }
 
         public void MoveTowards(Direction position, bool checkCanMove = true)

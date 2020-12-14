@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.UserInterface.Windows;
+﻿using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,15 @@ namespace Emberpoint.Core
             }
             var position = new Point(x, y);
             Game.Player.MoveTowards(position, false);
+
+            // Discover radius around player on teleport
+            var prevRadius = Game.Player.FieldOfViewRadius;
+            Game.Player.FieldOfViewRadius = Constants.Items.FlashlightRadius;
+            EntityManager.RecalculatFieldOfView(Game.Player, false);
+            GridManager.Grid.DrawFieldOfView(Game.Player, true);
+            Game.Player.FieldOfViewRadius = prevRadius;
+            EntityManager.RecalculatFieldOfView(Game.Player, false);
+
             output = $"Teleported player from {Game.Player.Position} to {position}";
             return true;
         }
