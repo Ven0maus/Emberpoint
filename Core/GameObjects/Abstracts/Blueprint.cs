@@ -151,14 +151,15 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             string stairsName = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? "Stairs Down" : "Stairs Up";
             Blueprint<T> blueprint = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? StairsUpBlueprint : StairsDownBlueprint;
 
+            // Initialize new cells, TODO: Keep track of previous cells for switching back
             EntityManager.ClearExceptPlayer();
-            GridManager.InitializeCustomCells(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells());
+            GridManager.InitializeBluePrint(blueprint);
 
             // Move player
             var stairs = GridManager.Grid.GetCells(a => a.CellProperties.Name != null && a.CellProperties.Name.Equals(stairsName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if (stairs == null)
             {
-                throw new Exception("[" + GetType().Name + "] No stairs down available for stairs up at position: " + cell.Position);
+                throw new Exception($"[{GetType().Name}] No {stairsName} available for {tile.Name} at position: {cell.Position}");
             }
 
             GridManager.Grid.RenderObject(UserInterfaceManager.Get<MapWindow>());

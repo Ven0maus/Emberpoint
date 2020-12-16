@@ -15,9 +15,9 @@ namespace Emberpoint.Core.GameObjects.Managers
             Grid.CalibrateLightEngine();
         }
 
-        public static void InitializeCustomCells(int width, int height, EmberCell[] cells)
+        public static void InitializeBluePrint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
         {
-            Grid = new EmberGrid(width, height, cells);
+            Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells());
 
             // After map is created, we calibrate the light engine
             Grid.CalibrateLightEngine();
