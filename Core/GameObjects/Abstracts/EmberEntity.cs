@@ -40,7 +40,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public Direction Facing  {get; private set; }
 
-        private Console _renderedConsole;
+        public Console RenderConsole { get; private set; }
 
         /// <summary>
         /// Call this when the grid changes to a new grid object. (Like going into the basement etc)
@@ -85,9 +85,6 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                 bool discoverUnexploredTiles = flashLight != null && flashLight.LightOn;
                 GridManager.Grid.DrawFieldOfView(this, discoverUnexploredTiles);
             }
-
-            // Check if the cell has movement effects to be executed
-            ExecuteMovementEffects(args);
         }
 
         public bool GetInteractedCell(out Point cellPosition)
@@ -118,7 +115,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public void RenderObject(Console console)
         {
             if (Health == 0) return;
-            _renderedConsole = console;
+            RenderConsole = console;
             console.Children.Add(this);
         }
 
@@ -133,7 +130,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             return false;
         }
 
-        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null)
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true)
         {
             if (Health == 0) return;
 
@@ -142,7 +139,14 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
             if (checkCanMove && !CanMoveTowards(position)) return;
 
+            var oldPos = Position;
             Position = position;
+
+            if (triggerMovementEffects)
+            {
+                // Check if the cell has movement effects to be executed
+                ExecuteMovementEffects(new EntityMovedEventArgs(this, oldPos));
+            }
         }
 
         public void MoveTowards(Direction position, bool checkCanMove = true)
@@ -170,10 +174,10 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public void UnRenderObject()
         {
-            if (_renderedConsole != null)
+            if (RenderConsole != null)
             {
-                _renderedConsole.Children.Remove(this);
-                _renderedConsole = null;
+                RenderConsole.Children.Remove(this);
+                RenderConsole = null;
             }
         }
 

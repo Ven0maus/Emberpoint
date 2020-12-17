@@ -1,5 +1,7 @@
 ﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
+using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using System;
@@ -16,6 +18,9 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public int GridSizeX { get; private set; }
         public int GridSizeY { get; private set; }
         public string BlueprintPath { get; private set; }
+
+        public virtual Blueprint<T> StairsUpBlueprint { get; private set; }
+        public virtual Blueprint<T> StairsDownBlueprint { get; private set; }
 
         public Blueprint()
         {
@@ -120,6 +125,16 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                         }
                     };
 
+                    // Set cell effect for stairs
+                    if (tile.Name != null && tile.Name.Equals("Stairs Down", StringComparison.OrdinalIgnoreCase) && StairsDownBlueprint != null)
+                    {
+                        cell.EffectProperties.AddMovementEffect((entity) => AddStairsLogic(cell, tile));
+                    }
+                    else if (tile.Name != null && tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) && StairsUpBlueprint != null)
+                    {
+                        cell.EffectProperties.AddMovementEffect((entity) => AddStairsLogic(cell, tile));
+                    }
+
                     if (!string.IsNullOrWhiteSpace(tile.LightColor))
                     {
                         cell.LightProperties.LightColor = MonoGameExtensions.GetColorByString(tile.LightColor);
@@ -129,6 +144,29 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                 }
             }
             return cells.ToArray();
+        }
+
+        private void AddStairsLogic(T cell, BlueprintTile tile)
+        {
+            string stairsName = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? "Stairs Down" : "Stairs Up";
+            Blueprint<T> blueprint = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? StairsUpBlueprint : StairsDownBlueprint;
+
+            // TODO: Issue 110: Layer entities on their own layer based on blueprint they are currently part of instead of clearing them.
+            EntityManager.ClearExceptPlayer();
+
+            // Initialize new blueprint with tracking of the previous
+            GridManager.InitializeBlueprint(blueprint, true);
+
+            // Move player
+            var stairs = GridManager.Grid.GetCells(a => a.CellProperties.Name != null && a.CellProperties.Name.Equals(stairsName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            if (stairs == null)
+            {
+                throw new Exception($"[{GetType().Name}] No {stairsName} available for {tile.Name} at position: {cell.Position}");
+            }
+
+            GridManager.Grid.RenderObject(UserInterfaceManager.Get<MapWindow>());
+            Game.Player.MoveTowards(stairs.Position, false, null, false);
+            Game.Player.Initialize(false);
         }
     }
 

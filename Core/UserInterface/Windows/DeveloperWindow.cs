@@ -242,9 +242,12 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         private bool ParseCommand(string text, out string output)
         {
-            if (DeveloperCommands.Commands.TryGetValue(text, out DeveloperCommands.CustomFunc<bool, DeveloperWindow, string> command))
+            foreach (var command in DeveloperCommands.Commands)
             {
-                return command(this, out output);
+                if (text.StartsWith(command.Key, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    return command.Value(text, this, out output);
+                }
             }
             output = "";
             return false;

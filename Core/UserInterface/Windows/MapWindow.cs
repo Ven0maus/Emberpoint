@@ -22,7 +22,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public void Initialize()
         {
             // Initialize grid and render it on the map
-            GridManager.InitializeBlueprint<GroundFloorBlueprint>();
+            GridManager.InitializeBlueprint<GroundFloorBlueprint>(true);
             GridManager.Grid.RenderObject(this);
         }
 

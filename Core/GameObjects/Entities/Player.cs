@@ -117,10 +117,13 @@ namespace Emberpoint.Core.GameObjects.Entities
                 return base.ProcessKeyboard(info);
         }
 
-        public void Initialize()
+        public void Initialize(bool addRenderObject = true)
         {
-            // Draw player on the map
-            RenderObject(MapWindow);
+            if (addRenderObject)
+            {
+                // Draw player on the map
+                RenderObject(MapWindow);
+            }
 
             // Make sure we check for input
             IsFocused = true;
@@ -130,6 +133,9 @@ namespace Emberpoint.Core.GameObjects.Entities
 
             // Show the nearby objects in the fov window
             _fovObjectsWindow.Update(this);
+
+            // Render map
+            MapWindow.IsDirty = true;
         }
 
         private readonly Dictionary<Keybindings, Direction> _playerMovements =

@@ -56,7 +56,9 @@ namespace Tests.TestObjects.Entities
 
         public int Glyph => throw new NotImplementedException();
 
-        private readonly EmberGrid _grid;
+        public SadConsole.Console RenderConsole => throw new NotImplementedException("Unit tests do not use XNA consoles.");
+
+        private EmberGrid _grid;
 
         public BaseEntity()
         {
@@ -67,13 +69,18 @@ namespace Tests.TestObjects.Entities
             Facing = Direction.DOWN;
         }
 
-        public BaseEntity(BaseGrid grid)
+        public BaseEntity(EmberGrid grid)
         {
             _grid = grid;
             ObjectId = EntityManager.GetUniqueId();
             Moved += OnMove;
             MaxHealth = 100; // Default stats
             Facing = Direction.DOWN;
+        }
+
+        public void ChangeGrid(EmberGrid grid)
+        {
+            _grid = grid;
         }
 
         private void OnMove(object sender, EntityMovedEventArgs args)
@@ -85,9 +92,6 @@ namespace Tests.TestObjects.Entities
                     // Re-calculate the field of view
                     FieldOfView.Calculate(Position, FieldOfViewRadius);
                 }
-
-                // Check if the cell has movement effects to be executed
-                ExecuteMovementEffects(args);
             }
         }
 
@@ -113,7 +117,7 @@ namespace Tests.TestObjects.Entities
             return _grid.InBounds(position) && _grid.GetCell(position).CellProperties.Walkable && !EntityManager.EntityExistsAt(position);
         }
 
-        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null)
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true)
         {
             if (Health == 0) return;
 
@@ -125,7 +129,17 @@ namespace Tests.TestObjects.Entities
 
             Position = position;
 
-            Moved.Invoke(this, new EntityMovedEventArgs(null, prevPos));
+            if (prevPos != position)
+            {
+                var args = new EntityMovedEventArgs(null, prevPos);
+                Moved.Invoke(this, args);
+
+                if (triggerMovementEffects)
+                {
+                    // Check if the cell has movement effects to be executed
+                    ExecuteMovementEffects(args);
+                }
+            }
         }
 
         public void MoveTowards(Direction position, bool checkCanMove = true)

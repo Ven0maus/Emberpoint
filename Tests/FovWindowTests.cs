@@ -54,7 +54,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            EntityManager.Clear();
+            EntityManager.Clear(false);
         }
 
         [Test]
