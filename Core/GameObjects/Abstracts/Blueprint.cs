@@ -155,7 +155,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             EntityManager.ClearExceptPlayer();
 
             // Initialize new blueprint with tracking of the previous
-            GridManager.InitializeBluePrint(blueprint, true);
+            GridManager.InitializeBlueprint(blueprint, true);
 
             // Move player
             var stairs = GridManager.Grid.GetCells(a => a.CellProperties.Name != null && a.CellProperties.Name.Equals(stairsName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();

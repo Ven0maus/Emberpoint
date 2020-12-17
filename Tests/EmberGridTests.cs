@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using System.Linq;
+using Tests.TestObjects.Blueprints;
+using Tests.TestObjects.Entities;
 using Tests.TestObjects.Grids;
 
 namespace Tests
@@ -16,6 +18,61 @@ namespace Tests
         {
             _grid = BaseGrid.Create(10, 10);
             GridManager.InitializeCustomGrid(_grid);
+        }
+
+        [Test]
+        public void CanChangeBlueprintByCellEffect()
+        {
+            GridManager.InitializeBlueprint<BaseBlueprint>(true);
+
+            Assert.IsFalse(GridManager.Grid.GetCell(1, 1).LightProperties.EmitsLight);
+            var exploreACell = GridManager.Grid.GetCell(0, 0);
+            exploreACell.CellProperties.BlocksFov = true;
+            GridManager.Grid.SetCell(exploreACell, false, false);
+            Assert.IsTrue(GridManager.Grid.GetCell(0, 0).CellProperties.BlocksFov);
+
+            var up = GridManager.Grid.GetCells(a => a.Glyph == '>').FirstOrDefault();
+            Assert.IsNotNull(up);
+
+            // Add effect to go up
+            up.EffectProperties.EntityMovementEffects.Clear();
+            up.EffectProperties.AddMovementEffect((e) =>
+            {
+                // Initialize new blueprint with tracking of the previous
+                GridManager.InitializeBlueprint<BaseBlueprintExtra>(true);
+            });
+
+            var entity = EntityManager.Create<BaseEntity>(new Point(2, 3), GridManager.Grid);
+            entity.MoveTowards(up.Position, false, triggerMovementEffects: true);
+
+            // Map is reloaded at this point, find way down
+            var down = GridManager.Grid.GetCells(a => a.Glyph == '<').FirstOrDefault();
+            Assert.IsNotNull(down);
+
+            // Add effect to go back down
+            down.EffectProperties.EntityMovementEffects.Clear();
+            down.EffectProperties.AddMovementEffect((e) =>
+            {
+                // Initialize new blueprint with tracking of the previous
+                GridManager.InitializeBlueprint<BaseBlueprint>(true);
+            });
+
+            entity.MoveTowards(down.Position, false, triggerMovementEffects: false);
+            entity.ChangeGrid(GridManager.Grid);
+
+            // Check if a cell corresponds to the correct grid after change
+            Assert.IsTrue(GridManager.Grid.GetCell(1, 1).LightProperties.EmitsLight);
+
+            // Move away from stairs first
+            entity.MoveTowards(new Point(2, 3), false, triggerMovementEffects: false);
+            // Move back downwards
+            entity.MoveTowards(down.Position, false, triggerMovementEffects: true);
+
+            // Verify if map changed
+            Assert.IsFalse(GridManager.Grid.GetCell(1, 1).LightProperties.EmitsLight);
+
+            // Verify if changes are tracked
+            Assert.IsTrue(GridManager.Grid.GetCell(0, 0).CellProperties.BlocksFov);
         }
 
         [Test]

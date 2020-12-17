@@ -58,7 +58,7 @@ namespace Tests.TestObjects.Entities
 
         public SadConsole.Console RenderConsole => throw new NotImplementedException("Unit tests do not use XNA consoles.");
 
-        private readonly EmberGrid _grid;
+        private EmberGrid _grid;
 
         public BaseEntity()
         {
@@ -69,13 +69,18 @@ namespace Tests.TestObjects.Entities
             Facing = Direction.DOWN;
         }
 
-        public BaseEntity(BaseGrid grid)
+        public BaseEntity(EmberGrid grid)
         {
             _grid = grid;
             ObjectId = EntityManager.GetUniqueId();
             Moved += OnMove;
             MaxHealth = 100; // Default stats
             Facing = Direction.DOWN;
+        }
+
+        public void ChangeGrid(EmberGrid grid)
+        {
+            _grid = grid;
         }
 
         private void OnMove(object sender, EntityMovedEventArgs args)

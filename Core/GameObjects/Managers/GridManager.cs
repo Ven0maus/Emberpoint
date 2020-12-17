@@ -33,7 +33,7 @@ namespace Emberpoint.Core.GameObjects.Managers
             }
         }
 
-        public static void InitializeBluePrint<T>(Blueprint<T> blueprint, bool saveGridData) where T : EmberCell, new()
+        public static void InitializeBlueprint<T>(Blueprint<T> blueprint, bool saveGridData) where T : EmberCell, new()
         {
             if (!saveGridData)
             {
