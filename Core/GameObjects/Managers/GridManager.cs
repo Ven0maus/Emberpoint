@@ -1,5 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Map;
+using System;
+using System.Collections.Generic;
 
 namespace Emberpoint.Core.GameObjects.Managers
 {
@@ -7,20 +9,50 @@ namespace Emberpoint.Core.GameObjects.Managers
     {
         public static EmberGrid Grid { get; private set; }
 
-        public static void InitializeBlueprint<T>() where T : Blueprint<EmberCell>, new()
-        {
-            Grid = new EmberGrid(new T());
+        private readonly static Dictionary<Type, EmberGrid> _blueprintGridCache = new Dictionary<Type, EmberGrid>();
 
-            // After map is created, we calibrate the light engine
-            Grid.CalibrateLightEngine();
+        public static void InitializeBlueprint<T>(bool saveGridData) where T : Blueprint<EmberCell>, new()
+        {
+            if (!saveGridData)
+            {
+                Grid = new EmberGrid(new T());
+                Grid.CalibrateLightEngine();
+                return;
+            }
+
+            if (_blueprintGridCache.TryGetValue(typeof(T), out EmberGrid grid))
+            {
+                Grid = grid;
+            }
+            else
+            {
+                Grid = new EmberGrid(new T());
+                Grid.CalibrateLightEngine();
+
+                _blueprintGridCache.Add(typeof(T), Grid);
+            }
         }
 
-        public static void InitializeBluePrint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
+        public static void InitializeBluePrint<T>(Blueprint<T> blueprint, bool saveGridData) where T : EmberCell, new()
         {
-            Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells());
+            if (!saveGridData)
+            {
+                Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells());
+                Grid.CalibrateLightEngine();
+                return;
+            }
 
-            // After map is created, we calibrate the light engine
-            Grid.CalibrateLightEngine();
+            if (_blueprintGridCache.TryGetValue(blueprint.GetType(), out EmberGrid grid))
+            {
+                Grid = grid;
+            }
+            else
+            {
+                Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells());
+                Grid.CalibrateLightEngine();
+
+                _blueprintGridCache.Add(blueprint.GetType(), Grid);
+            }
         }
 
         public static void InitializeCustomGrid(EmberGrid grid)

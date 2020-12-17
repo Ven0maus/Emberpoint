@@ -50,13 +50,25 @@ namespace Emberpoint.Core.GameObjects.Managers
             EntityDatabase.Entities.Remove(entity.ObjectId);
         }
 
-        public static void Clear()
+        public static void Clear(bool unRenderEntities)
         {
+            if (unRenderEntities)
+            {
+                foreach (var entity in EntityDatabase.Entities)
+                {
+                    entity.Value.UnRenderObject();
+                }
+            }
             EntityDatabase.Reset();
         }
 
         public static void ClearExceptPlayer()
         {
+            foreach (var entity in EntityDatabase.Entities)
+            {
+                if (entity.Key == Game.Player.ObjectId) continue;
+                entity.Value.UnRenderObject();
+            }
             EntityDatabase.ResetExcept(Game.Player.ObjectId);
         }
 

@@ -40,7 +40,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public Direction Facing  {get; private set; }
 
-        private Console _renderedConsole;
+        public Console RenderConsole { get; private set; }
 
         /// <summary>
         /// Call this when the grid changes to a new grid object. (Like going into the basement etc)
@@ -115,7 +115,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public void RenderObject(Console console)
         {
             if (Health == 0) return;
-            _renderedConsole = console;
+            RenderConsole = console;
             console.Children.Add(this);
         }
 
@@ -174,10 +174,10 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public void UnRenderObject()
         {
-            if (_renderedConsole != null)
+            if (RenderConsole != null)
             {
-                _renderedConsole.Children.Remove(this);
-                _renderedConsole = null;
+                RenderConsole.Children.Remove(this);
+                RenderConsole = null;
             }
         }
 

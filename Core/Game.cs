@@ -56,7 +56,7 @@ namespace Emberpoint.Core
             }
 
             Player = null;
-            EntityManager.Clear();
+            EntityManager.Clear(true);
             ItemManager.Clear();
         }
 

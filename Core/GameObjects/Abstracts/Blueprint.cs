@@ -151,9 +151,11 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             string stairsName = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? "Stairs Down" : "Stairs Up";
             Blueprint<T> blueprint = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? StairsUpBlueprint : StairsDownBlueprint;
 
-            // Initialize new cells, TODO: Keep track of previous cells for switching back
+            // TODO: Issue 110: Layer entities on their own layer based on blueprint they are currently part of instead of clearing them.
             EntityManager.ClearExceptPlayer();
-            GridManager.InitializeBluePrint(blueprint);
+
+            // Initialize new blueprint with tracking of the previous
+            GridManager.InitializeBluePrint(blueprint, true);
 
             // Move player
             var stairs = GridManager.Grid.GetCells(a => a.CellProperties.Name != null && a.CellProperties.Name.Equals(stairsName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();

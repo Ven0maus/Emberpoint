@@ -1,10 +1,12 @@
 ﻿using GoRogue;
 using Microsoft.Xna.Framework;
+using SadConsole;
 
 namespace Emberpoint.Core.GameObjects.Interfaces
 {
     public interface IEntity : IRenderable, IEntityBaseStats
     {
+        Console RenderConsole { get; }
         int ObjectId { get; }
         FOV FieldOfView { get; }
         int FieldOfViewRadius { get; set; }
