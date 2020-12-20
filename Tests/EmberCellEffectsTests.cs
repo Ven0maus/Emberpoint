@@ -17,7 +17,7 @@ namespace Tests
         public void SetUp()
         {
             _grid = BaseGrid.Create(10, 10);
-            _entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            _entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
             GridManager.InitializeCustomGrid(_grid);
         }
 
@@ -46,7 +46,7 @@ namespace Tests
             Assert.IsTrue(_entity.Position == new Point(1, 0));
             Assert.IsTrue(_entity.Health == 0);
 
-            Assert.IsFalse(EntityManager.EntityExistsAt(_entity.Position));
+            Assert.IsFalse(EntityManager.EntityExistsAt(_entity.Position, _entity.CurrentBlueprintId));
         }
     }
 }

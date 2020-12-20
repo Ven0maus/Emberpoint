@@ -27,12 +27,13 @@ namespace Tests
         [Test]
         public void EntitiesSynced_AfterPlayerMoves_ToNewBlueprint()
         {
-            var entity1 = EntityManager.Create<BaseEntity>(new Point(1, 1), _grid);
-            var entity2 = EntityManager.Create<BaseEntity>(new Point(2, 1), _grid);
+            GridManager.InitializeBlueprint<BaseBlueprintExtra>(false);
+
+            var entity1 = EntityManager.Create<BaseEntity>(new Point(1, 1), -1, _grid);
+            var entity2 = EntityManager.Create<BaseEntity>(new Point(2, 1), -1, _grid);
             Assert.AreEqual(entity1.CurrentBlueprintId, entity2.CurrentBlueprintId);
 
             // Set entity1's blueprint layer
-            GridManager.InitializeBlueprint<BaseBlueprintExtra>(false);
             entity1.MoveToBlueprint(GridManager.ActiveBlueprint);
 
             // Sync entities
@@ -62,8 +63,8 @@ namespace Tests
         {
             var entities = new[]
             {
-                EntityManager.Create<BaseEntity>(new Point(0, 0)),
-                EntityManager.Create<BaseEntity>(new Point(1, 0)),
+                EntityManager.Create<BaseEntity>(new Point(0, 0), -1),
+                EntityManager.Create<BaseEntity>(new Point(1, 0), -1),
             };
 
             Assert.AreEqual(0, entities[0].ObjectId);
@@ -73,7 +74,7 @@ namespace Tests
         [Test]
         public void Entity_CanMoveTowards_IsCorrect()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
             var cell = _grid.GetCell(0, 1);
             cell.CellProperties.Walkable = false;
             _grid.SetCell(cell, true);
@@ -85,7 +86,7 @@ namespace Tests
         [Test]
         public void Entity_MoveTowards_PositionChangeIsCorrect()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
             var cell = _grid.GetCell(0, 1);
             cell.CellProperties.Walkable = false;
             _grid.SetCell(cell, true);
@@ -99,7 +100,7 @@ namespace Tests
         [Test]
         public void Entity_IsFieldOfView_Correct()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
             entity.FieldOfViewRadius = 5;
             entity.FieldOfView.Calculate(entity.Position, entity.FieldOfViewRadius);
 
@@ -116,15 +117,15 @@ namespace Tests
         [Test]
         public void Entity_CellContainsEntity_Correct()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
-            Assert.IsTrue(_grid.ContainsEntity(entity.Position));
-            Assert.IsTrue(_grid.GetCell(entity.Position).ContainsEntity());
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
+            Assert.IsTrue(_grid.ContainsEntity(entity.Position, -1));
+            Assert.IsTrue(_grid.GetCell(entity.Position).ContainsEntity(-1));
         }
 
         [Test]
         public void Entity_CellIntegrationFacingRight_Correct()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
             entity.MoveTowards(new Point(1, 0), false);
             var cell = _grid.GetCell(2, 0);
             cell.CellProperties.Interactable = true;
@@ -150,7 +151,7 @@ namespace Tests
         [Test]
         public void Entity_CellIntegrationFacingLeft_Correct()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(2, 0), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(2, 0), -1, _grid);
             entity.MoveTowards(new Point(1, 0), false);
             var cell = _grid.GetCell(0, 0);
             cell.CellProperties.Interactable = true;
@@ -176,7 +177,7 @@ namespace Tests
         [Test]
         public void Entity_CellIntegrationFacingUp_Correct()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 2), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 2), -1, _grid);
             entity.MoveTowards(new Point(0, 1), false);
             var cell = _grid.GetCell(0, 0);
             cell.CellProperties.Interactable = true;
@@ -202,7 +203,7 @@ namespace Tests
         [Test]
         public void Entity_CellIntegrationFacingDown_Correct()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
             entity.MoveTowards(new Point(0, 1), false);
             var cell = _grid.GetCell(0, 2);
             cell.CellProperties.Interactable = true;
@@ -228,7 +229,7 @@ namespace Tests
         [Test]
         public void Entity_CellIntegrationNotExplored_Correct()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
             entity.MoveTowards(new Point(1, 0)); // facing right
             var cell = _grid.GetCell(2, 0);
             cell.CellProperties.Interactable = true;
@@ -239,7 +240,7 @@ namespace Tests
         [Test]
         public void Entity_CellIntegrationNotInteractable_Correct()
         {
-            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(0, 0), -1, _grid);
             entity.MoveTowards(new Point(1, 0)); // facing right
             var cell = _grid.GetCell(2, 0);
             cell.CellProperties.Interactable = false;

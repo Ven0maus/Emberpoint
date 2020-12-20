@@ -30,7 +30,7 @@ namespace Tests
             GridManager.InitializeCustomGrid(_grid);
 
             // Create entity and calculate fov + draw it
-            var entity = EntityManager.Create<BaseEntity>(new Point(1, 1), _grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(1, 1), -1, _grid);
             EntityManager.RecalculatFieldOfView(entity);
             GridManager.Grid.DrawFieldOfView(entity);
 
@@ -50,7 +50,7 @@ namespace Tests
             GridManager.InitializeCustomGrid(_grid);
 
             // Create entity and calculate fov + draw it
-            var entity = EntityManager.Create<BaseEntity>(_grid.GetCell(a => a.LightProperties.Brightness > 0f && a.CellProperties.Walkable).Position, _grid);
+            var entity = EntityManager.Create<BaseEntity>(_grid.GetCell(a => a.LightProperties.Brightness > 0f && a.CellProperties.Walkable).Position, -1, _grid);
             EntityManager.RecalculatFieldOfView(entity);
             GridManager.Grid.DrawFieldOfView(entity);
 

@@ -170,7 +170,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             // Instantiate player in the middle of the map
             var spawnPosition = GridManager.Grid.GetCell(a => a.LightProperties.Brightness > 0.3f && a.CellProperties.Walkable);
-            Game.Player = EntityManager.Create<Player>(spawnPosition.Position);
+            Game.Player = EntityManager.Create<Player>(spawnPosition.Position, GridManager.ActiveBlueprint.ObjectId);
             Game.Player.Initialize();
 
             // Show a tutorial dialog window.

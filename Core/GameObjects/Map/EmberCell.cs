@@ -170,9 +170,9 @@ namespace Emberpoint.Core.GameObjects.Map
             return closest;
         }
 
-        public bool ContainsEntity()
+        public bool ContainsEntity(int blueprintId)
         {
-            return EntityManager.EntityExistsAt(Position);
+            return EntityManager.EntityExistsAt(Position, blueprintId);
         }
 
         public bool Equals(EmberCell other)

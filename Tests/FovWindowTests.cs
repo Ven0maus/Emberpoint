@@ -47,7 +47,7 @@ namespace Tests
             AddLampToGrid(10, 10);
 
             // Create entity on the grid
-            _entity = EntityManager.Create<BaseEntity>(new Point(1, 1), _grid);
+            _entity = EntityManager.Create<BaseEntity>(new Point(1, 1), -1, _grid);
             _entity.FieldOfViewRadius = Constants.Player.FieldOfViewRadius;
         }
 

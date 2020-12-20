@@ -19,9 +19,9 @@ namespace Emberpoint.Core.GameObjects.Managers
         /// <param name="position"></param>
         /// <param name="grid">Custom grid, for tests</param>
         /// <returns></returns>
-        public static T Create<T>(Point position, EmberGrid grid = null) where T : IEntity
+        public static T Create<T>(Point position, int blueprintId, EmberGrid grid = null) where T : IEntity
         {
-            if (EntityExistsAt(position))
+            if (EntityExistsAt(position, blueprintId))
             {
                 return default;
             }
@@ -31,11 +31,13 @@ namespace Emberpoint.Core.GameObjects.Managers
             {
                 entity = (T)Activator.CreateInstance(typeof(T), grid);
                 entity.Position = position;
+                entity.MoveToBlueprint(blueprintId);
             }
             else
             {
                 entity = Activator.CreateInstance<T>();
                 entity.Position = position;
+                entity.MoveToBlueprint(blueprintId);
             }
 
             EntityDatabase.Entities.Add(entity.ObjectId, entity);
@@ -98,24 +100,24 @@ namespace Emberpoint.Core.GameObjects.Managers
             return collection.ToArray();
         }
 
-        public static T GetEntityAt<T>(Point position) where T : IEntity
+        public static T GetEntityAt<T>(Point position, int blueprintId) where T : IEntity
         {
-            return (T)EntityDatabase.Entities.Values.SingleOrDefault(a => a.Position == position);
+            return (T)EntityDatabase.Entities.Values.SingleOrDefault(a => a.Position == position && a.CurrentBlueprintId == blueprintId);
         }
 
-        public static T GetEntityAt<T>(int x, int y) where T : IEntity
+        public static T GetEntityAt<T>(int x, int y, int blueprintId) where T : IEntity
         {
-            return (T)EntityDatabase.Entities.Values.SingleOrDefault(a => a.Position.X == x && a.Position.Y == y);
+            return (T)EntityDatabase.Entities.Values.SingleOrDefault(a => a.Position.X == x && a.Position.Y == y && a.CurrentBlueprintId == blueprintId);
         }
 
-        public static bool EntityExistsAt(int x, int y)
+        public static bool EntityExistsAt(int x, int y, int blueprintId)
         {
-            return GetEntityAt<IEntity>(x, y) != null;
+            return GetEntityAt<IEntity>(x, y, blueprintId) != null;
         }
 
-        public static bool EntityExistsAt(Point position)
+        public static bool EntityExistsAt(Point position, int blueprintId)
         {
-            return GetEntityAt<IEntity>(position) != null;
+            return GetEntityAt<IEntity>(position, blueprintId) != null;
         }
 
         public static void RecalculatFieldOfView(IEntity entity, bool redrawFov = true, bool exploreCells = false)

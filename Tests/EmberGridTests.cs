@@ -44,7 +44,7 @@ namespace Tests
                 ((BaseEntity)e).MoveToBlueprint(GridManager.ActiveBlueprint);
             });
 
-            var entity = EntityManager.Create<BaseEntity>(new Point(2, 3), GridManager.Grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(2, 3), GridManager.Grid.Blueprint.ObjectId, GridManager.Grid);
 
             Assert.IsTrue(entity.CurrentBlueprintId == currentBlueprint.ObjectId);
             Assert.IsTrue(entity.CurrentBlueprintId == GridManager.ActiveBlueprint.ObjectId);

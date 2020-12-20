@@ -129,14 +129,14 @@ namespace Emberpoint.Core.GameObjects.Map
             return null;
         }
 
-        public bool ContainsEntity(Point position)
+        public bool ContainsEntity(Point position, int blueprintId)
         {
-            return EntityManager.EntityExistsAt(position.X, position.Y);
+            return EntityManager.EntityExistsAt(position.X, position.Y, blueprintId);
         }
 
-        public bool ContainsEntity(int x, int y)
+        public bool ContainsEntity(int x, int y, int blueprintId)
         {
-            return EntityManager.EntityExistsAt(x, y);
+            return EntityManager.EntityExistsAt(x, y, blueprintId);
         }
 
         /// <summary>

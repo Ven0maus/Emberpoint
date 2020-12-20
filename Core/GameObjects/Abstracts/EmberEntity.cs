@@ -66,10 +66,23 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             }
         }
 
+        public void MoveToBlueprint(int blueprintId)
+        {
+            CurrentBlueprintId = blueprintId;
+
+            // Reset field of view when we move to another blueprint
+            ResetFieldOfView();
+
+            if (!(this is Player))
+            {
+                IsVisible = Game.Player != null && Game.Player.CurrentBlueprintId == CurrentBlueprintId;
+            }
+        }
+
         public EmberEntity(Color foreground, Color background, int glyph, Blueprint<EmberCell> blueprint = null, int width = 1, int height = 1) : base(width, height)
         {
             ObjectId = EntityManager.GetUniqueId();
-            CurrentBlueprintId = blueprint != null ? blueprint.ObjectId : GridManager.ActiveBlueprint.ObjectId;
+            CurrentBlueprintId = blueprint != null ? blueprint.ObjectId : (GridManager.ActiveBlueprint != null ? GridManager.ActiveBlueprint.ObjectId : -1);
 
             Font = Global.FontDefault.Master.GetFont(Constants.Map.Size);
             Animation.CurrentFrame[0].Foreground = foreground;
@@ -120,13 +133,13 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             if (Health == 0) return false;
             if (!GridManager.Grid.InBounds(x, y)) return false;
             var cell = GridManager.Grid.GetCell(x, y);
-            return cell.CellProperties.Interactable && !EntityManager.EntityExistsAt(x, y) && cell.CellProperties.IsExplored;
+            return cell.CellProperties.Interactable && !EntityManager.EntityExistsAt(x, y, CurrentBlueprintId) && cell.CellProperties.IsExplored;
         }
         public bool CanMoveTowards(Point position)
         {
             if (Health == 0) return false;
             var cell = GridManager.Grid.GetCell(position);
-            return GridManager.Grid.InBounds(position) && cell.CellProperties.Walkable && !EntityManager.EntityExistsAt(position) && cell.CellProperties.IsExplored;
+            return GridManager.Grid.InBounds(position) && cell.CellProperties.Walkable && !EntityManager.EntityExistsAt(position, CurrentBlueprintId) && cell.CellProperties.IsExplored;
         }
 
         public void RenderObject(Console console)

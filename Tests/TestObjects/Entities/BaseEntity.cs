@@ -91,6 +91,14 @@ namespace Tests.TestObjects.Entities
             ResetFieldOfView();
         }
 
+        public void MoveToBlueprint(int blueprintId)
+        {
+            CurrentBlueprintId = blueprintId;
+
+            // Reset field of view when entity moves blueprint
+            ResetFieldOfView();
+        }
+
         public void ChangeGrid(EmberGrid grid)
         {
             _grid = grid;
@@ -127,7 +135,7 @@ namespace Tests.TestObjects.Entities
         public bool CanMoveTowards(Point position)
         {
             if (Health == 0) return false;
-            return _grid.InBounds(position) && _grid.GetCell(position).CellProperties.Walkable && !EntityManager.EntityExistsAt(position);
+            return _grid.InBounds(position) && _grid.GetCell(position).CellProperties.Walkable && !EntityManager.EntityExistsAt(position, CurrentBlueprintId);
         }
 
         public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true)
