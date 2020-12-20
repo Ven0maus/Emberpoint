@@ -39,18 +39,17 @@ namespace Emberpoint.Core
                 output = "Invalid command arguments.";
                 return false;
             }
-            var position = new Point(x, y);
-            Game.Player.MoveTowards(position, false);
+            var prevPosition = Game.Player.Position;
+            Game.Player.MoveTowards(new Point(x, y), false);
 
             // Discover radius around player on teleport
             var prevRadius = Game.Player.FieldOfViewRadius;
             Game.Player.FieldOfViewRadius = Constants.Items.FlashlightRadius;
-            EntityManager.RecalculatFieldOfView(Game.Player, false);
-            GridManager.Grid.DrawFieldOfView(Game.Player, true);
+            EntityManager.RecalculatFieldOfView(Game.Player, true, true);
             Game.Player.FieldOfViewRadius = prevRadius;
             EntityManager.RecalculatFieldOfView(Game.Player, false);
 
-            output = $"Teleported player from {Game.Player.Position} to {position}";
+            output = $"Teleported player from {prevPosition} to {Game.Player.Position}";
             return true;
         }
     }
