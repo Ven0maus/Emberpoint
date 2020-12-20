@@ -57,6 +57,9 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         {
             CurrentBlueprintId = blueprint.ObjectId;
 
+            // Reset field of view when we move to another blueprint
+            ResetFieldOfView();
+
             if (!(this is Player))
             {
                 IsVisible = Game.Player != null && Game.Player.CurrentBlueprintId == CurrentBlueprintId;

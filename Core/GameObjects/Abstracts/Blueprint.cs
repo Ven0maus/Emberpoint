@@ -1,4 +1,4 @@
-﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.UserInterface.Windows;
@@ -154,11 +154,11 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             string stairsName = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? "Stairs Down" : "Stairs Up";
             Blueprint<T> blueprint = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? StairsUpBlueprint : StairsDownBlueprint;
 
-            // Make sure all entities are synced to correct blueprint
-            EntityManager.MovePlayerToBlueprint(blueprint);
-
             // Initialize new blueprint with tracking of the previous
             GridManager.InitializeBlueprint(blueprint, true);
+
+            // Make sure all entities are synced to correct blueprint
+            EntityManager.MovePlayerToBlueprint(blueprint);
 
             // Move player
             var stairs = GridManager.Grid.GetCells(a => a.CellProperties.Name != null && a.CellProperties.Name.Equals(stairsName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();

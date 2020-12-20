@@ -86,6 +86,9 @@ namespace Tests.TestObjects.Entities
         public void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
         {
             CurrentBlueprintId = blueprint.ObjectId;
+
+            // Reset field of view when entity moves blueprint
+            ResetFieldOfView();
         }
 
         public void ChangeGrid(EmberGrid grid)
