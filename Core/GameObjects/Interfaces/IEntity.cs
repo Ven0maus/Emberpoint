@@ -8,6 +8,7 @@ namespace Emberpoint.Core.GameObjects.Interfaces
     {
         Console RenderConsole { get; }
         int ObjectId { get; }
+        int CurrentBlueprintId { get; }
         FOV FieldOfView { get; }
         int FieldOfViewRadius { get; set; }
         Point Position { get; set; }

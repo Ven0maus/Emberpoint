@@ -8,6 +8,7 @@ namespace Emberpoint.Core.GameObjects.Managers
     public static class GridManager
     {
         public static EmberGrid Grid { get; private set; }
+        public static Blueprint<EmberCell> ActiveBlueprint { get { return Grid?.Blueprint; } }
 
         private readonly static Dictionary<Type, EmberGrid> _blueprintGridCache = new Dictionary<Type, EmberGrid>();
 
@@ -37,7 +38,7 @@ namespace Emberpoint.Core.GameObjects.Managers
         {
             if (!saveGridData)
             {
-                Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells());
+                Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells(), blueprint as Blueprint<EmberCell>);
                 Grid.CalibrateLightEngine();
                 return;
             }
@@ -48,7 +49,7 @@ namespace Emberpoint.Core.GameObjects.Managers
             }
             else
             {
-                Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells());
+                Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells(), blueprint as Blueprint<EmberCell>);
                 Grid.CalibrateLightEngine();
 
                 _blueprintGridCache.Add(blueprint.GetType(), Grid);

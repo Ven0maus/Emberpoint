@@ -1,10 +1,10 @@
-﻿using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using System;
-using Tests.TestObjects.Grids;
 using static SadConsole.Entities.Entity;
 
 namespace Tests.TestObjects.Entities
@@ -58,12 +58,16 @@ namespace Tests.TestObjects.Entities
 
         public SadConsole.Console RenderConsole => throw new NotImplementedException("Unit tests do not use XNA consoles.");
 
+        public int CurrentBlueprintId { get; private set; }
+        public bool IsVisible { get; set; } = true;
+
         private EmberGrid _grid;
 
         public BaseEntity()
         {
             // Not linked to a grid
             ObjectId = EntityManager.GetUniqueId();
+            CurrentBlueprintId = GridManager.ActiveBlueprint == null ? -1 : GridManager.ActiveBlueprint.ObjectId;
             Moved += OnMove;
             MaxHealth = 100; // Default stats
             Facing = Direction.DOWN;
@@ -73,9 +77,15 @@ namespace Tests.TestObjects.Entities
         {
             _grid = grid;
             ObjectId = EntityManager.GetUniqueId();
+            CurrentBlueprintId = grid.Blueprint == null ? -1 : grid.Blueprint.ObjectId;
             Moved += OnMove;
             MaxHealth = 100; // Default stats
             Facing = Direction.DOWN;
+        }
+
+        public void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
+        {
+            CurrentBlueprintId = blueprint.ObjectId;
         }
 
         public void ChangeGrid(EmberGrid grid)

@@ -1,6 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using Tests.TestObjects.Blueprints;
 using Tests.TestObjects.Entities;
 using Tests.TestObjects.Grids;
 
@@ -21,6 +22,39 @@ namespace Tests
         public void TearDown()
         {
             EntityManager.Clear(false);
+        }
+
+        [Test]
+        public void EntitiesSynced_AfterPlayerMoves_ToNewBlueprint()
+        {
+            var entity1 = EntityManager.Create<BaseEntity>(new Point(1, 1), _grid);
+            var entity2 = EntityManager.Create<BaseEntity>(new Point(2, 1), _grid);
+            Assert.AreEqual(entity1.CurrentBlueprintId, entity2.CurrentBlueprintId);
+
+            // Set entity1's blueprint layer
+            GridManager.InitializeBlueprint<BaseBlueprintExtra>(false);
+            entity1.MoveToBlueprint(GridManager.ActiveBlueprint);
+
+            // Sync entities
+            var entities = EntityManager.GetEntities<BaseEntity>();
+            foreach (var entity in entities)
+            {
+                if (entity.CurrentBlueprintId == GridManager.ActiveBlueprint.ObjectId)
+                {
+                    // Make all entities on current blueprint visible
+                    entity.IsVisible = true;
+                }
+                else
+                {
+                    // Make all entities on another blueprint invisible
+                    entity.IsVisible = false;
+                }
+            }
+
+            Assert.AreEqual(GridManager.ActiveBlueprint.ObjectId, entity1.CurrentBlueprintId);
+            Assert.AreNotEqual(GridManager.ActiveBlueprint.ObjectId, entity2.CurrentBlueprintId);
+            Assert.AreEqual(true, entity1.IsVisible);
+            Assert.AreEqual(false, entity2.IsVisible);
         }
 
         [Test]

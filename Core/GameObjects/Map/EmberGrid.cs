@@ -13,8 +13,7 @@ namespace Emberpoint.Core.GameObjects.Map
 {
     public class EmberGrid : IRenderable
     {
-        private readonly EmberCell[] _cells;
-        protected EmberCell[] Cells => _cells;
+        protected EmberCell[] Cells { get; }
 
         private ArrayMap<bool> _fieldOfView;
         public ArrayMap<bool> FieldOfView
@@ -67,24 +66,15 @@ namespace Emberpoint.Core.GameObjects.Map
             Blueprint = blueprint;
 
             // Initialize cells
-            _cells = Blueprint.GetCells();
+            Cells = Blueprint.GetCells();
         }
 
-        public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells)
+        public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells, Blueprint<EmberCell> blueprint = null)
         {
             GridSizeX = gridSizeX;
             GridSizeY = gridSizeY;
-            _cells = cells;
-
-            _fieldOfView = new ArrayMap<bool>(gridSizeX, gridSizeY);
-            for (int x = 0; x < GridSizeX; x++)
-            {
-                for (int y = 0; y < GridSizeY; y++)
-                {
-                    var cell = GetNonClonedCell(x, y);
-                    _fieldOfView[x, y] = !cell.CellProperties.BlocksFov;
-                }
-            }
+            Blueprint = blueprint;
+            Cells = cells;
         }
 
         /// <summary>

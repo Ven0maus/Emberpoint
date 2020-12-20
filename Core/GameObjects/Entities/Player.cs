@@ -23,7 +23,7 @@ namespace Emberpoint.Core.GameObjects.Entities
         private readonly InteractionWindow _interaction;
         private bool InteractionStatus;
 
-        public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character, 1, 1)
+        public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character)
         {
             FieldOfViewRadius = 0;
             InteractionStatus = false;
