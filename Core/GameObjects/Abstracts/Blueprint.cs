@@ -15,6 +15,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 {
     public abstract class Blueprint<T> where T : EmberCell, new()
     {
+        public int ObjectId { get; private set; }
         public int GridSizeX { get; private set; }
         public int GridSizeY { get; private set; }
         public string BlueprintPath { get; private set; }
@@ -24,11 +25,13 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public Blueprint()
         {
+            ObjectId = BlueprintDatabase.GetUniqueId();
             InitializeBlueprint(Constants.Blueprint.BlueprintsPath);
         }
 
         protected Blueprint(string customPath)
         {
+            ObjectId = BlueprintDatabase.GetUniqueId();
             InitializeBlueprint(customPath);
         }
 
@@ -151,8 +154,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             string stairsName = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? "Stairs Down" : "Stairs Up";
             Blueprint<T> blueprint = tile.Name.Equals("Stairs Up", StringComparison.OrdinalIgnoreCase) ? StairsUpBlueprint : StairsDownBlueprint;
 
-            // TODO: Issue 110: Layer entities on their own layer based on blueprint they are currently part of instead of clearing them.
-            EntityManager.ClearExceptPlayer();
+            // Make sure all entities are synced to correct blueprint
+            EntityManager.MovePlayerToBlueprint(blueprint);
 
             // Initialize new blueprint with tracking of the previous
             GridManager.InitializeBlueprint(blueprint, true);
@@ -167,6 +170,38 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             GridManager.Grid.RenderObject(UserInterfaceManager.Get<MapWindow>());
             Game.Player.MoveTowards(stairs.Position, false, null, false);
             Game.Player.Initialize(false);
+        }
+
+        private static class BlueprintDatabase
+        {
+            public static readonly Dictionary<int, Blueprint<T>> Blueprints = new Dictionary<int, Blueprint<T>>();
+
+            private static int _currentId;
+            public static int GetUniqueId()
+            {
+                return _currentId++;
+            }
+
+            public static void Reset()
+            {
+                Blueprints.Clear();
+                _currentId = 0;
+            }
+
+            public static void ResetExcept(params int[] ids)
+            {
+                var toRemove = new List<int>();
+                foreach (var entity in Blueprints)
+                {
+                    toRemove.Add(entity.Key);
+                }
+
+                toRemove = toRemove.Except(ids).ToList();
+                foreach (var id in toRemove)
+                    Blueprints.Remove(id);
+
+                _currentId = Blueprints.Count == 0 ? 0 : (Blueprints.Max(a => a.Key) + 1);
+            }
         }
     }
 

@@ -1,7 +1,9 @@
-﻿using Emberpoint.Core.GameObjects.Entities;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Map;
 using Microsoft.Xna.Framework;
+using SadConsole.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,26 +52,40 @@ namespace Emberpoint.Core.GameObjects.Managers
             EntityDatabase.Entities.Remove(entity.ObjectId);
         }
 
-        public static void Clear(bool unRenderEntities)
+        public static void Clear(bool unRenderEntities, Func<IEntity, bool> criteria = null)
         {
             if (unRenderEntities)
             {
                 foreach (var entity in EntityDatabase.Entities)
                 {
-                    entity.Value.UnRenderObject();
+                    if (criteria == null || criteria.Invoke(entity.Value))
+                    {
+                        entity.Value.UnRenderObject();
+                    }
                 }
             }
             EntityDatabase.Reset();
         }
 
-        public static void ClearExceptPlayer()
+        public static void MovePlayerToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
         {
+            // Set player's blueprint layer
+            Game.Player.MoveToBlueprint(blueprint);
+
             foreach (var entity in EntityDatabase.Entities)
             {
-                if (entity.Key == Game.Player.ObjectId) continue;
-                entity.Value.UnRenderObject();
+                var castedEntity = (Entity)entity.Value;
+                if (entity.Value.CurrentBlueprintId == blueprint.ObjectId)
+                {
+                    // Make all entities on current blueprint visible
+                    castedEntity.IsVisible = true;
+                }
+                else
+                {
+                    // Make all entities on another blueprint invisible
+                    castedEntity.IsVisible = false;
+                }
             }
-            EntityDatabase.ResetExcept(Game.Player.ObjectId);
         }
 
         public static T[] GetEntities<T>(Func<T, bool> criteria = null) where T : IEntity

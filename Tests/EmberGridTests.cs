@@ -24,6 +24,7 @@ namespace Tests
         public void CanChangeBlueprintByCellEffect()
         {
             GridManager.InitializeBlueprint<BaseBlueprint>(true);
+            var currentBlueprint = GridManager.ActiveBlueprint;
 
             Assert.IsFalse(GridManager.Grid.GetCell(1, 1).LightProperties.EmitsLight);
             var exploreACell = GridManager.Grid.GetCell(0, 0);
@@ -40,10 +41,19 @@ namespace Tests
             {
                 // Initialize new blueprint with tracking of the previous
                 GridManager.InitializeBlueprint<BaseBlueprintExtra>(true);
+                ((BaseEntity)e).MoveToBlueprint(GridManager.ActiveBlueprint);
             });
 
             var entity = EntityManager.Create<BaseEntity>(new Point(2, 3), GridManager.Grid);
+
+            Assert.IsTrue(entity.CurrentBlueprintId == currentBlueprint.ObjectId);
+            Assert.IsTrue(entity.CurrentBlueprintId == GridManager.ActiveBlueprint.ObjectId);
+
+            // Move entity into new blueprint by stairs logic
             entity.MoveTowards(up.Position, false, triggerMovementEffects: true);
+
+            Assert.IsTrue(entity.CurrentBlueprintId != currentBlueprint.ObjectId);
+            Assert.IsTrue(entity.CurrentBlueprintId == GridManager.ActiveBlueprint.ObjectId);
 
             // Map is reloaded at this point, find way down
             var down = GridManager.Grid.GetCells(a => a.Glyph == '<').FirstOrDefault();
@@ -55,6 +65,7 @@ namespace Tests
             {
                 // Initialize new blueprint with tracking of the previous
                 GridManager.InitializeBlueprint<BaseBlueprint>(true);
+                ((BaseEntity)e).MoveToBlueprint(GridManager.ActiveBlueprint);
             });
 
             entity.MoveTowards(down.Position, false, triggerMovementEffects: false);
@@ -67,6 +78,9 @@ namespace Tests
             entity.MoveTowards(new Point(2, 3), false, triggerMovementEffects: false);
             // Move back downwards
             entity.MoveTowards(down.Position, false, triggerMovementEffects: true);
+
+            Assert.IsTrue(entity.CurrentBlueprintId == currentBlueprint.ObjectId);
+            Assert.IsTrue(entity.CurrentBlueprintId == GridManager.ActiveBlueprint.ObjectId);
 
             // Verify if map changed
             Assert.IsFalse(GridManager.Grid.GetCell(1, 1).LightProperties.EmitsLight);

@@ -126,7 +126,8 @@ namespace Emberpoint.Core.GameObjects.Map
                             {
                                 if (cellToAdd.LightProperties.LightSources == null)
                                     cellToAdd.LightProperties.LightSources = new List<EmberCell>();
-                                cellToAdd.LightProperties.LightSources.RemoveAll(a => a.Position == cell.Position);
+                                else
+                                    cellToAdd.LightProperties.LightSources.RemoveAll(a => a.Position == cell.Position);
                                 cellToAdd.LightProperties.LightSources.Add(cell);
                             }
                             toChangeCells.Add((cellToAdd, distanceOfCenter));

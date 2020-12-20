@@ -6,6 +6,7 @@ using GoRogue;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.GameObjects.Map;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
@@ -42,6 +43,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public Console RenderConsole { get; private set; }
 
+        public int CurrentBlueprintId { get; private set; }
+
         /// <summary>
         /// Call this when the grid changes to a new grid object. (Like going into the basement etc)
         /// </summary>
@@ -50,9 +53,20 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             _fieldOfView = null;
         }
 
-        public EmberEntity(Color foreground, Color background, int glyph, int width = 1, int height = 1) : base(width, height)
+        public void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
+        {
+            CurrentBlueprintId = blueprint.ObjectId;
+
+            if (!(this is Player))
+            {
+                IsVisible = Game.Player != null && Game.Player.CurrentBlueprintId == CurrentBlueprintId;
+            }
+        }
+
+        public EmberEntity(Color foreground, Color background, int glyph, Blueprint<EmberCell> blueprint = null, int width = 1, int height = 1) : base(width, height)
         {
             ObjectId = EntityManager.GetUniqueId();
+            CurrentBlueprintId = blueprint != null ? blueprint.ObjectId : GridManager.ActiveBlueprint.ObjectId;
 
             Font = Global.FontDefault.Master.GetFont(Constants.Map.Size);
             Animation.CurrentFrame[0].Foreground = foreground;
