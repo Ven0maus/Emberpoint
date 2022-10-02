@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Emberpoint.Core.GameObjects.Abstracts;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
@@ -7,6 +6,7 @@ using GoRogue;
 using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using SadConsole.Input;
+using System.Collections.Generic;
 
 namespace Emberpoint.Core.GameObjects.Entities
 {
@@ -56,7 +56,7 @@ namespace Emberpoint.Core.GameObjects.Entities
                 if (info.IsKeyPressed(binding))
                 {
                     var moveDirection = _playerMovements[key];
-                    _interaction.PrintMessage(string.Empty);
+                    _interaction.ClearMessage();
                     MoveTowards(moveDirection);
                     InteractionStatus = CheckInteraction( _interaction);
                     keyHandled = true;

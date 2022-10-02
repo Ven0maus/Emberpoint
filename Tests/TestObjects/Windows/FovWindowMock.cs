@@ -4,9 +4,7 @@ using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Tests.TestObjects.Windows
@@ -18,26 +16,7 @@ namespace Tests.TestObjects.Windows
 
         public FovWindowMock()
         {
-            _blueprintTiles = GetTilesFromConfig();
-        }
-
-        private Dictionary<char, BlueprintTile> GetTilesFromConfig()
-        {
-            var blueprintConfigPath = Path.Combine(Constants.Blueprint.BlueprintsConfigPath, Constants.Blueprint.BlueprintTiles + ".json");
-
-            if (!File.Exists(blueprintConfigPath) || !File.Exists(Constants.Blueprint.SpecialCharactersPath))
-                return new Dictionary<char, BlueprintTile>();
-
-            var specialConfig = JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(Constants.Blueprint.SpecialCharactersPath));
-            var specialChars = specialConfig.Tiles.ToDictionary(a => a.Glyph, a => a);
-
-            var config = JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(blueprintConfigPath));
-            var tiles = config.Tiles.ToDictionary(a => a.Glyph, a => a);
-
-            foreach (var (key, value) in specialChars)
-                tiles.Add(key, value);
-
-            return tiles;
+            _blueprintTiles = Blueprint.GetTilesFromConfig();
         }
 
         private void ReinitializeCharObjects(IEnumerable<char> characters)

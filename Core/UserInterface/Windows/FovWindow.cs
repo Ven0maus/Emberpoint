@@ -3,12 +3,11 @@ using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
 using SadConsole;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Console = SadConsole.Console;
 
@@ -27,9 +26,9 @@ namespace Emberpoint.Core.UserInterface.Windows
         public FovWindow(int width, int height) : base(width, height)
         {
             this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
-            Print(3, 0, "Objects", Color.Orange);
+            Print(3, 0, Strings.ObjectsInView, Color.Orange);
             _charObjects = new Dictionary<char, CharObj>();
-            _blueprintTiles = GetTilesFromConfig();
+            _blueprintTiles = Blueprint.GetTilesFromConfig();
             _maxLineRows = Height - 2;
 
             _textConsole = new Console(Width - 2, Height - 2)
@@ -43,33 +42,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Global.CurrentScreen.Children.Add(this);
         }
 
-        private Dictionary<char, BlueprintTile> GetTilesFromConfig()
-        {
-            var configPaths = GetConfigurationPaths();
-
-            if (AllConfigFilesExist(configPaths) == false)
-                return new Dictionary<char, BlueprintTile>();
-
-            var configs = GetConfigurations(configPaths);
-            var tiles = GetBlueprintConfigValuePairs(configs);
-      
-            return new Dictionary<char, BlueprintTile>(tiles);
-        }
-
-        private string[] GetConfigurationPaths() => new[]
-        {
-            Path.Combine(Constants.Blueprint.BlueprintsConfigPath, Constants.Blueprint.BlueprintTiles + ".json"),
-            Constants.Blueprint.SpecialCharactersPath
-        };
-
-        private bool AllConfigFilesExist(IEnumerable<string> configPaths) => configPaths.All(File.Exists);
-
-        private IEnumerable<BlueprintConfig> GetConfigurations(params string[] configPaths) =>
-            configPaths.Select(path => JsonConvert.DeserializeObject<BlueprintConfig>(File.ReadAllText(path)));
-
-        private IEnumerable<KeyValuePair<char, BlueprintTile>> GetBlueprintConfigValuePairs(IEnumerable<BlueprintConfig> configs) =>
-            configs.SelectMany(config => config.Tiles.Select(a => new KeyValuePair<char, BlueprintTile>(a.Glyph, a)));
-
+        
         private void ReinitializeCharObjects(IEnumerable<char> characters, bool updateText = true)
         {
             _charObjects = new Dictionary<char, CharObj>(GetCharObjectPairs(characters));
@@ -105,7 +78,6 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         private void DrawCharObj(CharObj charObj)
         {
-             //Debug.WriteLine(charObj.Name + ": " + charObj.Glyph);
             _textConsole.Cursor.Print(new ColoredString("[" + charObj.Glyph + "]:", charObj.GlyphColor, Color.Transparent));
             _textConsole.Cursor.Print(' ' + charObj.Name());
             _textConsole.Cursor.CarriageReturn();
@@ -128,6 +100,16 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Draw visible cells to the FOV window
             ReinitializeCharObjects(characters: cells, updateText: false);
             UpdateText();
+        }
+
+        public void Update()
+        {
+            Clear();
+            this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
+            Print(3, 0, Strings.ObjectsInView, Color.Orange);
+
+            if (Game.Player != null)
+                Update(Game.Player);
         }
 
         private IEnumerable<char> GetBrightCellsInFov(IEntity entity, int fovRadius)

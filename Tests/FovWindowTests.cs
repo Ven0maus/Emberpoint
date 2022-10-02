@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using System;
@@ -70,7 +71,7 @@ namespace Tests
             expectedResult = new[] { 'G' };
             Assert.IsTrue(_fovWindow.SequenceEqual(expectedResult, out result), GetExpectedMessage(expectedResult, result));
 
-            AddGlyphToGrid('>', "Stairs up", 4, 3);
+            AddGlyphToGrid('>', Strings.StairsUp, 4, 3);
 
             _fovWindow.Update(_entity);
             expectedResult = new[] { 'G', '>' };

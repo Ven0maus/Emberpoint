@@ -61,6 +61,87 @@ namespace Emberpoint.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Battery.
+        /// </summary>
+        public static string Battery {
+            get {
+                return ResourceManager.GetString("Battery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Power.
+        /// </summary>
+        public static string BatteryPower {
+            get {
+                return ResourceManager.GetString("BatteryPower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bed.
+        /// </summary>
+        public static string Bed {
+            get {
+                return ResourceManager.GetString("Bed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bookcase.
+        /// </summary>
+        public static string Bookcase {
+            get {
+                return ResourceManager.GetString("Bookcase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Carpet.
+        /// </summary>
+        public static string Carpet {
+            get {
+                return ResourceManager.GetString("Carpet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chair.
+        /// </summary>
+        public static string Chair {
+            get {
+                return ResourceManager.GetString("Chair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contributors.
+        /// </summary>
+        public static string Contributors {
+            get {
+                return ResourceManager.GetString("Contributors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Desk.
+        /// </summary>
+        public static string Desk {
+            get {
+                return ResourceManager.GetString("Desk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You closed the door..
         /// </summary>
         public static string DoorClosedEvent {
@@ -97,11 +178,182 @@ namespace Emberpoint.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dutch.
+        /// </summary>
+        public static string Dutch {
+            get {
+                return ResourceManager.GetString("Dutch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        public static string English {
+            get {
+                return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flashlight.
+        /// </summary>
+        public static string Flashlight {
+            get {
+                return ResourceManager.GetString("Flashlight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Emberpoint.
         /// </summary>
         public static string GameTitle {
             get {
                 return ResourceManager.GetString("GameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interaction.
+        /// </summary>
+        public static string Interaction {
+            get {
+                return ResourceManager.GetString("Interaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press {0} to interact..
+        /// </summary>
+        public static string InteractMessage {
+            get {
+                return ResourceManager.GetString("InteractMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inventory.
+        /// </summary>
+        public static string Inventory {
+            get {
+                return ResourceManager.GetString("Inventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keybindings.
+        /// </summary>
+        public static string Keybindings {
+            get {
+                return ResourceManager.GetString("Keybindings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lamp.
+        /// </summary>
+        public static string Lamp {
+            get {
+                return ResourceManager.GetString("Lamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing happens..
+        /// </summary>
+        public static string NothingHappens {
+            get {
+                return ResourceManager.GetString("NothingHappens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Objects in view.
+        /// </summary>
+        public static string ObjectsInView {
+            get {
+                return ResourceManager.GetString("ObjectsInView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pillar.
+        /// </summary>
+        public static string Pillar {
+            get {
+                return ResourceManager.GetString("Pillar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        public static string Play {
+            get {
+                return ResourceManager.GetString("Play", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stairs down.
+        /// </summary>
+        public static string StairsDown {
+            get {
+                return ResourceManager.GetString("StairsDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stairs up.
+        /// </summary>
+        public static string StairsUp {
+            get {
+                return ResourceManager.GetString("StairsUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statue.
+        /// </summary>
+        public static string Statue {
+            get {
+                return ResourceManager.GetString("Statue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wardrobe.
+        /// </summary>
+        public static string Wardrobe {
+            get {
+                return ResourceManager.GetString("Wardrobe", resourceCulture);
             }
         }
     }

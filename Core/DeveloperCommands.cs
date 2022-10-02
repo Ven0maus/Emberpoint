@@ -1,4 +1,6 @@
-﻿using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 using System;
@@ -22,15 +24,21 @@ namespace Emberpoint.Core
 
         private static bool SetLanguage(string text, DeveloperWindow window, out string output)
         {
-            string lang = Constants.SupportedCultures.FirstOrDefault(m => m.Equals(text, StringComparison.OrdinalIgnoreCase));
-            if (lang == null)
+            var lang = Constants.SupportedCultures.FirstOrDefault(m => m.Key.Equals(text, StringComparison.OrdinalIgnoreCase));
+            if (lang.IsDefault())
             {
-                output = "Invalid language ("+text+"), use any of the following: " + string.Join(", ", Constants.SupportedCultures.Select(a => "'" + a + "'"));
+                output = "Invalid language ("+text+"), use any of the following: " + string.Join(", ", Constants.SupportedCultures.Select(a => "'" + a.Key + "'"));
                 return false;
             }
 
-            Constants.Language = lang;
-            output = "Language set to: " + lang;
+            Constants.Language = lang.Key;
+
+            // Update views
+            var views = UserInterfaceManager.GetAll<IUserInterface>();
+            foreach (var view in views)
+                view.Update();
+
+            output = "Language set to: " + lang.Key;
             return true;
         }
 

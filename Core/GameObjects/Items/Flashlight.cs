@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Microsoft.Xna.Framework;
 using System.Timers;
 
@@ -12,7 +13,7 @@ namespace Emberpoint.Core.GameObjects.Items
 
         private readonly Timer _drainTimer;
 
-        public Flashlight() : base('F', Color.LightSkyBlue, 1, 1)
+        public Flashlight() : base('F', Color.LightSkyBlue, name: () => Strings.Flashlight)
         {
             _drainTimer = new Timer(1000);
             _drainTimer.Elapsed += DrainTimer_Elapsed;
@@ -27,6 +28,10 @@ namespace Emberpoint.Core.GameObjects.Items
             }
 
             if (UserInterfaceManager.IsPaused) return;
+
+            // Sync language changes between game thread and timer thread
+            if (System.Threading.Thread.CurrentThread.CurrentUICulture != Game.CurrentCulture)
+                System.Threading.Thread.CurrentThread.CurrentUICulture = Game.CurrentCulture;
 
             if (!Battery.Drain())
             {

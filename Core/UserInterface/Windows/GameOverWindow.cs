@@ -1,10 +1,10 @@
-﻿using System;
-using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Themes;
+using System;
 using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
@@ -28,6 +28,13 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             Global.CurrentScreen.Children.Add(this);
 
+            InitializeButtons();
+        }
+
+        public void Update()
+        {
+            Invalidate();
+            RemoveAll();
             InitializeButtons();
         }
 

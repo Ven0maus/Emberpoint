@@ -1,12 +1,13 @@
 ﻿using Emberpoint.Core.GameObjects.Entities;
-using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.GameObjects.Map;
+using Emberpoint.Core.Resources;
+using Emberpoint.Core.UserInterface.Windows;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using SadConsole;
-using Emberpoint.Core.UserInterface.Windows;
-using Emberpoint.Core.GameObjects.Map;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
@@ -153,8 +154,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         {
             if (GetInteractedCell(out _))
             {
-                interaction.PrintMessage("Press " + KeybindingsManager.GetKeybinding(Keybindings.Interact) +
-                                         " to interact with object.");
+                interaction.PrintMessage(() => string.Format(Strings.InteractMessage, KeybindingsManager.GetKeybinding(Keybindings.Interact)));
                 return true;
             }
             return false;

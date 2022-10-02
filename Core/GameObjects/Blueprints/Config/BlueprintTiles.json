@@ -1,4 +1,5 @@
 {
+  "name": "BlueprintTiles",
   "tiles": [
     {
       "glyph": " ",
@@ -18,7 +19,7 @@
     },
     {
       "glyph": "+",
-      "name": "DoorStateClosed",
+      "name": "Strings.DoorStateClosed",
       "walkable": false,
       "interactable": true,
       "foreground": "White",
@@ -27,7 +28,7 @@
     },
     {
       "glyph": "=",
-      "name": "DoorStateOpen",
+      "name": "Strings.DoorStateOpen",
       "walkable": true,
       "interactable": true,
       "foreground": "White",
@@ -36,63 +37,63 @@
     },
     {
       "glyph": ">",
-      "name": "Stairs Up",
+      "name": "Strings.StairsUp",
       "walkable": true,
       "foreground": "Bisque",
       "blocksfov": true
     },
     {
       "glyph": "<",
-      "name": "Stairs Down",
+      "name": "Strings.StairsDown",
       "walkable": true,
       "foreground": "Bisque",
       "blocksfov": true
     },
     {
       "glyph": "G",
-      "name": "Gargoyle Statue",
+      "name": "Strings.Statue",
       "walkable": false,
       "foreground": "Ivory",
       "blocksfov": true
     },
     {
       "glyph": "D",
-      "name": "Desk",
+      "name": "Strings.Desk",
       "walkable": false,
       "foreground": "Brown",
       "blocksfov": false
     },
     {
       "glyph": "B",
-      "name": "Bookcase",
+      "name": "Strings.Bookcase",
       "walkable": false,
       "foreground": "Brown",
       "blocksfov": true
     },
     {
       "glyph": "b",
-      "name": "Bed",
+      "name": "Strings.Bed",
       "walkable": false,
       "foreground": "Red",
       "blocksfov": false
     },
     {
       "glyph": "C",
-      "name": "Carpet",
+      "name": "Strings.Carpet",
       "walkable": true,
       "foreground": "Red",
       "blocksfov": false
     },
     {
       "glyph": "c",
-      "name": "Chair",
+      "name": "Strings.Chair",
       "walkable": false,
       "foreground": "Black",
       "blocksfov": false
     },
     {
       "glyph": "W",
-      "name": "Wardrobe",
+      "name": "Strings.Wardrobe",
       "walkable": false,
       "interactable": true,
       "foreground": "Brown",
@@ -100,14 +101,14 @@
     },
     {
       "glyph": "|",
-      "name": "Pillar",
+      "name": "Strings.Pillar",
       "walkable": false,
       "foreground": "LightSlateGray",
       "blocksfov": false
     },
     {
       "glyph": ".",
-      "name": "Lamp",
+      "name": "Strings.Lamp",
       "walkable": true,
       "foreground": "LightYellow",
       "blocksfov": false,

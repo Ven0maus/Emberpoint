@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using SadConsole;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -19,13 +20,20 @@ namespace Emberpoint.Core
             get { return _language ?? (Language = "en-US"); }
             set
             {
+                if (value == null) return;
                 _language = value;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(value);
+                Game.CurrentCulture = Thread.CurrentThread.CurrentUICulture;
             }
         }
 
+        public static readonly Dictionary<string, Func<string>> SupportedCultures = new Dictionary<string, Func<string>>
+        {
+            { "en-US", () => Strings.English },
+            { "nl-BE", () => Strings.Dutch },
+        };
+
         public static readonly string ApplicationRoot = GetApplicationRoot();
-        public static readonly string[] SupportedCultures = new[] { "en-US", "nl-BE" };
         public static readonly ResourceHelper ResourceHelper = new ResourceHelper();
 
         public static class Map
@@ -54,10 +62,14 @@ namespace Emberpoint.Core
 
         public static class Blueprint
         {
-            public static string SpecialCharactersPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "SpecialCharactersConfig.json");
-            public static string BlueprintsPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints");
-            public static string BlueprintsConfigPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "Config");
-            public const string BlueprintTiles = "BlueprintTiles";
+            public static string BlueprintsDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints");
+            public static string BlueprintsConfigDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "Config");
+
+            public static class Prints
+            {
+                public const string BlueprintTiles = "BlueprintTiles";
+                public const string SpecialCharacters = "SpecialCharacters";
+            }
 
             public static class Tests
             {
