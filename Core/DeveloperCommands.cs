@@ -3,6 +3,7 @@ using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Emberpoint.Core
 {
@@ -10,13 +11,28 @@ namespace Emberpoint.Core
     {
         public delegate TReturn CustomFunc<TReturn, TParam1, TParam2, TOutValue>(TParam1 param1, TParam2 param2, out TOutValue output);
 
-        public static Dictionary<string, CustomFunc<bool, string,  DeveloperWindow, string>> Commands = 
+        public static Dictionary<string, CustomFunc<bool, string, DeveloperWindow, string>> Commands =
             new Dictionary<string, CustomFunc<bool, string, DeveloperWindow, string>>(StringComparer.OrdinalIgnoreCase)
             {
                 { "clear", Clear },
                 { "playerpos", GetPlayerPos },
-                { "teleport", TeleportPlayer }
+                { "teleport", TeleportPlayer },
+                { "setlanguage", SetLanguage }
             };
+
+        private static bool SetLanguage(string text, DeveloperWindow window, out string output)
+        {
+            string lang = Constants.SupportedCultures.FirstOrDefault(m => m.Equals(text, StringComparison.OrdinalIgnoreCase));
+            if (lang == null)
+            {
+                output = "Invalid language ("+text+"), use any of the following: " + string.Join(", ", Constants.SupportedCultures.Select(a => "'" + a + "'"));
+                return false;
+            }
+
+            Constants.Language = lang;
+            output = "Language set to: " + lang;
+            return true;
+        }
 
         private static bool Clear(string text, DeveloperWindow window, out string output)
         {
@@ -34,7 +50,7 @@ namespace Emberpoint.Core
         private static bool TeleportPlayer(string text, DeveloperWindow window, out string output)
         {
             var args = text.Split(' ');
-            if (args.Length != 3 || !int.TryParse(args[1], out int x) || !int.TryParse(args[2], out int y))
+            if (args.Length != 2 || !int.TryParse(args[0], out int x) || !int.TryParse(args[1], out int y))
             {
                 output = "Invalid command arguments.";
                 return false;

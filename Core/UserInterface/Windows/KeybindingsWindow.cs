@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
@@ -12,11 +11,11 @@ using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class OptionsWindow : ControlsConsole, IUserInterface
+    public class KeybindingsWindow : ControlsConsole, IUserInterface
     {
         public Console Console => this;
 
-        public OptionsWindow(int width, int height) : base(width, height)
+        public KeybindingsWindow(int width, int height) : base(width, height)
         {
             // Set custom theme
             var colors = Colors.CreateDefault();

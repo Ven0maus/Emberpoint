@@ -1,12 +1,12 @@
 {
   "tiles": [
     {
-      "glyph" : " ",
-      "name" : null,
-      "walkable" : true,
-	  "foreground" : "BurlyWood",
-      "background" : "Black",
-	  "blocksfov" : false
+      "glyph": " ",
+      "name": null,
+      "walkable": true,
+      "foreground": "BurlyWood",
+      "background": "Black",
+      "blocksfov": false
     },
     {
       "glyph": "#",
@@ -18,12 +18,21 @@
     },
     {
       "glyph": "+",
-      "name": "Closed door",
+      "name": "DoorStateClosed",
       "walkable": false,
       "interactable": true,
       "foreground": "White",
       "background": "#2f2f2f",
       "blocksfov": true
+    },
+    {
+      "glyph": "=",
+      "name": "DoorStateOpen",
+      "walkable": true,
+      "interactable": true,
+      "foreground": "White",
+      "background": "#2f2f2f",
+      "blocksfov": false
     },
     {
       "glyph": ">",
@@ -32,19 +41,19 @@
       "foreground": "Bisque",
       "blocksfov": true
     },
-	{
-      "glyph" : "<",
-      "name" : "Stairs Down",
-      "walkable" : true,
-	  "foreground" : "Bisque",
-	  "blocksfov" : true
+    {
+      "glyph": "<",
+      "name": "Stairs Down",
+      "walkable": true,
+      "foreground": "Bisque",
+      "blocksfov": true
     },
-	{
-      "glyph" : "G",
-      "name" : "Gargoyle Statue",
-      "walkable" : false,
-	  "foreground" : "Ivory",
-	  "blocksfov" : true
+    {
+      "glyph": "G",
+      "name": "Gargoyle Statue",
+      "walkable": false,
+      "foreground": "Ivory",
+      "blocksfov": true
     },
     {
       "glyph": "D",
@@ -85,27 +94,27 @@
       "glyph": "W",
       "name": "Wardrobe",
       "walkable": false,
-      "interactable" : true,
+      "interactable": true,
       "foreground": "Brown",
       "blocksfov": true
     },
     {
-      "glyph" : "|",
-      "name" : "Pillar",
-      "walkable" : false,
-	  "foreground" : "LightSlateGray",
-	  "blocksfov" : false
+      "glyph": "|",
+      "name": "Pillar",
+      "walkable": false,
+      "foreground": "LightSlateGray",
+      "blocksfov": false
     },
-	{
-      "glyph" : ".",
-      "name" : "Lamp",
-      "walkable" : true,
-	  "foreground" : "LightYellow",
-	  "blocksfov" : false,
-	  "EmitsLight" : true,
-	  "Brightness" : 0.5,
-	  "LightRadius" : 5,
-	  "LightColor" : "BlanchedAlmond"
+    {
+      "glyph": ".",
+      "name": "Lamp",
+      "walkable": true,
+      "foreground": "LightYellow",
+      "blocksfov": false,
+      "EmitsLight": true,
+      "Brightness": 0.5,
+      "LightRadius": 5,
+      "LightColor": "BlanchedAlmond"
     }
   ]
 }

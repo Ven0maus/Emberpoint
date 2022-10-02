@@ -56,7 +56,7 @@ namespace Emberpoint.Core.GameObjects.Entities
                 if (info.IsKeyPressed(binding))
                 {
                     var moveDirection = _playerMovements[key];
-                    _interaction.PrintMessage(Constants.EmptyMessage);
+                    _interaction.PrintMessage(string.Empty);
                     MoveTowards(moveDirection);
                     InteractionStatus = CheckInteraction( _interaction);
                     keyHandled = true;

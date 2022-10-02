@@ -22,29 +22,24 @@ namespace Emberpoint.Core.GameObjects.Managers
         {
             var cell = GridManager.Grid.GetCell(position);
             string cellName = cell.CellProperties.Name;
-            switch (cellName)
-            {
-                case Constants.DoorClosed:
-                case Constants.DoorOpen:
-                    HandleDoorInteraction(cell);
-                    break;
-                default:
-                    HandleDefaultInteraction(cell);
-                    break;
-            }
+
+            if (cellName == Resources.Strings.DoorStateClosed || cellName == Resources.Strings.DoorStateOpen)
+                HandleDoorInteraction(cell);
+            else
+                HandleDefaultInteraction(cell);
         }
         private void HandleDoorInteraction(EmberCell cell) 
         {
             if (cell.CellProperties.Walkable)
             {
-                interactionWindow.PrintMessage(Constants.CloseDoor);
+                interactionWindow.PrintMessage(Resources.Strings.DoorClosedEvent);
                 cell.CellProperties.Walkable = false;
                 cell.Glyph = '+';
                 cell.CellProperties.BlocksFov = true;
             }
             else
             {
-                interactionWindow.PrintMessage(Constants.OpenDoor);
+                interactionWindow.PrintMessage(Resources.Strings.DoorOpenEvent);
                 cell.CellProperties.Walkable = true;
                 cell.Glyph = '=';
                 cell.CellProperties.BlocksFov = false;
