@@ -1,7 +1,8 @@
 ﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public InventoryWindow(int width, int height) : base(width, height)
         {
             this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
-            Print(3, 0, "Inventory", Color.Orange);
+            Print(3, 0, Strings.Inventory, Color.Orange);
 
             _inventory = new List<IItem>();
             _maxLineRows = Height - 2;
@@ -37,6 +38,14 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             Children.Add(_textConsole);
             Global.CurrentScreen.Children.Add(this);
+        }
+
+        public void Update()
+        {
+            Clear();
+            this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
+            Print(3, 0, Strings.Inventory, Color.Orange);
+            UpdateInventoryText();
         }
 
         public void Initialize()

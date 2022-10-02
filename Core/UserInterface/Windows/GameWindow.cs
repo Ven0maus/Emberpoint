@@ -21,5 +21,12 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             get { return this; }
         }
+
+        public void Update()
+        {
+            Clear();
+            SadConsole.Game.Instance.Window.Title = Resources.Strings.GameTitle;
+            Print((int)System.Math.Round((Width / 2) / 1.5f) - Resources.Strings.GameTitle.Length / 2, 1, Resources.Strings.GameTitle);
+        }
     }
 }

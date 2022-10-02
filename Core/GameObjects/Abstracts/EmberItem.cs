@@ -14,7 +14,12 @@ namespace Emberpoint.Core.GameObjects.Abstracts
     {
         public int ObjectId { get; }
         public int Amount { get; set; }
-        public new string Name { get; set; }
+        private readonly System.Func<string> _localizedName;
+        public new string Name
+        {
+            get { return _localizedName?.Invoke() ?? GetType().Name; }
+            private set { }
+        }
         public int Glyph { get { return Animation.CurrentFrame[0].Glyph; } set { Animation.CurrentFrame[0].Glyph = value; } }
         public Color GlyphColor { get { return Animation.CurrentFrame[0].Foreground; } set { Animation.CurrentFrame[0].Foreground = value; } }
 
@@ -22,13 +27,13 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         private Console _renderedConsole;
 
-        public EmberItem(int glyph, Color foregroundColor, int width = 1, int height = 1, string name = null) : base(width, height)
+        public EmberItem(int glyph, Color foregroundColor, int width = 1, int height = 1, System.Func<string> name = null) : base(width, height)
         {
             ObjectId = ItemManager.GetUniqueId();
             ItemManager.Add(this);
 
             Amount = 1;
-            Name = name ?? GetType().Name;
+            _localizedName = name;
             Animation.CurrentFrame[0].Foreground = foregroundColor;
             Animation.CurrentFrame[0].Background = Color.Transparent;
             Animation.CurrentFrame[0].Glyph = glyph;

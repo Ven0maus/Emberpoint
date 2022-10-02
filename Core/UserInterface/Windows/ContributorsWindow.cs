@@ -1,9 +1,10 @@
-﻿using System.Linq;
-using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.Resources;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Themes;
+using System.Linq;
 using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
@@ -30,12 +31,18 @@ namespace Emberpoint.Core.UserInterface.Windows
             DrawContributors();
         }
 
+        public void Update()
+        {
+            RemoveAll();
+            InitializeBackButton();
+        }
+
         private void InitializeBackButton()
         {
             // Add back button
             var backButton = new Button(20, 3)
             {
-                Text = "Back",
+                Text = Strings.Back,
                 Position = new Point(5, 3),
                 UseMouse = true,
                 UseKeyboard = false,

@@ -1,6 +1,8 @@
-﻿using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 using Tests.TestObjects.Blueprints;
 using Tests.TestObjects.Entities;
@@ -121,6 +123,18 @@ namespace Tests
             Assert.IsFalse(_grid.InBounds(-5, 10));
             Assert.IsTrue(_grid.InBounds(0, 0));
             Assert.IsFalse(_grid.InBounds(_grid.GridSizeX + 2, _grid.GridSizeY + 2));
+        }
+
+        [Test]
+        public void Glyphs_AreNot_SharedInMultiple_Configs()
+        {
+            var configs = Blueprint.GetConfigurations();
+            var tiles = configs
+                .SelectMany(config => config.Tiles
+                .Select(a => new KeyValuePair<char, BlueprintTile>(a.Glyph, a)));
+
+            var hashSet = tiles.Select(a => a.Key).ToHashSet();
+            Assert.AreEqual(tiles.Count(), hashSet.Count);
         }
     }
 }

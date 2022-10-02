@@ -1,13 +1,15 @@
-﻿using Emberpoint.Core.GameObjects.Entities;
+﻿using Emberpoint.Core.GameObjects.Dialogs;
+using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
-using System;
-using System.Linq;
 using SadConsole.Themes;
+using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 
 namespace Emberpoint.Core.UserInterface.Windows
@@ -15,7 +17,8 @@ namespace Emberpoint.Core.UserInterface.Windows
     public class MainMenuWindow : ControlsConsole, IUserInterface
     {
         public ContributorsWindow ContributorsWindow { get; set; }
-        public KeybindingsWindow OptionsWindow { get; private set; }
+        public KeybindingsWindow KeybindingsWindow { get; private set; }
+        public SettingsWindow SettingsWindow { get; private set; }
 
         public SadConsole.Console Console
         {
@@ -40,6 +43,13 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             // Add it to the children of the main console
             Global.CurrentScreen.Children.Add(this);
+        }
+
+        public void Update()
+        {
+            RemoveAll();
+            InitializeButtons();
+            Invalidate();
         }
 
         protected override void OnInvalidate()
@@ -80,7 +90,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             var playButton = new Button(20, 3)
             {
-                Text = "Play",
+                Text = Strings.Play,
                 Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) - 4),
                 UseMouse = true,
                 UseKeyboard = false,
@@ -90,7 +100,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             var contributorsButton = new Button(20, 3)
             {
-                Text = "Contributors",
+                Text = Strings.Contributors,
                 Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2)),
                 UseMouse = true,
                 UseKeyboard = false,
@@ -98,20 +108,30 @@ namespace Emberpoint.Core.UserInterface.Windows
             contributorsButton.Click += ButtonPressContributors;
             Add(contributorsButton);
 
-            var optionsButton = new Button(20, 3)
+            var keybindingsButton = new Button(20, 3)
             {
-                Text = "Keybindings",
+                Text = Strings.Keybindings,
                 Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) + 4),
                 UseMouse = true,
                 UseKeyboard = false,
             };
-            optionsButton.Click += ButtonPressOptions;
-            Add(optionsButton);
+            keybindingsButton.Click += ButtonPressKeybindings;
+            Add(keybindingsButton);
+
+            var settingsButton = new Button(20, 3)
+            {
+                Text = Strings.Settings,
+                Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) + 8),
+                UseMouse = true,
+                UseKeyboard = false,
+            };
+            settingsButton.Click += ButtonPressSettings;
+            Add(settingsButton);
 
             var exitButton = new Button(20, 3)
             {
-                Text = "Exit",
-                Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) + 8),
+                Text = Strings.Exit,
+                Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) + 12),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -179,21 +199,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Game.Player.Initialize();
 
             // Show a tutorial dialog window.
-            var dialogWindow = UserInterfaceManager.Get<DialogWindow>();
-            dialogWindow.AddDialog("Game introduction", new[]
-            {
-                "Welcome to Emberpoint.",
-                "This is a small introduction to the game.",
-                "Press 'Enter' to continue."
-            });
-            dialogWindow.AddDialog("Flashlight introduction", new[]
-{
-                "The flashlight can be used to discover new tiles.",
-                "Turn on your flashlight and discover some new tiles.",
-                "Press '" + KeybindingsManager.GetKeybinding(Keybindings.Flashlight) + "' to turn on your flashlight.",
-                "Press 'Enter' to exit dialog."
-            });
-            dialogWindow.ShowNext();
+            TutorialDialog.Start();
         }
 
         public void ButtonPressContributors(object sender, EventArgs args)
@@ -212,20 +218,36 @@ namespace Emberpoint.Core.UserInterface.Windows
             Transition(ContributorsWindow);
         }
 
-        public void ButtonPressOptions(object sender, EventArgs args)
+        public void ButtonPressSettings(object sender, EventArgs args)
         {
-            if (OptionsWindow == null)
+            if (SettingsWindow == null)
             {
-                OptionsWindow = new KeybindingsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
-                UserInterfaceManager.Add(OptionsWindow);
+                SettingsWindow = new SettingsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
+                UserInterfaceManager.Add(SettingsWindow);
             }
             else
             {
-                OptionsWindow.IsVisible = true;
+                SettingsWindow.IsVisible = true;
             }
 
             // Transition to options window
-            Transition(OptionsWindow);
+            Transition(SettingsWindow);
+        }
+
+        public void ButtonPressKeybindings(object sender, EventArgs args)
+        {
+            if (KeybindingsWindow == null)
+            {
+                KeybindingsWindow = new KeybindingsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
+                UserInterfaceManager.Add(KeybindingsWindow);
+            }
+            else
+            {
+                KeybindingsWindow.IsVisible = true;
+            }
+
+            // Transition to options window
+            Transition(KeybindingsWindow);
         }
 
         public void ButtonPressExit(object sender, EventArgs args)

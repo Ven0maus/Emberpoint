@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 
@@ -9,9 +10,9 @@ namespace Emberpoint.Core.GameObjects.Items
     {
         public int Power { get; private set; }
 
-        public override string DisplayName { get { return string.Format(" {0} : {1} : Power [{2}] \r\n", Name, Amount, Power); } }
+        public override string DisplayName { get { return string.Format(" {0} : {1} : " + Strings.BatteryPower + " [{2}] \r\n", Name, Amount, Power); } }
 
-        public Battery() : base('B', Color.YellowGreen, 1, 1)
+        public Battery() : base('B', Color.YellowGreen, name: () => Strings.Battery)
         {
             Power = Constants.Items.BatteryMaxPower;
         }
@@ -31,14 +32,11 @@ namespace Emberpoint.Core.GameObjects.Items
                 {
                     Game.Player.Inventory.RemoveInventoryItem<Battery>(1);
                     Power = Constants.Items.BatteryMaxPower;
-
-                    dialogWindow.AddDialog("Battery depleted.", new[] { "A battery has been depleted!", "Press enter to hide this message." });
-                    dialogWindow.ShowNext();
                     return true;
                 }
 
-                dialogWindow.AddDialog("Battery depleted.", new[] { "You ran out of batteries!", "Press enter to hide this message." });
-                dialogWindow.ShowNext();
+                // TODO: Add localization, move to file?
+                dialogWindow.AddDialog("Batteries depleted.", new[] { "You ran out of batteries!", "Press enter to hide this message." });
                 return false;
             }
             return true;

@@ -1,6 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Map;
+using Emberpoint.Core.Resources;
 using Emberpoint.Core.UserInterface.Windows;
 using Microsoft.Xna.Framework;
 
@@ -23,23 +24,23 @@ namespace Emberpoint.Core.GameObjects.Managers
             var cell = GridManager.Grid.GetCell(position);
             string cellName = cell.CellProperties.Name;
 
-            if (cellName == Resources.Strings.DoorStateClosed || cellName == Resources.Strings.DoorStateOpen)
+            if (cellName == Strings.DoorStateClosed || cellName == Strings.DoorStateOpen)
                 HandleDoorInteraction(cell);
             else
-                HandleDefaultInteraction(cell);
+                HandleDefaultInteraction();
         }
         private void HandleDoorInteraction(EmberCell cell) 
         {
             if (cell.CellProperties.Walkable)
             {
-                interactionWindow.PrintMessage(Resources.Strings.DoorClosedEvent);
+                interactionWindow.PrintMessage(() => Strings.DoorClosedEvent);
                 cell.CellProperties.Walkable = false;
                 cell.Glyph = '+';
                 cell.CellProperties.BlocksFov = true;
             }
             else
             {
-                interactionWindow.PrintMessage(Resources.Strings.DoorOpenEvent);
+                interactionWindow.PrintMessage(() => Strings.DoorOpenEvent);
                 cell.CellProperties.Walkable = true;
                 cell.Glyph = '=';
                 cell.CellProperties.BlocksFov = false;
@@ -65,9 +66,9 @@ namespace Emberpoint.Core.GameObjects.Managers
             _fovObjectsWindow.Update(player);
         }
 
-        private void HandleDefaultInteraction(EmberCell cell)
+        private void HandleDefaultInteraction()
         {
-            interactionWindow.PrintMessage("Interacting with " + cell.CellProperties.Name);
+            interactionWindow.PrintMessage(() => Strings.NothingHappens);
         }
     }
 }

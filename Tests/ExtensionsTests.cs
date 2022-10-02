@@ -1,7 +1,7 @@
-﻿using System;
-using Emberpoint.Core.Extensions;
+﻿using Emberpoint.Core.Extensions;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using System;
 
 namespace Tests
 {

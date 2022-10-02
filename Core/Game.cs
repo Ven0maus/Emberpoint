@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using SadConsole;
-using Microsoft.Xna.Framework;
-using Emberpoint.Core.GameObjects.Entities;
+﻿using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.UserInterface.Windows;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.UserInterface.Windows;
+using Microsoft.Xna.Framework;
+using SadConsole;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 
 namespace Emberpoint.Core
@@ -14,6 +14,8 @@ namespace Emberpoint.Core
     {
         private static MainMenuWindow _mainMenuWindow;
         public static Player Player { get; set; }
+
+        public static CultureInfo CurrentCulture { get; internal set; }
 
         private static void Main()
         {
@@ -32,11 +34,11 @@ namespace Emberpoint.Core
 
         private static void Update(GameTime gameTime)
         {
-            if (_mainMenuWindow?.OptionsWindow != null && _mainMenuWindow.OptionsWindow.WaitingForAnyKeyPress)
+            if (_mainMenuWindow?.KeybindingsWindow != null && _mainMenuWindow.KeybindingsWindow.WaitingForAnyKeyPress)
             {
                 if (Global.KeyboardState.KeysPressed.Any())
                 {
-                    _mainMenuWindow.OptionsWindow.ChangeKeybinding(Global.KeyboardState.KeysPressed.First().Key);
+                    _mainMenuWindow.KeybindingsWindow.ChangeKeybinding(Global.KeyboardState.KeysPressed.First().Key);
                 }
             }
         }
@@ -66,6 +68,7 @@ namespace Emberpoint.Core
         {
             // Set default language to english
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(Constants.Language);
+            CurrentCulture = Thread.CurrentThread.CurrentUICulture;
 
             // Makes buttons look better
             Settings.UseDefaultExtendedFont = true;

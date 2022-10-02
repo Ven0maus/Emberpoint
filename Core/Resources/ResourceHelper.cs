@@ -16,13 +16,17 @@ namespace Emberpoint.Core.Resources
         public ResourceHelper()
         {
             _resourceCache = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+            BuildCache();
+        }
 
+        private void BuildCache()
+        {
             var type = typeof(Strings);
             var properties = type.GetProperties(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
                 .Where(a => a.PropertyType == typeof(string));
 
             // Build a resource cache for each supported language
-            foreach (var culture in Constants.SupportedCultures)
+            foreach (var culture in Constants.SupportedCultures.Keys)
             {
                 var cache = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 _resourceCache.Add(culture, cache);
@@ -32,8 +36,6 @@ namespace Emberpoint.Core.Resources
                 {
                     var value = (string)property.GetValue(null);
                     cache.Add(property.Name, value);
-
-                    System.Diagnostics.Debug.WriteLine("["+culture+"] Added localization: " + property.Name + ": " + value);
                 }
             }
 
@@ -49,10 +51,25 @@ namespace Emberpoint.Core.Resources
         /// <returns></returns>
         public string ReadProperty(string property, string defaultValue = null)
         {
-            if (property == null) return defaultValue;
-            if (_resourceCache[Constants.Language].TryGetValue(property, out string value))
+            if (property == null || !property.StartsWith("Strings.", StringComparison.OrdinalIgnoreCase)) return defaultValue;
+            var key = property.Substring("Strings.".Length);
+            if (_resourceCache[Constants.Language].TryGetValue(key, out string value))
                 return value;
             return defaultValue;
+        }
+
+        public IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> GetResources()
+        {
+            var clone = new Dictionary<string, IReadOnlyDictionary<string, string>>();
+            foreach (var kvp in _resourceCache)
+                clone.Add(kvp.Key, kvp.Value);
+            return clone;
+        }
+
+        public void ResetCache()
+        {
+            _resourceCache.Clear();
+            BuildCache();
         }
     }
 }

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Linq;
-using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Themes;
+using System;
+using System.Linq;
 using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
@@ -32,6 +33,13 @@ namespace Emberpoint.Core.UserInterface.Windows
             InitializeButtons();
         }
 
+        public void Update()
+        {
+            RemoveAll();
+            InitializeButtons();
+            Invalidate();
+        }
+
         private void InitializeButtons()
         {
             // Setup UI for the buttons
@@ -40,7 +48,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Add back button
             var backButton = new Button(20, 3)
             {
-                Text = "Back",
+                Text = Strings.Back,
                 Position = new Point(5, 3),
                 UseMouse = true,
                 UseKeyboard = false,
@@ -99,7 +107,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 if (keybindings.Contains(button.Name))
                 {
-                    Print(button.Position.X + 12, button.Position.Y + 1, button.Name.ToString().Replace("_", " "), Color.White);
+                    Print(button.Position.X + 12, button.Position.Y + 1, button.Name.Replace("_", " "), Color.White);
                 }
             }
         }

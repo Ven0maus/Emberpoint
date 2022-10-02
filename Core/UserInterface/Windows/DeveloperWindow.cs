@@ -99,6 +99,11 @@ namespace Emberpoint.Core.UserInterface.Windows
             Global.CurrentScreen.Children.Add(this);
         }
 
+        public void Update()
+        {
+            Invalidate();
+        }
+
         public void Show()
         {
             // TODO: Animate entrance
