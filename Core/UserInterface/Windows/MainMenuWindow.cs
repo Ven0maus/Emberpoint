@@ -7,13 +7,15 @@ using SadConsole.Controls;
 using System;
 using System.Linq;
 using SadConsole.Themes;
+using System.Globalization;
+using System.Threading;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
     public class MainMenuWindow : ControlsConsole, IUserInterface
     {
         public ContributorsWindow ContributorsWindow { get; set; }
-        public OptionsWindow OptionsWindow { get; private set; }
+        public KeybindingsWindow OptionsWindow { get; private set; }
 
         public SadConsole.Console Console
         {
@@ -23,7 +25,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public MainMenuWindow(int width, int height) : base(width, height)
         {
             // Set the XNA container's title
-            SadConsole.Game.Instance.Window.Title = Constants.GameTitle;
+            SadConsole.Game.Instance.Window.Title = Resources.Strings.GameTitle;
 
             var colors = Colors.CreateDefault();
             colors.ControlBack = Color.Black;
@@ -98,7 +100,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             var optionsButton = new Button(20, 3)
             {
-                Text = "Options",
+                Text = "Keybindings",
                 Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) + 4),
                 UseMouse = true,
                 UseKeyboard = false,
@@ -162,6 +164,9 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void ButtonPressPlay(object sender, EventArgs args)
         {
+            // Set selected language
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(Constants.Language);
+
             // Initialize user interface
             UserInterfaceManager.Initialize();
 
@@ -211,7 +216,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             if (OptionsWindow == null)
             {
-                OptionsWindow = new OptionsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
+                OptionsWindow = new KeybindingsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
                 UserInterfaceManager.Add(OptionsWindow);
             }
             else

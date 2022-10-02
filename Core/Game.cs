@@ -5,6 +5,8 @@ using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.UserInterface.Windows;
 using Emberpoint.Core.GameObjects.Managers;
+using System.Globalization;
+using System.Threading;
 
 namespace Emberpoint.Core
 {
@@ -46,7 +48,7 @@ namespace Emberpoint.Core
             var skipInterfaces = new []
             {
                 UserInterfaceManager.Get<MainMenuWindow>() as IUserInterface,
-                UserInterfaceManager.Get<OptionsWindow>() as IUserInterface, 
+                UserInterfaceManager.Get<KeybindingsWindow>() as IUserInterface, 
             };
 
             foreach (var inf in UserInterfaceManager.GetAll<IUserInterface>())
@@ -62,6 +64,9 @@ namespace Emberpoint.Core
 
         private static void Init()
         {
+            // Set default language to english
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(Constants.Language);
+
             // Makes buttons look better
             Settings.UseDefaultExtendedFont = true;
 

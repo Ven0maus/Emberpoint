@@ -246,7 +246,8 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 if (text.StartsWith(command.Key, System.StringComparison.OrdinalIgnoreCase))
                 {
-                    return command.Value(text, this, out output);
+                    var sub = text.Substring(command.Key.Length).TrimStart();
+                    return command.Value(sub, this, out output);
                 }
             }
             output = "";

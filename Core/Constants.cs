@@ -1,22 +1,32 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Emberpoint.Core.Resources;
+using Microsoft.Xna.Framework;
 using SadConsole;
 using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 
 namespace Emberpoint.Core
 {
     public sealed class Constants
     {
-        public static string ApplicationRoot = GetApplicationRoot();
-        public const string GameTitle = "Emberpoint";
-        public const string OpenDoor = "You opened the door.";
-        public const string CloseDoor = "You closed the door.";
-        public const string EmptyMessage = "";
-        public const string DoorClosed = "Closed door";
-        public const string DoorOpen = "Open door";
-
         public const int GameWindowWidth = 120;
         public const int GameWindowHeight = 41;
+
+        private static string _language;
+        public static string Language
+        {
+            get { return _language ?? (Language = "en-US"); }
+            set
+            {
+                _language = value;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(value);
+            }
+        }
+
+        public static readonly string ApplicationRoot = GetApplicationRoot();
+        public static readonly string[] SupportedCultures = new[] { "en-US", "nl-BE" };
+        public static readonly ResourceHelper ResourceHelper = new ResourceHelper();
 
         public static class Map
         {

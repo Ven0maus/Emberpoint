@@ -53,6 +53,6 @@ namespace Emberpoint.Core.GameObjects.Managers
         Movement_Right,
         Flashlight,
         Interact,
-        DeveloperConsole
+        DeveloperConsole,
     }
 }

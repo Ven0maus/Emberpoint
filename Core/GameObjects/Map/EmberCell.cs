@@ -90,7 +90,7 @@ namespace Emberpoint.Core.GameObjects.Map
             // Base properties
             Position = cell.Position;
             // Ember cell properties
-            CellProperties.Name = cell.CellProperties.Name;
+            CellProperties.Name = cell.CellProperties.LocalizedName;
             CellProperties.NormalForeground = cell.CellProperties.NormalForeground;
             CellProperties.NormalBackground = cell.CellProperties.NormalBackground;
             CellProperties.ForegroundFov = cell.CellProperties.ForegroundFov;
@@ -117,7 +117,7 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 CellProperties = new EmberCellProperties()
                 {
-                    Name = this.CellProperties.Name,
+                    Name = this.CellProperties.LocalizedName,
                     NormalForeground = this.CellProperties.NormalForeground,
                     NormalBackground = this.CellProperties.NormalBackground,
                     ForegroundFov = this.CellProperties.ForegroundFov,
@@ -237,7 +237,21 @@ namespace Emberpoint.Core.GameObjects.Map
         {
             public bool Walkable { get; set; }
             public bool Interactable { get; set; }
-            public string Name { get; set; }
+
+            public string LocalizedName { get; private set; }
+            public string Name
+            {
+                get 
+                {
+                    // Check if this name can be found within the localization resources
+                    return Constants.ResourceHelper.ReadProperty(LocalizedName, LocalizedName ?? ""); 
+                }
+                set 
+                {
+                    LocalizedName = value; 
+                }
+            }
+
             public Color NormalForeground { get; set; }
             public Color ForegroundFov { get; set; }
             public Color NormalBackground { get; set; }

@@ -6,6 +6,7 @@ using Emberpoint.Core.GameObjects.Managers;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using SadConsole;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,13 +30,6 @@ namespace Emberpoint.Core.UserInterface.Windows
             Print(3, 0, "Objects", Color.Orange);
             _charObjects = new Dictionary<char, CharObj>();
             _blueprintTiles = GetTilesFromConfig();
-            _blueprintTiles.Add('=', new BlueprintTile() 
-            { 
-                Name = Constants.DoorOpen,
-                Glyph = '=',
-                Foreground = "White",
-                BlocksFov = false
-            });
             _maxLineRows = Height - 2;
 
             _textConsole = new Console(Width - 2, Height - 2)
@@ -91,7 +85,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 if (!_blueprintTiles.TryGetValue(character, out var tile) || tile.Name == null) continue;
                 var glyphColor = MonoGameExtensions.GetColorByString(tile.Foreground);
                 if (glyphColor.A == 0) continue; // Don't render transparent tiles on the fov window
-                yield return new KeyValuePair<char, CharObj>(character, new CharObj(tile.Glyph, glyphColor, tile.Name));
+                yield return new KeyValuePair<char, CharObj>(character, new CharObj(tile.Glyph, glyphColor, () => Constants.ResourceHelper.ReadProperty(tile.Name, tile.Name ?? "")));
             }
         }
 
@@ -113,7 +107,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
              //Debug.WriteLine(charObj.Name + ": " + charObj.Glyph);
             _textConsole.Cursor.Print(new ColoredString("[" + charObj.Glyph + "]:", charObj.GlyphColor, Color.Transparent));
-            _textConsole.Cursor.Print(' ' + charObj.Name);
+            _textConsole.Cursor.Print(' ' + charObj.Name());
             _textConsole.Cursor.CarriageReturn();
             _textConsole.Cursor.LineFeed();
         }
@@ -147,9 +141,9 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             public readonly char Glyph;
             public readonly Color GlyphColor;
-            public readonly string Name;
+            public readonly Func<string> Name;
 
-            public CharObj(char glyph, Color glyphColor, string name)
+            public CharObj(char glyph, Color glyphColor, Func<string> name)
             {
                 Glyph = glyph;
                 GlyphColor = glyphColor;
