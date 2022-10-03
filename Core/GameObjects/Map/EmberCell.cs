@@ -84,6 +84,9 @@ namespace Emberpoint.Core.GameObjects.Map
 
         public void CopyFrom(EmberCell cell)
         {
+            // If we passed the same reference, we don't need to do anything
+            if (cell == this) return;
+
             // Does foreground, background, glyph, mirror, decorators
             CopyAppearanceFrom(cell);
 
@@ -108,7 +111,11 @@ namespace Emberpoint.Core.GameObjects.Map
             LightProperties.LightSources = cell.LightProperties.LightSources;
 
             // Ember Effect Properties
-            EffectProperties.EntityMovementEffects = cell.EffectProperties.EntityMovementEffects;
+            if (cell.EffectProperties.EntityMovementEffects != null)
+            {
+                EffectProperties.ClearMovementEffects();
+                EffectProperties.AddMovementEffects(cell.EffectProperties.EntityMovementEffects);
+            }
         }
 
         public new EmberCell Clone()
@@ -139,11 +146,15 @@ namespace Emberpoint.Core.GameObjects.Map
                     LightSources = this.LightProperties.LightSources
                 },
 
-                EffectProperties = new EmberEffectProperties
-                {
-                    EntityMovementEffects = this.EffectProperties.EntityMovementEffects,
-                }
+                EffectProperties = new EmberEffectProperties()
             };
+
+            // Add effects
+            if (EffectProperties.EntityMovementEffects != null)
+            {
+                cell.EffectProperties.AddMovementEffects(EffectProperties.EntityMovementEffects);
+            }
+
             // Does foreground, background, glyph, mirror, decorators
             CopyAppearanceTo(cell);
             return cell;
@@ -262,12 +273,33 @@ namespace Emberpoint.Core.GameObjects.Map
 
         public class EmberEffectProperties
         {
-            public List<Action<IEntity>> EntityMovementEffects { get; set; }
-
-            public void AddMovementEffect(Action<IEntity> action)
+            private List<Action<IEntity>> _entityMovementEffects;
+            public IReadOnlyList<Action<IEntity>> EntityMovementEffects
             {
-                if (EntityMovementEffects == null) EntityMovementEffects = new List<Action<IEntity>>();
-                EntityMovementEffects.Add(action);
+                get { return _entityMovementEffects; }
+            }
+
+            public void AddMovementEffect(Action<IEntity> action, int? insertIndex = null)
+            {
+                if (_entityMovementEffects == null) 
+                    _entityMovementEffects = new List<Action<IEntity>>();
+
+                if (insertIndex != null)
+                    _entityMovementEffects.Insert(insertIndex.Value, action);
+                else
+                    _entityMovementEffects.Add(action);
+            }
+
+            public void AddMovementEffects(IEnumerable<Action<IEntity>> actions)
+            {
+                if (_entityMovementEffects == null)
+                    _entityMovementEffects = new List<Action<IEntity>>();
+                _entityMovementEffects.AddRange(actions);
+            }
+
+            public void ClearMovementEffects()
+            {
+                _entityMovementEffects = null;
             }
         }
     }

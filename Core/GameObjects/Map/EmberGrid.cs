@@ -156,10 +156,11 @@ namespace Emberpoint.Core.GameObjects.Map
 
             // Update the map fov values if the walkable is changed
             bool updateFieldOfView = originalCell.CellProperties.BlocksFov != cell.CellProperties.BlocksFov;
+            
             // Adjust the lights of the tiles
             if (adjustLights)
             {
-                LightEngine.AdjustLightSource(cell, originalCell.Clone());
+                LightEngine.AdjustLightSource(cell, originalCell);
             }
 
             // Copy the new cell data

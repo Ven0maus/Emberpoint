@@ -41,8 +41,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Children.Add(_textConsole);
             Global.CurrentScreen.Children.Add(this);
         }
-
-        
+       
         private void ReinitializeCharObjects(IEnumerable<char> characters, bool updateText = true)
         {
             _charObjects = new Dictionary<char, CharObj>(GetCharObjectPairs(characters));

@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using SadConsole;
 
 namespace Emberpoint.Core.Extensions
 {
     public static class ConsoleExtensions
     {
-        public static void DrawBorders(this SadConsole.Console currentWindow, int width, int height, string cornerGlyph, string horizontalBorderGlyph, string verticalBorderGlyph, Color borderColor)
+        public static void DrawBorders(this Console currentWindow, int width, int height, string cornerGlyph, string horizontalBorderGlyph, string verticalBorderGlyph, Color borderColor)
         {
             for (int rowIndex = 0; rowIndex < height; rowIndex++)
             {
@@ -28,6 +29,17 @@ namespace Emberpoint.Core.Extensions
                     {
                         currentWindow.Print(colIndex, rowIndex, verticalBorderGlyph, borderColor);
                     }
+                }
+            }
+        }
+
+        public static void ColorFill(this Console currentWindow, Color color)
+        {
+            for (int x = 0; x < currentWindow.Width; x++)
+            {
+                for (int y = 0; y < currentWindow.Height; y++)
+                {
+                    currentWindow.Print(x, y, new ColoredGlyph(0, color, color));
                 }
             }
         }

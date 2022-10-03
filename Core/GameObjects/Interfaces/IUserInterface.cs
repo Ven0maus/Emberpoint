@@ -9,5 +9,7 @@ namespace Emberpoint.Core.GameObjects.Interfaces
         bool IsDirty { get; set; }
         SadConsole.Console Console { get; }
         void Update();
+        void BeforeCreate() { }
+        void AfterCreate() { }
     }
 }

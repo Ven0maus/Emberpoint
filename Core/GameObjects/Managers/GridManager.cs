@@ -12,6 +12,11 @@ namespace Emberpoint.Core.GameObjects.Managers
 
         private readonly static Dictionary<Type, EmberGrid> _blueprintGridCache = new Dictionary<Type, EmberGrid>();
 
+        public static void ClearCache()
+        {
+            _blueprintGridCache.Clear();
+        }
+
         public static void InitializeBlueprint<T>(bool saveGridData) where T : Blueprint<EmberCell>, new()
         {
             if (!saveGridData)
@@ -29,7 +34,6 @@ namespace Emberpoint.Core.GameObjects.Managers
             {
                 Grid = new EmberGrid(new T());
                 Grid.CalibrateLightEngine();
-
                 _blueprintGridCache.Add(typeof(T), Grid);
             }
         }
