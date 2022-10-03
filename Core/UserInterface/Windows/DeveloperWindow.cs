@@ -99,6 +99,11 @@ namespace Emberpoint.Core.UserInterface.Windows
             Global.CurrentScreen.Children.Add(this);
         }
 
+        public void BeforeCreate()
+        {
+            IsVisible = false;
+        }
+
         public void Update()
         {
             Invalidate();

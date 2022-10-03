@@ -19,7 +19,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Global.CurrentScreen.Children.Add(this);
         }
 
-        public void Initialize()
+        public void AfterCreate()
         {
             // Initialize grid and render it on the map
             GridManager.InitializeBlueprint<GroundFloorBlueprint>(true);

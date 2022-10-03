@@ -48,7 +48,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             UpdateInventoryText();
         }
 
-        public void Initialize()
+        public void AfterCreate()
         {
             // Adding default Items to Inventory
             var items = new IItem[]

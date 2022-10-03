@@ -189,6 +189,9 @@
   <data name="Language" xml:space="preserve">
     <value>Taal</value>
   </data>
+  <data name="Map" xml:space="preserve">
+    <value>Kaart</value>
+  </data>
   <data name="NothingHappens" xml:space="preserve">
     <value>Er gebeurd niets.</value>
   </data>

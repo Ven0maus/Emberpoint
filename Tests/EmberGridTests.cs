@@ -38,13 +38,15 @@ namespace Tests
             Assert.IsNotNull(up);
 
             // Add effect to go up
-            up.EffectProperties.EntityMovementEffects.Clear();
+            up.EffectProperties.ClearMovementEffects();
             up.EffectProperties.AddMovementEffect((e) =>
             {
                 // Initialize new blueprint with tracking of the previous
                 GridManager.InitializeBlueprint<BaseBlueprintExtra>(true);
                 ((BaseEntity)e).MoveToBlueprint(GridManager.ActiveBlueprint);
+                System.Diagnostics.Debug.WriteLine("Moving up!");
             });
+            GridManager.Grid.SetCell(up, false, false);
 
             var entity = EntityManager.Create<BaseEntity>(new Point(2, 3), GridManager.Grid.Blueprint.ObjectId, GridManager.Grid);
 
@@ -53,28 +55,33 @@ namespace Tests
 
             // Move entity into new blueprint by stairs logic
             entity.MoveTowards(up.Position, false, triggerMovementEffects: true);
+            entity.ChangeGrid(GridManager.Grid);
 
             Assert.IsTrue(entity.CurrentBlueprintId != currentBlueprint.ObjectId);
             Assert.IsTrue(entity.CurrentBlueprintId == GridManager.ActiveBlueprint.ObjectId);
+
+            // Check if a cell corresponds to the correct grid after change
+            Assert.IsTrue(GridManager.Grid.GetCell(1, 1).LightProperties.EmitsLight);
 
             // Map is reloaded at this point, find way down
             var down = GridManager.Grid.GetCells(a => a.Glyph == '<').FirstOrDefault();
             Assert.IsNotNull(down);
 
-            // Add effect to go back down
-            down.EffectProperties.EntityMovementEffects.Clear();
+            // Add custom effect to go back down
+            down.EffectProperties.ClearMovementEffects();
             down.EffectProperties.AddMovementEffect((e) =>
             {
                 // Initialize new blueprint with tracking of the previous
                 GridManager.InitializeBlueprint<BaseBlueprint>(true);
                 ((BaseEntity)e).MoveToBlueprint(GridManager.ActiveBlueprint);
             });
+            GridManager.Grid.SetCell(down, false, false);
 
+            // Fake move with no trigger
+            int currentEntityBpId = entity.CurrentBlueprintId;
             entity.MoveTowards(down.Position, false, triggerMovementEffects: false);
-            entity.ChangeGrid(GridManager.Grid);
 
-            // Check if a cell corresponds to the correct grid after change
-            Assert.IsTrue(GridManager.Grid.GetCell(1, 1).LightProperties.EmitsLight);
+            Assert.IsTrue(entity.CurrentBlueprintId == currentEntityBpId);
 
             // Move away from stairs first
             entity.MoveTowards(new Point(2, 3), false, triggerMovementEffects: false);

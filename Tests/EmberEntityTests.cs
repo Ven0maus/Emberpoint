@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using Tests.TestObjects.Blueprints;
@@ -15,6 +16,7 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            GridManager.ClearCache();
             _grid = BaseGrid.Create(10, 10);
         }
 
@@ -35,6 +37,7 @@ namespace Tests
 
             // Set entity1's blueprint layer
             entity1.MoveToBlueprint(GridManager.ActiveBlueprint);
+            entity1.ChangeGrid(GridManager.Grid);
 
             // Sync entities
             var entities = EntityManager.GetEntities<BaseEntity>();
@@ -56,6 +59,21 @@ namespace Tests
             Assert.AreNotEqual(GridManager.ActiveBlueprint.ObjectId, entity2.CurrentBlueprintId);
             Assert.AreEqual(true, entity1.IsVisible);
             Assert.AreEqual(false, entity2.IsVisible);
+
+            var stairsDown = GridManager.Grid.GetCell(a => a.CellProperties.Name == Strings.StairsDown);
+            Assert.IsNotNull(stairsDown);
+
+            // Add an additional effect to adjust grid for this entity
+            stairsDown.EffectProperties.AddMovementEffect((e) =>
+            {
+                ((BaseEntity)e).ChangeGrid(GridManager.Grid);
+            });
+
+            // Move onto stairs down, and trigger its effect
+            var prevBlueprint = GridManager.ActiveBlueprint.ObjectId;
+            entity1.MoveTowards(stairsDown.Position, false, triggerMovementEffects: true);
+            Assert.AreNotEqual(GridManager.ActiveBlueprint.ObjectId, prevBlueprint);
+            Assert.AreEqual(GridManager.ActiveBlueprint.ObjectId, entity1.CurrentBlueprintId);
         }
 
         [Test]

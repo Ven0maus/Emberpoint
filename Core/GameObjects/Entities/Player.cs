@@ -21,6 +21,8 @@ namespace Emberpoint.Core.GameObjects.Entities
         private readonly InteractionManager interactionManager;
         private readonly FovWindow _fovObjectsWindow;
         private readonly InteractionWindow _interaction;
+        private readonly WorldmapWindow _worldMap;
+        private readonly DeveloperWindow _devWindow;
         private bool InteractionStatus;
 
         public Player() : base(Constants.Player.Foreground, Color.Transparent, Constants.Player.Character)
@@ -30,6 +32,8 @@ namespace Emberpoint.Core.GameObjects.Entities
             _interaction = UserInterfaceManager.Get<InteractionWindow>();
             interactionManager = new InteractionManager(_interaction, this);
             _fovObjectsWindow = UserInterfaceManager.Get<FovWindow>();
+            _worldMap = UserInterfaceManager.Get<WorldmapWindow>();
+            _devWindow = UserInterfaceManager.Get<DeveloperWindow>();
             Components.Add(new EntityViewSyncComponent());
         }
 
@@ -64,6 +68,15 @@ namespace Emberpoint.Core.GameObjects.Entities
                 }
             }
 
+            if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Map)))
+            {
+                if (!_worldMap.IsVisible)
+                {
+                    _worldMap.Show();
+                }
+                keyHandled = true;
+            }
+
             // Handle cell interactions
             if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Interact)) 
                 && InteractionStatus && GetInteractedCell(out Point position))
@@ -84,8 +97,7 @@ namespace Emberpoint.Core.GameObjects.Entities
             // Handle dialog window
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
             {
-                var devConsole = UserInterfaceManager.Get<DeveloperWindow>();
-                if (!devConsole.IsVisible)
+                if (!_devWindow.IsVisible)
                 {
                     var dialogWindow = UserInterfaceManager.Get<DialogWindow>();
                     if (dialogWindow.IsVisible)
@@ -99,14 +111,13 @@ namespace Emberpoint.Core.GameObjects.Entities
             // Handle dev console showing
             if (info.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.DeveloperConsole)))
             {
-                var devConsole = UserInterfaceManager.Get<DeveloperWindow>();
-                if (devConsole.IsVisible)
+                if (_devWindow.IsVisible)
                 {
-                    devConsole.Hide();
+                    _devWindow.Hide();
                 }
                 else
                 {
-                    devConsole.Show();
+                    _devWindow.Show();
                 }
                 keyHandled = true;
             }

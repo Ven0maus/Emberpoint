@@ -14,39 +14,26 @@ namespace Emberpoint.Core.GameObjects.Managers
 
         public static void Initialize()
         {
-            // Initialize game window, set's the Global.CurrentScreen
-            var gameWindow = new GameWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
-            Add(gameWindow);
-
-            // Initialize map
-            var map = new MapWindow(Constants.Map.Width, Constants.Map.Height);
-            Add(map);
-            map.Initialize();
-
-            // Initialize dialog window
-            var dialogWindow = new DialogWindow(Constants.Map.Width, 6);
-            Add(dialogWindow);
-
-            // Initialize game over window
-            var gameOverWindow = new GameOverWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
-            Add(gameOverWindow);
-
-            // Initialize inventory
-            var inventory = new InventoryWindow(Constants.GameWindowWidth / 3, 15);
-            Add(inventory);
-            inventory.Initialize();
-
-            var interaction = new InteractionWindow(Constants.GameWindowWidth / 3, 7);
-            Add(interaction);
-
-            var fovWindow = new FovWindow(Constants.GameWindowWidth / 3, 12);
-            Add(fovWindow);
-
-            var developerWindow = new DeveloperWindow(Constants.Map.Width, 14)
+            // Initialize all game window interfaces
+            var interfaces = new IUserInterface[]
             {
-                IsVisible = false
+                new GameWindow(Constants.GameWindowWidth, Constants.GameWindowHeight),
+                new MapWindow(Constants.Map.Width, Constants.Map.Height),
+                new DialogWindow(Constants.Map.Width, 6),
+                new GameOverWindow(Constants.GameWindowWidth, Constants.GameWindowHeight),
+                new InventoryWindow(Constants.GameWindowWidth / 3, 15),
+                new InteractionWindow(Constants.GameWindowWidth / 3, 7),
+                new FovWindow(Constants.GameWindowWidth / 3, 12),
+                new DeveloperWindow(Constants.Map.Width, 14),
+                new WorldmapWindow(Constants.Map.Width, Constants.Map.Height)
             };
-            Add(developerWindow);
+
+            foreach (var window in interfaces)
+            {
+                window.BeforeCreate();
+                Add(window);
+                window.AfterCreate();
+            }
 
             IsInitialized = true;
         }
@@ -58,7 +45,7 @@ namespace Emberpoint.Core.GameObjects.Managers
 
         public static T Get<T>() where T : IUserInterface
         {
-            return Interfaces.OfType<T>().SingleOrDefault();
+            return (T)Interfaces.FirstOrDefault(a => a.GetType() == typeof(T));
         }
 
         public static void Remove<T>(T userInterface) where T : IUserInterface

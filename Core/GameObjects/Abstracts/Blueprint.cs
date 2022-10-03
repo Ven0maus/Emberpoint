@@ -1,4 +1,6 @@
 using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Entities;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
@@ -127,11 +129,11 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                     // Set cell effect for stairs
                     if (cell.CellProperties.Name != null && cell.CellProperties.Name.Equals(Strings.StairsDown, StringComparison.OrdinalIgnoreCase) && StairsDownBlueprint != null)
                     {
-                        cell.EffectProperties.AddMovementEffect((entity) => AddStairsLogic(cell, tile));
+                        cell.EffectProperties.AddMovementEffect((entity) => AddStairsLogic(entity, cell, tile));
                     }
                     else if (cell.CellProperties.Name != null && cell.CellProperties.Name.Equals(Strings.StairsUp, StringComparison.OrdinalIgnoreCase) && StairsUpBlueprint != null)
                     {
-                        cell.EffectProperties.AddMovementEffect((entity) => AddStairsLogic(cell, tile));
+                        cell.EffectProperties.AddMovementEffect((entity) => AddStairsLogic(entity, cell, tile));
                     }
 
                     if (!string.IsNullOrWhiteSpace(tile.LightColor))
@@ -145,16 +147,19 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             return cells.ToArray();
         }
 
-        private void AddStairsLogic(T cell, BlueprintTile tile)
+        private void AddStairsLogic(IEntity entity, EmberCell cell, BlueprintTile tile)
         {
-            string stairsName = tile.Name.Equals(Strings.StairsUp, StringComparison.OrdinalIgnoreCase) ? Strings.StairsDown : Strings.StairsUp;
-            Blueprint<T> blueprint = tile.Name.Equals(Strings.StairsUp, StringComparison.OrdinalIgnoreCase) ? StairsUpBlueprint : StairsDownBlueprint;
+            string stairsName = cell.CellProperties.Name.Equals(Strings.StairsUp, StringComparison.OrdinalIgnoreCase) ? Strings.StairsDown : Strings.StairsUp;
+            Blueprint<EmberCell> blueprint = cell.CellProperties.Name.Equals(Strings.StairsUp, StringComparison.OrdinalIgnoreCase) ? GridManager.ActiveBlueprint.StairsUpBlueprint : GridManager.ActiveBlueprint.StairsDownBlueprint;
 
             // Initialize new blueprint with tracking of the previous
             GridManager.InitializeBlueprint(blueprint, true);
 
-            // Make sure all entities are synced to correct blueprint
-            EntityManager.MovePlayerToBlueprint(blueprint);
+            // Sync entities to blueprint
+            if (entity is Player)
+                EntityManager.MovePlayerToBlueprint(blueprint);
+            else
+                entity.MoveToBlueprint(blueprint);
 
             // Move player
             var stairs = GridManager.Grid.GetCells(a => a.CellProperties.Name != null && a.CellProperties.Name.Equals(stairsName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
@@ -163,9 +168,13 @@ namespace Emberpoint.Core.GameObjects.Abstracts
                 throw new Exception($"[{GetType().Name}] No {stairsName} available for {tile.Name} at position: {cell.Position}");
             }
 
-            GridManager.Grid.RenderObject(UserInterfaceManager.Get<MapWindow>());
-            Game.Player.MoveTowards(stairs.Position, false, null, false);
-            Game.Player.Initialize(false);
+            if (entity is Player)
+                GridManager.Grid.RenderObject(UserInterfaceManager.Get<MapWindow>());
+
+            entity.MoveTowards(stairs.Position, false, null, false);
+
+            if (entity is Player)
+                Game.Player.Initialize(false);
         }
 
         private static class BlueprintDatabase
