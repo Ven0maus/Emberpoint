@@ -5,14 +5,8 @@ branches:
   only:
   - master
 before_build:
-- ps: >-
-    Write-Host ("Installing MonoGame...")
-
-
-    Start-Sleep -s 5
 - cmd: >-
     dotnet restore
-
     nuget restore
 build:
   parallel: true
