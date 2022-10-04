@@ -28,7 +28,7 @@ The whole purpose behind this project is to get people contributing however larg
 In general, the contribution workflow looks like this:
 
 - Be assigned to an existing issue or open a new issue in the [issue tracker](https://github.com/Venom0us/Emberpoint/issues).
-- Copy the repo, and create a feature branch. We usually go with something like "feature/issue#number-initialsOfUser" ex: "feature/issue#100-ven"
+- Fork the repo, and create a feature branch. We usually go with something like "feature/issue#number-initialsOfUser" ex: "feature/issue#100-ven"
 - Make your development changes
 - Make sure all tests are green, and your feature is sufficiently covered by tests.
 - Submit a pull request, referencing any issues it addresses in the comment of the PR.
