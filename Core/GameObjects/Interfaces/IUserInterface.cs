@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+﻿using SadRogue.Primitives;
 
 namespace Emberpoint.Core.GameObjects.Interfaces
 {
@@ -8,7 +8,7 @@ namespace Emberpoint.Core.GameObjects.Interfaces
         bool IsVisible { get; set; }
         bool IsDirty { get; set; }
         SadConsole.Console Console { get; }
-        void Update();
+        void Refresh();
         void BeforeCreate() { }
         void AfterCreate() { }
     }

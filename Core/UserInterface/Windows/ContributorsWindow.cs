@@ -1,9 +1,9 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
 using SadConsole;
-using SadConsole.Controls;
-using SadConsole.Themes;
+using SadConsole.UI;
+using SadConsole.UI.Controls;
+using SadRogue.Primitives;
 using System.Linq;
 using Console = SadConsole.Console;
 
@@ -15,25 +15,17 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public ContributorsWindow(int width, int height) : base(width, height)
         {
-            // Set custom theme
-            var colors = Colors.CreateDefault();
-            colors.ControlBack = Color.Black;
-            colors.Text = Color.White;
-            colors.TitleText = Color.White;
-            colors.ControlHostBack = Color.White;
-            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
-            colors.RebuildAppearances();
+            DefaultBackground = Color.Black;
+            DefaultForeground = Color.White;
 
-            // Set the new theme colors         
-            ThemeColors = colors;
-
+            DrawWindowTitle();
             InitializeBackButton();
             DrawContributors();
         }
 
-        public void Update()
+        public void Refresh()
         {
-            RemoveAll();
+            Controls.Clear();
             InitializeBackButton();
         }
 
@@ -52,14 +44,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 IsVisible = false;
                 MainMenuWindow.Show();
             };
-            Add(backButton);
-        }
-
-        protected override void OnInvalidate()
-        {
-            base.OnInvalidate();
-
-            DrawWindowTitle();
+            Controls.Add(backButton);
         }
 
         private void DrawWindowTitle()
@@ -83,7 +68,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 {
                     if (startPosX + x >= Constants.GameWindowWidth ||
                         startPosY + y >= Constants.GameWindowHeight) continue;
-                    Print(startPosX + x, startPosY + y, new ColoredGlyph(titleFragments[y][x], Color.White, Color.Transparent));
+                    Surface.SetGlyph(startPosX + x, startPosY + y, titleFragments[y][x], Color.White, Color.Transparent);
                 }
             }
         }
@@ -108,7 +93,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             foreach (var contributor in contributors)
                 listbox.Items.Add(contributor);
 
-            Add(listbox);
+            Controls.Add(listbox);
         }
     }
 }

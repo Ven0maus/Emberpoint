@@ -1,10 +1,8 @@
-﻿using SadConsole;
-
-namespace Emberpoint.Core.GameObjects.Interfaces
+﻿namespace Emberpoint.Core.GameObjects.Interfaces
 {
-    public interface IRenderable
+    public interface IRenderable<T>
     {
-        void RenderObject(Console console);
+        void RenderObject(T console);
         void UnRenderObject();
     }
 }

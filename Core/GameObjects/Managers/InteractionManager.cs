@@ -3,7 +3,7 @@ using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
 using Emberpoint.Core.UserInterface.Windows;
-using Microsoft.Xna.Framework;
+using SadRogue.Primitives;
 
 namespace Emberpoint.Core.GameObjects.Managers
 {
@@ -62,7 +62,7 @@ namespace Emberpoint.Core.GameObjects.Managers
             bool discoverUnexploredTiles = flashLight != null && flashLight.LightOn;
             GridManager.Grid.DrawFieldOfView(player, discoverUnexploredTiles);
 
-            player.MapWindow.Update();
+            player.MapWindow.Refresh();
             _fovObjectsWindow.Update(player);
         }
 

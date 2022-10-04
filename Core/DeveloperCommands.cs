@@ -2,7 +2,7 @@
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
-using Microsoft.Xna.Framework;
+using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +19,37 @@ namespace Emberpoint.Core
                 { "clear", Clear },
                 { "playerpos", GetPlayerPos },
                 { "teleport", TeleportPlayer },
-                { "setlanguage", SetLanguage }
+                { "setlanguage", SetLanguage },
+                { "infopos", GetInfoPos }
             };
+
+        private static bool GetInfoPos(string text, DeveloperWindow window, out string output)
+        {
+            const string invalidMsg = "Invalid input. pass coords like 5,6";
+            var pos = text.Split(',');
+            if (pos.Length != 2)
+            {
+                output = invalidMsg;
+                return false;
+            }
+            var xS = pos[0];
+            var yS = pos[1];
+            if (!int.TryParse(xS, out int x) ||
+                !int.TryParse(yS, out int y))
+            {
+                output = invalidMsg;
+                return false;
+            }
+            var cell = GridManager.Grid.GetCell(x, y);
+            if (cell == null)
+            {
+                output = "Invalid coordinates. No cell found at " + text;
+                return false;
+            }
+            output = cell.ToString();
+            System.Diagnostics.Debug.WriteLine(output);
+            return true;
+        }
 
         private static bool SetLanguage(string text, DeveloperWindow window, out string output)
         {
@@ -36,7 +65,7 @@ namespace Emberpoint.Core
             // Update views
             var views = UserInterfaceManager.GetAll<IUserInterface>();
             foreach (var view in views)
-                view.Update();
+                view.Refresh();
 
             output = "Language set to: " + lang.Key;
             return true;

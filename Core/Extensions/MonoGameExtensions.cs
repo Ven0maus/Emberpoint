@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+﻿using SadRogue.Primitives;
 using System;
 using System.Globalization;
 
@@ -49,9 +49,9 @@ namespace Emberpoint.Core.Extensions
                 return color;
             }
 
-            var prop = typeof(Color).GetProperty(value);
-            if (prop != null)
-                return (Color)prop.GetValue(null, null);
+            var field = typeof(Color).GetField(value);
+            if (field != null)
+                return (Color)field.GetValue(null);
             return default;
         }
     }

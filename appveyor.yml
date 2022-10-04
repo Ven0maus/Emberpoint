@@ -1,18 +1,10 @@
 version: 1.0.{build}
-image: Visual Studio 2019
+image: Visual Studio 2022
 configuration: Release
 branches:
   only:
   - master
 before_build:
-- ps: >-
-    Write-Host ("Installing MonoGame...")
-
-    (New-Object Net.WebClient).DownloadFile('https://github.com/MonoGame/MonoGame/releases/download/v3.7.1/MonoGameSetup.exe', 'C:\MonoGameSetup.exe')
-    
-    Start-Process -FilePath "C:\MonoGameSetup.exe" -ArgumentList "/S /v /qn"
-    
-    Start-Sleep -s 5
 - cmd: >-
     dotnet restore
 

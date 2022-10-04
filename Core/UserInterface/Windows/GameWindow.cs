@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.Resources;
 using SadConsole;
 
 namespace Emberpoint.Core.UserInterface.Windows
@@ -8,13 +9,13 @@ namespace Emberpoint.Core.UserInterface.Windows
         public GameWindow(int width, int height) : base(width, height)
         {
             // Set the XNA container's title
-            SadConsole.Game.Instance.Window.Title = Resources.Strings.GameTitle;
+            Settings.WindowTitle = Strings.GameTitle;
 
             // Print the game title at the  top
-            Print((int)System.Math.Round((Width / 2) / 1.5f) - Resources.Strings.GameTitle.Length / 2, 1, Resources.Strings.GameTitle);
+            Surface.Print((int)System.Math.Round((Width / 2) / 1.5f) - Resources.Strings.GameTitle.Length / 2, 1, Resources.Strings.GameTitle);
 
             // Set the current screen to the game window
-            Global.CurrentScreen = this;
+            GameHost.Instance.Screen = this;
         }
 
         public Console Console
@@ -22,11 +23,11 @@ namespace Emberpoint.Core.UserInterface.Windows
             get { return this; }
         }
 
-        public void Update()
+        public void Refresh()
         {
-            Clear();
-            SadConsole.Game.Instance.Window.Title = Resources.Strings.GameTitle;
-            Print((int)System.Math.Round((Width / 2) / 1.5f) - Resources.Strings.GameTitle.Length / 2, 1, Resources.Strings.GameTitle);
+            Surface.Clear();
+            Settings.WindowTitle = Resources.Strings.GameTitle;
+            Surface.Print((int)System.Math.Round((Width / 2) / 1.5f) - Resources.Strings.GameTitle.Length / 2, 1, Resources.Strings.GameTitle);
         }
     }
 }

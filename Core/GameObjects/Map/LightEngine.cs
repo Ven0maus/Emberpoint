@@ -3,8 +3,8 @@ using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
-using GoRogue;
-using Microsoft.Xna.Framework;
+using GoRogue.FOV;
+using SadRogue.Primitives;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -109,7 +109,7 @@ namespace Emberpoint.Core.GameObjects.Map
         {
             if (cell.LightProperties.EmitsLight)
             {
-                var fov = new FOV(GridManager.Grid.FieldOfView);
+                var fov = new RecursiveShadowcastingFOV(GridManager.Grid.FieldOfView);
                 fov.Calculate(cell.Position, cell.LightProperties.LightRadius);
                 var toChangeCells = new List<(EmberCell, float)>();
                 for (int x = 0; x < GridManager.Grid.GridSizeX; x++)
@@ -117,7 +117,7 @@ namespace Emberpoint.Core.GameObjects.Map
                     for (int y = 0; y < GridManager.Grid.GridSizeY; y++)
                     {
                         // If cell is in the field of view of the object
-                        if (fov.BooleanFOV[x, y])
+                        if (fov.BooleanResultView[x, y])
                         {
                             var pos = new Point(x, y);
                             var distanceOfCenter = cell.Position.SquaredDistance(pos);

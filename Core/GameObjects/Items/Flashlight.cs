@@ -1,7 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
+using SadRogue.Primitives;
 using System.Timers;
 
 namespace Emberpoint.Core.GameObjects.Items

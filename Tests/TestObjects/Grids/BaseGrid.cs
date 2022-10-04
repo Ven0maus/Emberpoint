@@ -1,6 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Map;
-using Microsoft.Xna.Framework;
+using SadRogue.Primitives;
 
 namespace Tests.TestObjects.Grids
 {

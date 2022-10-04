@@ -5,9 +5,10 @@ using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
 using Emberpoint.Core.UserInterface.Windows;
-using GoRogue;
-using Microsoft.Xna.Framework;
+using GoRogue.FOV;
 using SadConsole;
+using SadConsole.Entities;
+using SadRogue.Primitives;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
@@ -16,12 +17,12 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public int ObjectId { get; }
         public int FieldOfViewRadius { get; set; }
 
-        private FOV _fieldOfView;
-        public FOV FieldOfView
+        private IFOV _fieldOfView;
+        public IFOV FieldOfView
         {
             get
             {
-                return _fieldOfView ??= new FOV(GridManager.Grid.FieldOfView);
+                return _fieldOfView ??= new RecursiveShadowcastingFOV(GridManager.Grid.FieldOfView);
             }
         }
 
@@ -38,11 +39,11 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             }
         }
 
-        public int Glyph { get => Animation.CurrentFrame[0].Glyph; }
+        public int Glyph { get => Appearance.Glyph; }
 
         public Direction Facing  {get; private set; }
 
-        public Console RenderConsole { get; private set; }
+        public Renderer RenderConsole { get; private set; }
 
         public int CurrentBlueprintId { get; private set; }
 
@@ -80,25 +81,24 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             }
         }
 
-        public EmberEntity(Color foreground, Color background, int glyph, Blueprint<EmberCell> blueprint = null, int width = 1, int height = 1) : base(width, height)
+        public EmberEntity(Color foreground, Color background, int glyph, Blueprint<EmberCell> blueprint = null, int zIndex = 1) : base(foreground, background, glyph, zIndex)
         {
             ObjectId = EntityManager.GetUniqueId();
             CurrentBlueprintId = blueprint != null ? blueprint.ObjectId : (GridManager.ActiveBlueprint != null ? GridManager.ActiveBlueprint.ObjectId : -1);
 
-            Font = Global.FontDefault.Master.GetFont(Constants.Map.Size);
-            Animation.CurrentFrame[0].Foreground = foreground;
-            Animation.CurrentFrame[0].Background = background;
-            Animation.CurrentFrame[0].Glyph = glyph;
+            Appearance.Foreground = foreground;
+            Appearance.Background = background;
+            Appearance.Glyph = glyph;
 
             // Default stats
             MaxHealth = 100;
 
-            Facing = Direction.DOWN;
+            Facing = Direction.Down;
 
-            Moved += OnMove;
+            PositionChanged += OnMove;
         }
 
-        public virtual void OnMove(object sender, EntityMovedEventArgs args)
+        public virtual void OnMove(object sender, ValueChangedEventArgs<Point> args)
         {
             if (this is IItem) return;
 
@@ -143,11 +143,11 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             return GridManager.Grid.InBounds(position) && cell.CellProperties.Walkable && !EntityManager.EntityExistsAt(position, CurrentBlueprintId) && cell.CellProperties.IsExplored;
         }
 
-        public void RenderObject(Console console)
+        public void RenderObject(Renderer console)
         {
             if (Health == 0) return;
             RenderConsole = console;
-            console.Children.Add(this);
+            console.Add(this);
         }
 
         public bool CheckInteraction(InteractionWindow interaction)
@@ -160,7 +160,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             return false;
         }
 
-        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true)
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction? direction = null, bool triggerMovementEffects = true)
         {
             if (Health == 0) return;
 
@@ -185,28 +185,28 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             MoveTowards(pos += position, checkCanMove);
         }
 
-        private void SetFacingDirection(Point newPosition, Direction direction)
+        private void SetFacingDirection(Point newPosition, Direction? direction)
         {
             // Set facing direction
             var prevPos = Position;
             var difference = newPosition - prevPos;
             if (difference.X == 1 && difference.Y == 0)
-                Facing = Direction.RIGHT;
+                Facing = Direction.Right;
             else if (difference.X == -1 && difference.Y == 0)
-                Facing = Direction.LEFT;
+                Facing = Direction.Left;
             else if (difference.X == 0 && difference.Y == 1)
-                Facing = Direction.DOWN;
+                Facing = Direction.Down;
             else if (difference.X == 0 && difference.Y == -1)
-                Facing = Direction.UP;
+                Facing = Direction.Up;
             else
-                Facing = direction ?? Direction.DOWN;
+                Facing = direction ?? Direction.Down;
         }
 
         public void UnRenderObject()
         {
             if (RenderConsole != null)
             {
-                RenderConsole.Children.Remove(this);
+                RenderConsole.Remove(this);
                 RenderConsole = null;
             }
         }

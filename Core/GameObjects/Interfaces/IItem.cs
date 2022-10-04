@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using SadRogue.Primitives;
 using System;
+using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.GameObjects.Interfaces
 {
-    public interface IItem : IRenderable, IEquatable<IItem>, IComparable<IItem>
+    public interface IItem : IRenderable<Console>, IEquatable<IItem>, IComparable<IItem>
     {
         int ObjectId { get; }
         string Name { get; set; }
