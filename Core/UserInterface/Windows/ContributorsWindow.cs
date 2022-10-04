@@ -18,15 +18,16 @@ namespace Emberpoint.Core.UserInterface.Windows
             DefaultBackground = Color.Black;
             DefaultForeground = Color.White;
 
-            DrawWindowTitle();
-            InitializeBackButton();
-            DrawContributors();
+            Refresh();
         }
 
         public void Refresh()
         {
             Controls.Clear();
+            Surface.Clear();
+            DrawWindowTitle();
             InitializeBackButton();
+            DrawContributors();
         }
 
         private void InitializeBackButton()

@@ -102,6 +102,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void Refresh()
         {
+            Surface.Clear();
             // Draw borders for the controls console
             this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
             Surface.Print(((Width / 2) - "Developer Console".Length / 2), 0, "Developer Console", Color.Orange);

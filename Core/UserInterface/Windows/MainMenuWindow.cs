@@ -42,6 +42,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public void Refresh()
         {
             Controls.Clear();
+            Surface.Clear();
             InitializeButtons();
             DrawGameTitle();
         }
