@@ -58,12 +58,22 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         private void DrawMap()
         {
+            // Make cells dark
+            var darkGray = new Color(10, 10, 10, 255);
+            for (int x=1; x < Width-1; x++)
+            {
+                for (int y=1; y < Height-1; y++)
+                {
+                    Print(x, y, new ColoredGlyph(0, darkGray, darkGray));
+                }
+            }
+
             // Show only explored cells and border cells
             var exploredCells = GridManager.Grid.GetCells(a => a.CellProperties.IsExplored || IsBorderCell(a));
             foreach (var cell in exploredCells)
             {
-                Print(cell.Position.X + 1, cell.Position.Y + 1, 
-                    new ColoredGlyph(cell.Glyph, cell.CellProperties.NormalForeground, 
+                Print(cell.Position.X + 1, cell.Position.Y + 1,
+                    new ColoredGlyph(cell.Glyph, cell.CellProperties.NormalForeground,
                     cell.CellProperties.NormalBackground));
             }
 
@@ -77,6 +87,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void Show()
         {
+            Game.Player.MapWindow.IsVisible = false;
             Update();
             IsFocused = true;
             Game.Player.IsFocused = false;
@@ -85,6 +96,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void Hide()
         {
+            Game.Player.MapWindow.IsVisible = true;
             IsFocused = false;
             Game.Player.IsFocused = true;
             IsVisible = false;
