@@ -1,8 +1,8 @@
 ﻿using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
 using SadConsole;
+using SadRogue.Primitives;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
@@ -20,7 +20,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public InteractionWindow(int width, int height) : base(width, height)
         {
             this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
-            Print(3, 0, Strings.Interaction, Color.Orange);
+            Surface.Print(3, 0, Strings.Interaction, Color.Orange);
 
             _textConsole = new Console(Width - 2, Height - 2)
             {
@@ -30,14 +30,14 @@ namespace Emberpoint.Core.UserInterface.Windows
             Position = new Point(Constants.Map.Width + 7, 18);
 
             Children.Add(_textConsole);
-            Global.CurrentScreen.Children.Add(this);
+            GameHost.Instance.Screen.Children.Add(this);
         }
 
-        public void Update()
+        public void Refresh()
         {
-            Clear();
+            Surface.Clear();
             this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
-            Print(3, 0, Strings.Interaction, Color.Orange);
+            Surface.Print(3, 0, Strings.Interaction, Color.Orange);
 
             if (!string.IsNullOrWhiteSpace(_currentMessage?.Invoke()))
                 PrintMessage(_currentMessage);

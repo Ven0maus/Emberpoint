@@ -1,8 +1,8 @@
 ﻿using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Dialogs;
 using Emberpoint.Core.GameObjects.Interfaces;
-using Microsoft.Xna.Framework;
 using SadConsole;
+using SadRogue.Primitives;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,20 +35,20 @@ namespace Emberpoint.Core.UserInterface.Windows
             Position = new Point(5, Constants.GameWindowHeight - 7);
 
             Children.Add(_textConsole);
-            Global.CurrentScreen.Children.Add(this);
+            GameHost.Instance.Screen.Children.Add(this);
         }
 
-        public void Update()
+        public void Refresh()
         {
             // Re-draw current dialog
             if (_displayedDialog != null)
             {
-                Clear();
+                Surface.Clear();
                 this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
                 Position = new Point(5, Constants.GameWindowHeight - 7);
 
                 _textConsole.Clear();
-                Print(3, 0, _displayedDialog.Title, Color.Orange);
+                Surface.Print(3, 0, _displayedDialog.Title, Color.Orange);
                 _textConsole.Clear();
                 _textConsole.Cursor.Position = new Point(0, 0);
                 foreach (var line in _displayedDialog.Content.Take(4))
@@ -92,7 +92,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             var dialog = _queuedDialogs.Dequeue();
             _displayedDialog = dialog;
 
-            Update();
+            Refresh();
             IsVisible = true;
         }
     }

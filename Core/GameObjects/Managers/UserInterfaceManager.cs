@@ -1,5 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.UserInterface.Windows;
+using SadConsole.UI.Controls;
+using SadConsole.UI.Themes;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +16,9 @@ namespace Emberpoint.Core.GameObjects.Managers
 
         public static void Initialize()
         {
+            // Set default control theme for buttons
+            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
+
             // Initialize all game window interfaces
             var interfaces = new IUserInterface[]
             {

@@ -1,9 +1,9 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
-using Microsoft.Xna.Framework;
 using SadConsole;
-using SadConsole.Controls;
-using SadConsole.Themes;
+using SadConsole.UI;
+using SadConsole.UI.Controls;
+using SadRogue.Primitives;
 using System;
 using Console = SadConsole.Console;
 
@@ -13,36 +13,22 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         public GameOverWindow(int width, int height) : base(width, height)
         {
-            var colors = Colors.CreateDefault();
-            colors.ControlBack = Color.Black;
-            colors.Text = Color.White;
-            colors.TitleText = Color.White;
-            colors.ControlHostBack = Color.White;
-            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
-            colors.RebuildAppearances();
-
-            // Set the new theme colors         
-            ThemeColors = colors;
+            DefaultBackground = Color.Black;
+            DefaultForeground = Color.White;
 
             IsVisible = false;
 
-            Global.CurrentScreen.Children.Add(this);
-
-            InitializeButtons();
-        }
-
-        public void Update()
-        {
-            Invalidate();
-            RemoveAll();
-            InitializeButtons();
-        }
-
-        protected override void OnInvalidate()
-        {
-            base.OnInvalidate();
+            GameHost.Instance.Screen.Children.Add(this);
 
             DrawGameOverTitle();
+            InitializeButtons();
+        }
+
+        public void Refresh()
+        {
+            DrawGameOverTitle();
+            Controls.Clear();
+            InitializeButtons();
         }
 
         public Console Console => this;
@@ -76,7 +62,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 UseKeyboard = false
             };
             returnToMainMenuButton.Click += ButtonPressToMainMenu;
-            Add(returnToMainMenuButton);
+            Controls.Add(returnToMainMenuButton);
 
             var exitGameButton = new Button(26, 3)
             {
@@ -86,7 +72,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 UseKeyboard = false
             };
             exitGameButton.Click += ButtonPressExitGame;
-            Add(exitGameButton);
+            Controls.Add(exitGameButton);
         }
 
         private void ButtonPressExitGame(object sender, EventArgs e)
@@ -119,8 +105,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Print title fragments
             for (var y = 0; y < titleFragments.Length; y++)
             for (var x = 0; x < titleFragments[y].Length; x++)
-                Print(startPosX + x, startPosY + y,
-                    new ColoredGlyph(titleFragments[y][x], Color.White, Color.Transparent));
+                Surface.SetGlyph(startPosX + x, startPosY + y, titleFragments[y][x], Color.White, Color.Transparent);
         }
     }
 }

@@ -2,8 +2,8 @@
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Map;
-using Microsoft.Xna.Framework;
 using SadConsole.Entities;
+using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,8 +1,8 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
-using GoRogue;
-using Microsoft.Xna.Framework;
+using GoRogue.FOV;
 using NUnit.Framework;
+using SadRogue.Primitives;
 using System.Linq;
 using Tests.TestObjects.Blueprints;
 using Tests.TestObjects.Entities;
@@ -77,14 +77,14 @@ namespace Tests
         {
             var cell = SetLightCell(10, 10, 4);
 
-            var fov = new FOV(_grid.FieldOfView);
+            var fov = new RecursiveShadowcastingFOV(_grid.FieldOfView);
             fov.Calculate(cell.Position, cell.LightProperties.LightRadius);
 
             for (int x=0; x < _grid.GridSizeX; x++)
             {
                 for (int y = 0; y < _grid.GridSizeY; y++)
                 {
-                    if (fov.BooleanFOV[x,y])
+                    if (fov.BooleanResultView[x,y])
                     {
                         Assert.IsTrue(_grid.GetCell(x, y).LightProperties.Brightness > 0f);
                     }
@@ -98,14 +98,14 @@ namespace Tests
             SetLightCell(10, 10, 4);
             UnsetLightCell(10, 10);
 
-            var fov = new FOV(_grid.FieldOfView);
+            var fov = new RecursiveShadowcastingFOV(_grid.FieldOfView);
             fov.Calculate(new Point(10, 10), 4);
 
             for (int x = 0; x < _grid.GridSizeX; x++)
             {
                 for (int y = 0; y < _grid.GridSizeY; y++)
                 {
-                    if (fov.BooleanFOV[x, y])
+                    if (fov.BooleanResultView[x, y])
                     {
                         Assert.IsTrue(_grid.GetCell(x, y).LightProperties.Brightness == 0f);
                     }
@@ -120,14 +120,14 @@ namespace Tests
 
             foreach (var cell in cells)
             {
-                var fov = new FOV(_grid.FieldOfView);
+                var fov = new RecursiveShadowcastingFOV(_grid.FieldOfView);
                 fov.Calculate(cell.Position, cell.LightProperties.LightRadius);
 
                 for (int x = 0; x < _grid.GridSizeX; x++)
                 {
                     for (int y = 0; y < _grid.GridSizeY; y++)
                     {
-                        if (fov.BooleanFOV[x, y])
+                        if (fov.BooleanResultView[x, y])
                         {
                             Assert.IsTrue(_grid.GetCell(x, y).LightProperties.Brightness > 0f);
                         }
@@ -149,14 +149,14 @@ namespace Tests
 
             for (int i=0; i < positions.Length; i++)
             {
-                var fov = new FOV(_grid.FieldOfView);
+                var fov = new RecursiveShadowcastingFOV(_grid.FieldOfView);
                 fov.Calculate(positions[i], radiuses[i]);
 
                 for (int x = 0; x < _grid.GridSizeX; x++)
                 {
                     for (int y = 0; y < _grid.GridSizeY; y++)
                     {
-                        if (fov.BooleanFOV[x, y])
+                        if (fov.BooleanResultView[x, y])
                         {
                             Assert.IsTrue(_grid.GetCell(x, y).LightProperties.Brightness == 0f);
                         }
@@ -173,14 +173,14 @@ namespace Tests
 
             foreach (var cell in setCells.Except(unsetCells))
             {
-                var fov = new FOV(_grid.FieldOfView);
+                var fov = new RecursiveShadowcastingFOV(_grid.FieldOfView);
                 fov.Calculate(cell.Position, cell.LightProperties.LightRadius);
 
                 for (int x = 0; x < _grid.GridSizeX; x++)
                 {
                     for (int y = 0; y < _grid.GridSizeY; y++)
                     {
-                        if (fov.BooleanFOV[x, y])
+                        if (fov.BooleanResultView[x, y])
                         {
                             Assert.IsTrue(_grid.GetCell(x, y).LightProperties.Brightness > 0f);
                         }
@@ -189,7 +189,7 @@ namespace Tests
             }
 
             // Check unset cell for light sources = null has 0 brightness
-            var fov2 = new FOV(_grid.FieldOfView);
+            var fov2 = new RecursiveShadowcastingFOV(_grid.FieldOfView);
             fov2.Calculate(unsetCells[0].Position, unsetCells[0].LightProperties.LightRadius);
 
             bool someCellsAreUnset = false;
@@ -197,7 +197,7 @@ namespace Tests
             {
                 for (int y = 0; y < _grid.GridSizeY; y++)
                 {
-                    if (fov2.BooleanFOV[x, y])
+                    if (fov2.BooleanResultView[x, y])
                     {
                         var value = _grid.GetCell(x, y);
                         if (value.LightProperties.LightSources == null && !value.LightProperties.EmitsLight)

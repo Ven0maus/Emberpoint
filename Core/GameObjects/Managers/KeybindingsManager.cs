@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using SadConsole.Input;
 using System.Collections.Generic;
 using System.Linq;
 

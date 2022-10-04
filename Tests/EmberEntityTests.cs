@@ -1,7 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using SadRogue.Primitives;
 using Tests.TestObjects.Blueprints;
 using Tests.TestObjects.Entities;
 using Tests.TestObjects.Grids;
@@ -122,14 +122,14 @@ namespace Tests
             entity.FieldOfViewRadius = 5;
             entity.FieldOfView.Calculate(entity.Position, entity.FieldOfViewRadius);
 
-            Assert.IsTrue(entity.FieldOfView.BooleanFOV[3,0]);
-            Assert.IsFalse(entity.FieldOfView.BooleanFOV[6, 0]);
+            Assert.IsTrue(entity.FieldOfView.BooleanResultView[3,0]);
+            Assert.IsFalse(entity.FieldOfView.BooleanResultView[6, 0]);
 
             var cell = _grid.GetCell(2, 0);
             cell.CellProperties.BlocksFov = true;
             _grid.SetCell(cell, true);
 
-            Assert.IsFalse(entity.FieldOfView.BooleanFOV[3, 0]);
+            Assert.IsFalse(entity.FieldOfView.BooleanResultView[3, 0]);
         }
 
         [Test]

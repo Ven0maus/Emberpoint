@@ -1,7 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Managers;
-using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using SadRogue.Primitives;
 using System.Collections.Generic;
 using System.Linq;
 using Tests.TestObjects.Blueprints;

@@ -3,9 +3,9 @@ using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Input;
+using SadRogue.Primitives;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
@@ -19,7 +19,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public WorldmapWindow(int width, int height) : base(width+2, height+2)
         {
             Position = new Point(4, 2);
-            Global.CurrentScreen.Children.Add(this);
+            GameHost.Instance.Screen.Children.Add(this);
         }
 
         public override bool ProcessKeyboard(Keyboard info)
@@ -38,12 +38,12 @@ namespace Emberpoint.Core.UserInterface.Windows
             IsVisible = false;
         }
 
-        public void Update()
+        public void Refresh()
         {
-            Clear();
+            Surface.Clear();
             this.ColorFill(Color.Black);
             this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
-            Print((Width / 2) - (Strings.Map.Length / 2), 0, Strings.Map, Color.Orange);
+            Surface.Print((Width / 2) - (Strings.Map.Length / 2), 0, Strings.Map, Color.Orange);
 
             if (GridManager.Grid != null)
                 DrawMap();
@@ -64,7 +64,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 for (int y=1; y < Height-1; y++)
                 {
-                    Print(x, y, new ColoredGlyph(0, darkGray, darkGray));
+                    Surface.SetGlyph(x, y, 0, darkGray, darkGray);
                 }
             }
 
@@ -72,23 +72,22 @@ namespace Emberpoint.Core.UserInterface.Windows
             var exploredCells = GridManager.Grid.GetCells(a => a.CellProperties.IsExplored || IsBorderCell(a));
             foreach (var cell in exploredCells)
             {
-                Print(cell.Position.X + 1, cell.Position.Y + 1,
-                    new ColoredGlyph(cell.Glyph, cell.CellProperties.NormalForeground,
-                    cell.CellProperties.NormalBackground));
+                Surface.SetGlyph(cell.Position.X + 1, cell.Position.Y + 1, cell.Glyph, 
+                    cell.CellProperties.NormalForeground, cell.CellProperties.NormalBackground);
             }
 
             // Draw player
             if (Game.Player != null)
             {
-                Print(Game.Player.Position.X + 1, Game.Player.Position.Y + 1, new ColoredGlyph(Game.Player.Glyph, Game.Player.Animation.CurrentFrame[0].Foreground,
-                        Game.Player.Animation.CurrentFrame[0].Background));
+                Surface.SetGlyph(Game.Player.Position.X + 1, Game.Player.Position.Y + 1, Game.Player.Glyph, 
+                    Game.Player.Appearance.Foreground, Game.Player.Appearance.Background);
             }
         }
 
         public void Show()
         {
             Game.Player.MapWindow.IsVisible = false;
-            Update();
+            Refresh();
             IsFocused = true;
             Game.Player.IsFocused = false;
             IsVisible = true;

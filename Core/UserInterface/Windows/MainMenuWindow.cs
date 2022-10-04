@@ -3,10 +3,10 @@ using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
 using SadConsole;
-using SadConsole.Controls;
-using SadConsole.Themes;
+using SadConsole.UI;
+using SadConsole.UI.Controls;
+using SadRogue.Primitives;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -28,34 +28,21 @@ namespace Emberpoint.Core.UserInterface.Windows
         public MainMenuWindow(int width, int height) : base(width, height)
         {
             // Set the XNA container's title
-            SadConsole.Game.Instance.Window.Title = Resources.Strings.GameTitle;
+            Settings.WindowTitle = Strings.GameTitle;
 
-            var colors = Colors.CreateDefault();
-            colors.ControlBack = Color.Black;
-            colors.Text = Color.White;
-            colors.TitleText = Color.White;
-            colors.ControlHostBack = Color.White;
-            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
-            colors.RebuildAppearances();
-
-            // Set the new theme colors         
-            ThemeColors = colors;
+            DefaultBackground = Color.Black;
+            DefaultForeground = Color.White;
 
             // Add it to the children of the main console
-            Global.CurrentScreen.Children.Add(this);
+            GameHost.Instance.Screen.Children.Add(this);
+
+            Refresh();
         }
 
-        public void Update()
+        public void Refresh()
         {
-            RemoveAll();
+            Controls.Clear();
             InitializeButtons();
-            Invalidate();
-        }
-
-        protected override void OnInvalidate()
-        {
-            base.OnInvalidate();
-
             DrawGameTitle();
         }
 
@@ -81,7 +68,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 for (int x = 0; x < titleFragments[y].Length; x++)
                 {
-                    Print(startPosX + x, startPosY + y, new ColoredGlyph(titleFragments[y][x], Color.White, Color.Transparent));
+                    Surface.SetGlyph(startPosX + x, startPosY + y, titleFragments[y][x], Color.White, Color.Transparent);
                 }
             }
         }
@@ -96,7 +83,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 UseKeyboard = false,
             };
             playButton.Click += ButtonPressPlay;
-            Add(playButton);
+            Controls.Add(playButton);
 
             var contributorsButton = new Button(20, 3)
             {
@@ -106,7 +93,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 UseKeyboard = false,
             };
             contributorsButton.Click += ButtonPressContributors;
-            Add(contributorsButton);
+            Controls.Add(contributorsButton);
 
             var keybindingsButton = new Button(20, 3)
             {
@@ -116,7 +103,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 UseKeyboard = false,
             };
             keybindingsButton.Click += ButtonPressKeybindings;
-            Add(keybindingsButton);
+            Controls.Add(keybindingsButton);
 
             var settingsButton = new Button(20, 3)
             {
@@ -126,7 +113,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 UseKeyboard = false,
             };
             settingsButton.Click += ButtonPressSettings;
-            Add(settingsButton);
+            Controls.Add(settingsButton);
 
             var exitButton = new Button(20, 3)
             {
@@ -136,7 +123,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 UseKeyboard = false,
             };
             exitButton.Click += ButtonPressExit;
-            Add(exitButton);
+            Controls.Add(exitButton);
         }
 
         public static MainMenuWindow Show()
@@ -155,9 +142,9 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 mainMenu.IsVisible = true;
                 mainMenu.IsFocused = true;
-                mainMenu.IsCursorDisabled = false;
+                mainMenu.Cursor.IsEnabled = false;
             }
-            Global.CurrentScreen = mainMenu;
+            GameHost.Instance.Screen = mainMenu;
             Game.Reset();
             return mainMenu;
         }
@@ -172,9 +159,9 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             mainMenu.IsVisible = false;
             mainMenu.IsFocused = false;
-            mainMenu.IsCursorDisabled = true;
+            mainMenu.Cursor.IsEnabled = true;
 
-            Global.CurrentScreen = transitionConsole;
+            GameHost.Instance.Screen = transitionConsole;
         }
 
         public static void Transition(SadConsole.Console transitionConsole)

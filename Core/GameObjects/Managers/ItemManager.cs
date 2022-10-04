@@ -1,5 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
-using Microsoft.Xna.Framework;
+using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;

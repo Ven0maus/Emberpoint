@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using SadConsole;
+﻿using SadConsole;
+using SadRogue.Primitives;
 
 namespace Emberpoint.Core.Extensions
 {
@@ -39,7 +39,7 @@ namespace Emberpoint.Core.Extensions
             {
                 for (int y = 0; y < currentWindow.Height; y++)
                 {
-                    currentWindow.Print(x, y, new ColoredGlyph(0, color, color));
+                    currentWindow.SetGlyph(x, y, 0, color, color);
                 }
             }
         }

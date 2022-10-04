@@ -2,10 +2,11 @@
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
-using GoRogue;
-using Microsoft.Xna.Framework;
+using GoRogue.FOV;
+using SadConsole;
+using SadConsole.Entities;
+using SadRogue.Primitives;
 using System;
-using static SadConsole.Entities.Entity;
 
 namespace Tests.TestObjects.Entities
 {
@@ -22,7 +23,7 @@ namespace Tests.TestObjects.Entities
             {
                 if (value.X != _position.X || value.Y != _position.Y)
                 {
-                    Moved?.Invoke(this, new SadConsole.Entities.Entity.EntityMovedEventArgs(null, _position));
+                    Moved?.Invoke(this, new ValueChangedEventArgs<Point>(_position, value));
                 }
                 _position = value;
             }
@@ -30,14 +31,14 @@ namespace Tests.TestObjects.Entities
 
         public Direction Facing { get; private set; }
 
-        public EventHandler<EntityMovedEventArgs> Moved;
+        public EventHandler<ValueChangedEventArgs<Point>> Moved;
 
         public int FieldOfViewRadius { get; set; } = 0;
 
-        private FOV _fieldOfView;
-        public FOV FieldOfView
+        private IFOV _fieldOfView;
+        public IFOV FieldOfView
         {
-            get => _fieldOfView ??= new FOV(_grid.FieldOfView);
+            get => _fieldOfView ??= new RecursiveShadowcastingFOV(_grid.FieldOfView);
         }
 
         public int ObjectId { get; }
@@ -56,7 +57,7 @@ namespace Tests.TestObjects.Entities
 
         public int Glyph => throw new NotImplementedException();
 
-        public SadConsole.Console RenderConsole => throw new NotImplementedException("Unit tests do not use XNA consoles.");
+        public Renderer RenderConsole => throw new NotImplementedException("Unit tests do not use XNA consoles.");
 
         public int CurrentBlueprintId { get; private set; }
         public bool IsVisible { get; set; } = true;
@@ -70,7 +71,7 @@ namespace Tests.TestObjects.Entities
             CurrentBlueprintId = GridManager.ActiveBlueprint == null ? -1 : GridManager.ActiveBlueprint.ObjectId;
             Moved += OnMove;
             MaxHealth = 100; // Default stats
-            Facing = Direction.DOWN;
+            Facing = Direction.Down;
         }
 
         public BaseEntity(EmberGrid grid)
@@ -80,7 +81,7 @@ namespace Tests.TestObjects.Entities
             CurrentBlueprintId = grid.Blueprint == null ? -1 : grid.Blueprint.ObjectId;
             Moved += OnMove;
             MaxHealth = 100; // Default stats
-            Facing = Direction.DOWN;
+            Facing = Direction.Down;
         }
 
         public void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
@@ -104,7 +105,7 @@ namespace Tests.TestObjects.Entities
             _grid = grid;
         }
 
-        private void OnMove(object sender, EntityMovedEventArgs args)
+        private void OnMove(object sender, ValueChangedEventArgs<Point> args)
         {
             if (_grid != null)
             {
@@ -116,10 +117,10 @@ namespace Tests.TestObjects.Entities
             }
         }
 
-        private void ExecuteMovementEffects(EntityMovedEventArgs args)
+        private void ExecuteMovementEffects(ValueChangedEventArgs<Point> args)
         {
             // Check if we moved
-            if (args.FromPosition != Position)
+            if (args.OldValue != Position && args.NewValue == Position)
             {
                 var cell = _grid.GetCell(Position);
                 if (cell.EffectProperties.EntityMovementEffects != null)
@@ -138,7 +139,7 @@ namespace Tests.TestObjects.Entities
             return _grid.InBounds(position) && _grid.GetCell(position).CellProperties.Walkable && !EntityManager.EntityExistsAt(position, CurrentBlueprintId);
         }
 
-        public void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true)
+        public void MoveTowards(Point position, bool checkCanMove = true, Direction? direction = null, bool triggerMovementEffects = true)
         {
             if (Health == 0) return;
 
@@ -152,7 +153,7 @@ namespace Tests.TestObjects.Entities
 
             if (prevPos != position)
             {
-                var args = new EntityMovedEventArgs(null, prevPos);
+                var args = new ValueChangedEventArgs<Point>(prevPos, position);
                 Moved.Invoke(this, args);
 
                 if (triggerMovementEffects)
@@ -169,21 +170,21 @@ namespace Tests.TestObjects.Entities
             MoveTowards(pos += position, checkCanMove);
         }
 
-        private void SetFacingDirection(Point newPosition, Direction direction)
+        private void SetFacingDirection(Point newPosition, Direction? direction)
         {
             // Set facing direction
             var prevPos = Position;
             var difference = newPosition - prevPos;
             if (difference.X == 1 && difference.Y == 0)
-                Facing = Direction.RIGHT;
+                Facing = Direction.Right;
             else if (difference.X == -1 && difference.Y == 0)
-                Facing = Direction.LEFT;
+                Facing = Direction.Left;
             else if (difference.X == 0 && difference.Y == 1)
-                Facing = Direction.DOWN;
+                Facing = Direction.Down;
             else if (difference.X == 0 && difference.Y == -1)
-                Facing = Direction.UP;
+                Facing = Direction.Up;
             else
-                Facing = direction ?? Direction.DOWN;
+                Facing = direction ?? Direction.Down;
         }
 
         public void ResetFieldOfView()
@@ -242,7 +243,7 @@ namespace Tests.TestObjects.Entities
             }
         }
 
-        public void RenderObject(SadConsole.Console console)
+        public void RenderObject(Renderer console)
         {
             throw new NotImplementedException();
         }

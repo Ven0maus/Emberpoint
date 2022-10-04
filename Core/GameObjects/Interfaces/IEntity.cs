@@ -1,22 +1,22 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Map;
-using GoRogue;
-using Microsoft.Xna.Framework;
-using SadConsole;
+using GoRogue.FOV;
+using SadConsole.Entities;
+using SadRogue.Primitives;
 
 namespace Emberpoint.Core.GameObjects.Interfaces
 {
-    public interface IEntity : IRenderable, IEntityBaseStats
+    public interface IEntity : IRenderable<Renderer>, IEntityBaseStats
     {
-        Console RenderConsole { get; }
+        Renderer RenderConsole { get; }
         int ObjectId { get; }
         int CurrentBlueprintId { get; }
-        FOV FieldOfView { get; }
+        IFOV FieldOfView { get; }
         int FieldOfViewRadius { get; set; }
         Point Position { get; set; }
         int Glyph { get; }
         void ResetFieldOfView();
-        void MoveTowards(Point position, bool checkCanMove = true, Direction direction = null, bool triggerMovementEffects = true);
+        void MoveTowards(Point position, bool checkCanMove = true, Direction? direction = null, bool triggerMovementEffects = true);
         void MoveToBlueprint(int blueprintId);
         void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new();
         bool CanMoveTowards(Point position);

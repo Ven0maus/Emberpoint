@@ -1,15 +1,15 @@
 ﻿using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
-using Microsoft.Xna.Framework;
 using SadConsole;
+using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Emberpoint.Core.GameObjects.Map
 {
-    public class EmberCell : Cell, ILightable, IEquatable<EmberCell>
+    public class EmberCell : ColoredGlyph, ILightable, IEquatable<EmberCell>
     {
         public EmberCellProperties CellProperties { get; set; }
         public LightEngineProperties LightProperties { get; set; }
@@ -51,7 +51,7 @@ namespace Emberpoint.Core.GameObjects.Map
                 BlocksFov = false,
                 IsExplored = false
             };
-
+            
             Position = position;
             Glyph = glyph;
             Foreground = foreground;
@@ -208,6 +208,8 @@ namespace Emberpoint.Core.GameObjects.Map
             sb.AppendLine($"<Position>: [X] {Position.X} [Y] {Position.Y}");
             sb.AppendLine();
             sb.AppendLine($"<Glyph>: {Glyph}");
+            sb.AppendLine($"<Foreground>: {Foreground}");
+            sb.AppendLine($"<Background>: {Background}");
             sb.AppendLine("[CellProperties]");
             sb.AppendLine($"<Name>: {CellProperties.Name}");
             sb.AppendLine($"<Walkable>: {CellProperties.Walkable}");

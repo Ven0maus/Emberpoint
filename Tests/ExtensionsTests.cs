@@ -1,6 +1,6 @@
 ﻿using Emberpoint.Core.Extensions;
-using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using SadRogue.Primitives;
 using System;
 
 namespace Tests

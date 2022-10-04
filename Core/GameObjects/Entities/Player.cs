@@ -2,10 +2,9 @@
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
-using GoRogue;
-using Microsoft.Xna.Framework;
-using SadConsole.Components;
+using SadConsole;
 using SadConsole.Input;
+using SadRogue.Primitives;
 using System.Collections.Generic;
 
 namespace Emberpoint.Core.GameObjects.Entities
@@ -34,10 +33,9 @@ namespace Emberpoint.Core.GameObjects.Entities
             _fovObjectsWindow = UserInterfaceManager.Get<FovWindow>();
             _worldMap = UserInterfaceManager.Get<WorldmapWindow>();
             _devWindow = UserInterfaceManager.Get<DeveloperWindow>();
-            Components.Add(new EntityViewSyncComponent());
         }
 
-        public override void OnMove(object sender, EntityMovedEventArgs args)
+        public override void OnMove(object sender, ValueChangedEventArgs<Point> args)
         {
             // Handles flashlight lights
             GridManager.Grid.LightEngine.HandleFlashlight(this);
@@ -95,7 +93,7 @@ namespace Emberpoint.Core.GameObjects.Entities
             }
 
             // Handle dialog window
-            if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
+            if (info.IsKeyPressed(Keys.Enter))
             {
                 if (!_devWindow.IsVisible)
                 {
@@ -133,7 +131,7 @@ namespace Emberpoint.Core.GameObjects.Entities
             if (addRenderObject)
             {
                 // Draw player on the map
-                RenderObject(MapWindow);
+                RenderObject(MapWindow.EntityRenderer);
             }
 
             // Make sure we check for input
@@ -152,10 +150,10 @@ namespace Emberpoint.Core.GameObjects.Entities
         private readonly Dictionary<Keybindings, Direction> _playerMovements =
         new Dictionary<Keybindings, Direction>
         {
-            {Keybindings.Movement_Up, Direction.UP},
-            {Keybindings.Movement_Down, Direction.DOWN},
-            {Keybindings.Movement_Left, Direction.LEFT},
-            {Keybindings.Movement_Right, Direction.RIGHT}
+            {Keybindings.Movement_Up, Direction.Up},
+            {Keybindings.Movement_Down, Direction.Down},
+            {Keybindings.Movement_Left, Direction.Left},
+            {Keybindings.Movement_Right, Direction.Right}
         };
     }
 }

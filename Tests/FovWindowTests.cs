@@ -1,8 +1,8 @@
 ﻿using Emberpoint.Core;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;

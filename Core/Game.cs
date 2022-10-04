@@ -2,8 +2,8 @@
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
-using Microsoft.Xna.Framework;
 using SadConsole;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -23,22 +23,22 @@ namespace Emberpoint.Core
             SadConsole.Game.Create(Constants.GameWindowWidth, Constants.GameWindowHeight);
 
             // Hook the start event so we can add consoles to the system.
-            SadConsole.Game.OnInitialize = Init;
+            GameHost.Instance.OnStart = Init;
             // Hook the update event so we can check for key presses.
-            SadConsole.Game.OnUpdate = Update;
+            GameHost.Instance.FrameUpdate += UpdateFrame;
 
             // Start the game.
-            SadConsole.Game.Instance.Run();
-            SadConsole.Game.Instance.Dispose();
+            GameHost.Instance.Run();
+            GameHost.Instance.Dispose();
         }
 
-        private static void Update(GameTime gameTime)
+        private static void UpdateFrame(object sender, GameHost e)
         {
             if (_mainMenuWindow?.KeybindingsWindow != null && _mainMenuWindow.KeybindingsWindow.WaitingForAnyKeyPress)
             {
-                if (Global.KeyboardState.KeysPressed.Any())
+                if (GameHost.Instance.Keyboard.KeysPressed.Any())
                 {
-                    _mainMenuWindow.KeybindingsWindow.ChangeKeybinding(Global.KeyboardState.KeysPressed.First().Key);
+                    _mainMenuWindow.KeybindingsWindow.ChangeKeybinding(GameHost.Instance.Keyboard.KeysPressed.First().Key);
                 }
             }
         }
@@ -72,6 +72,9 @@ namespace Emberpoint.Core
 
             // Makes buttons look better
             Settings.UseDefaultExtendedFont = true;
+            Settings.AllowWindowResize = true;
+            // It's ugly, but it's the best
+            Settings.ResizeMode = Settings.WindowResizeOptions.Stretch;
 
             // Shows the main menu
             _mainMenuWindow = MainMenuWindow.Show();

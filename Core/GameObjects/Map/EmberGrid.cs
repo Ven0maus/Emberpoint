@@ -2,8 +2,9 @@
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
-using GoRogue.MapViews;
-using Microsoft.Xna.Framework;
+using SadConsole;
+using SadRogue.Primitives;
+using SadRogue.Primitives.GridViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +12,17 @@ using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.GameObjects.Map
 {
-    public class EmberGrid : IRenderable
+    public class EmberGrid : IRenderable<Console>
     {
         protected EmberCell[] Cells { get; }
 
-        private ArrayMap<bool> _fieldOfView;
-        public ArrayMap<bool> FieldOfView
+        private ArrayView<bool> _fieldOfView;
+        public ArrayView<bool> FieldOfView
         {
             get
             {
                 if (_fieldOfView != null) return _fieldOfView;
-                _fieldOfView = new ArrayMap<bool>(GridSizeX, GridSizeY);
+                _fieldOfView = new ArrayView<bool>(GridSizeX, GridSizeY);
                 for (int x = 0; x < GridSizeX; x++)
                 {
                     for (int y = 0; y < GridSizeY; y++)
@@ -180,7 +181,8 @@ namespace Emberpoint.Core.GameObjects.Map
         public void RenderObject(Console console)
         {
             _renderedConsole = console;
-            console.SetSurface(Cells, GridSizeX, GridSizeY);
+            console.Surface = new CellSurface(console.ViewWidth, console.ViewHeight, GridSizeX, GridSizeY, Cells);
+            console.IsDirty = true;
         }
 
         /// <summary>
@@ -217,7 +219,7 @@ namespace Emberpoint.Core.GameObjects.Map
                 for (int y = 0; y < GridSizeY; y++)
                 {
                     var cell = GetNonClonedCell(x, y);
-                    if (entity.FieldOfView.BooleanFOV[x, y])
+                    if (entity.FieldOfView.BooleanResultView[x, y])
                         cells.Add(cell);
                 }
             }
@@ -285,7 +287,7 @@ namespace Emberpoint.Core.GameObjects.Map
 
                     if (discoverUnexploredTiles && !cell.CellProperties.IsExplored)
                     {
-                        if (entity.FieldOfView.BooleanFOV[x, y])
+                        if (entity.FieldOfView.BooleanResultView[x, y])
                         {
                             cell.CellProperties.IsExplored = true;
                         }
@@ -308,7 +310,7 @@ namespace Emberpoint.Core.GameObjects.Map
             // Redraw the map
             if (Map != null)
             {
-                Map.Update();
+                Map.Refresh();
             }
         }
 

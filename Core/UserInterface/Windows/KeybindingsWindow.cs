@@ -1,11 +1,11 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using SadConsole;
-using SadConsole.Controls;
-using SadConsole.Themes;
+using SadConsole.Input;
+using SadConsole.UI;
+using SadConsole.UI.Controls;
+using SadRogue.Primitives;
 using System;
 using System.Linq;
 using Console = SadConsole.Console;
@@ -18,26 +18,20 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public KeybindingsWindow(int width, int height) : base(width, height)
         {
-            // Set custom theme
-            var colors = Colors.CreateDefault();
-            colors.ControlBack = Color.Black;
-            colors.Text = Color.White;
-            colors.TitleText = Color.White;
-            colors.ControlHostBack = Color.White;
-            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
-            colors.RebuildAppearances();
-
-            // Set the new theme colors         
-            ThemeColors = colors;
+            DefaultBackground = Color.Black;
+            DefaultForeground = Color.White;
 
             InitializeButtons();
+            DrawWindowTitle();
+            DrawButtonNames();
         }
 
-        public void Update()
+        public void Refresh()
         {
-            RemoveAll();
+            Controls.Clear();
             InitializeButtons();
-            Invalidate();
+            DrawWindowTitle();
+            DrawButtonNames();
         }
 
         private void InitializeButtons()
@@ -58,15 +52,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 IsVisible = false;
                 MainMenuWindow.Show();
             };
-            Add(backButton);
-        }
-
-        protected override void OnInvalidate()
-        {
-            base.OnInvalidate();
-
-            DrawWindowTitle();
-            DrawButtonNames();
+            Controls.Add(backButton);
         }
 
         private void DrawWindowTitle()
@@ -92,7 +78,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 {
                     if (startPosX + x >= Constants.GameWindowWidth ||
                         startPosY + y >= Constants.GameWindowHeight) continue;
-                    Print(startPosX + x, startPosY + y, new ColoredGlyph(titleFragments[y][x], Color.White, Color.Transparent));
+                    Surface.SetGlyph(startPosX + x, startPosY + y, titleFragments[y][x], Color.White, Color.Transparent);
                 }
             }
         }
@@ -107,7 +93,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             {
                 if (keybindings.Contains(button.Name))
                 {
-                    Print(button.Position.X + 12, button.Position.Y + 1, button.Name.Replace("_", " "), Color.White);
+                    Surface.Print(button.Position.X + 12, button.Position.Y + 1, button.Name.Replace("_", " "), Color.White);
                 }
             }
         }
@@ -148,7 +134,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
                 // Add key re-arrange method
                 button.Click += TriggerKeybindingChangeCheck;
-                Add(button);
+                Controls.Add(button);
                 row += 3;
                 total++;
             }

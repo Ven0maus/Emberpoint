@@ -3,8 +3,8 @@ using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
 using SadConsole;
+using SadRogue.Primitives;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,7 +25,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public InventoryWindow(int width, int height) : base(width, height)
         {
             this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
-            Print(3, 0, Strings.Inventory, Color.Orange);
+            Surface.Print(3, 0, Strings.Inventory, Color.Orange);
 
             _inventory = new List<IItem>();
             _maxLineRows = Height - 2;
@@ -37,14 +37,14 @@ namespace Emberpoint.Core.UserInterface.Windows
             Position = new Point(Constants.Map.Width + 7, 1);
 
             Children.Add(_textConsole);
-            Global.CurrentScreen.Children.Add(this);
+            GameHost.Instance.Screen.Children.Add(this);
         }
 
-        public void Update()
+        public void Refresh()
         {
-            Clear();
+            Surface.Clear();
             this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
-            Print(3, 0, Strings.Inventory, Color.Orange);
+            Surface.Print(3, 0, Strings.Inventory, Color.Orange);
             UpdateInventoryText();
         }
 

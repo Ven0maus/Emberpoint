@@ -1,10 +1,10 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
-using Microsoft.Xna.Framework;
 using SadConsole;
-using SadConsole.Controls;
-using SadConsole.Themes;
+using SadConsole.UI;
+using SadConsole.UI.Controls;
+using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,34 +18,17 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public SettingsWindow(int width, int height) : base(width, height)
         {
-            // Set custom theme
-            var colors = Colors.CreateDefault();
-            colors.ControlBack = Color.Black;
-            colors.Text = Color.White;
-            colors.TitleText = Color.White;
-            colors.ControlHostBack = Color.White;
-            Library.Default.SetControlTheme(typeof(Button), new ButtonLinesTheme());
-            colors.RebuildAppearances();
+            DefaultBackground = Color.Black;
+            DefaultForeground = Color.White;
 
-            // Set the new theme colors         
-            ThemeColors = colors;
-
-            InitializeButtons();
-            InitializeSettings();
+            Refresh();
         }
 
-        public void Update()
+        public void Refresh()
         {
-            RemoveAll();
+            Controls.Clear();
             InitializeButtons();
             InitializeSettings();
-            Invalidate();
-        }
-
-        protected override void OnInvalidate()
-        {
-            base.OnInvalidate();
-
             DrawWindowTitle();
             DrawButtonTitles();
         }
@@ -74,7 +57,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 };
 
                 button.Click += setting.Value.Item1;
-                Add(button);
+                Controls.Add(button);
                 row += 3;
             }
         }
@@ -93,7 +76,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             var views = UserInterfaceManager.GetAll<IUserInterface>();
             foreach (var view in views)
-                view.Update();
+                view.Refresh();
         }
 
         private void DrawButtonTitles()
@@ -102,7 +85,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             foreach (var button in buttons)
             {
                 if (string.IsNullOrWhiteSpace(button.Name)) continue;
-                Print(button.Position.X - (button.Name.Length + 1), button.Position.Y + 1, button.Name, Color.White);
+                Surface.Print(button.Position.X - (button.Name.Length + 1), button.Position.Y + 1, button.Name, Color.White);
             }
         }
 
@@ -121,7 +104,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 IsVisible = false;
                 MainMenuWindow.Show();
             };
-            Add(backButton);
+            Controls.Add(backButton);
         }
 
         private void DrawWindowTitle()
@@ -147,7 +130,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 {
                     if (startPosX + x >= Constants.GameWindowWidth ||
                         startPosY + y >= Constants.GameWindowHeight) continue;
-                    Print(startPosX + x, startPosY + y, new ColoredGlyph(titleFragments[y][x], Color.White, Color.Transparent));
+                    Surface.SetGlyph(startPosX + x, startPosY + y, titleFragments[y][x], Color.White, Color.Transparent);
                 }
             }
         }

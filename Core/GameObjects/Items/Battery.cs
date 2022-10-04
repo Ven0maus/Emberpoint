@@ -2,7 +2,7 @@
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
 using Emberpoint.Core.UserInterface.Windows;
-using Microsoft.Xna.Framework;
+using SadRogue.Primitives;
 
 namespace Emberpoint.Core.GameObjects.Items
 {

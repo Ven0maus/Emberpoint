@@ -1,9 +1,9 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
-using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Entities;
+using SadRogue.Primitives;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
@@ -20,23 +20,23 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             get { return _localizedName?.Invoke() ?? GetType().Name; }
             private set { }
         }
-        public int Glyph { get { return Animation.CurrentFrame[0].Glyph; } set { Animation.CurrentFrame[0].Glyph = value; } }
-        public Color GlyphColor { get { return Animation.CurrentFrame[0].Foreground; } set { Animation.CurrentFrame[0].Foreground = value; } }
+        public int Glyph { get { return Appearance.Glyph; } set { Appearance.Glyph = value; } }
+        public Color GlyphColor { get { return Appearance.Foreground; } set { Appearance.Foreground = value; } }
 
         public virtual string DisplayName { get { return string.Format(" {0} : {1} \r\n", Name, Amount); } }
 
         private Console _renderedConsole;
 
-        public EmberItem(int glyph, Color foregroundColor, int width = 1, int height = 1, System.Func<string> name = null) : base(width, height)
+        public EmberItem(int glyph, Color foregroundColor, int zIndex = 0, System.Func<string> name = null) : base(foregroundColor, Color.Transparent, glyph, zIndex)
         {
             ObjectId = ItemManager.GetUniqueId();
             ItemManager.Add(this);
 
             Amount = 1;
             _localizedName = name;
-            Animation.CurrentFrame[0].Foreground = foregroundColor;
-            Animation.CurrentFrame[0].Background = Color.Transparent;
-            Animation.CurrentFrame[0].Glyph = glyph;
+            Appearance.Foreground = foregroundColor;
+            Appearance.Background = Color.Transparent;
+            Appearance.Glyph = glyph;
         }
 
         public void RenderObject(Console console)
