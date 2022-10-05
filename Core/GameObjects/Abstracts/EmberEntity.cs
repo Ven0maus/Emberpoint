@@ -12,7 +12,7 @@ using SadRogue.Primitives;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
-    public abstract class EmberEntity : SadConsole.Entities.Entity, IEntity
+    public abstract class EmberEntity : Entity, IEntity
     {
         public int ObjectId { get; }
         public int FieldOfViewRadius { get; set; }
@@ -100,22 +100,8 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public virtual void OnMove(object sender, ValueChangedEventArgs<Point> args)
         {
-            if (this is IItem) return;
-
             // Re-calculate the field of view
             FieldOfView.Calculate(Position, FieldOfViewRadius);
-
-            // Only update visual for player entity
-            if (this is Player player)
-            {
-                // Center viewpoint on player
-                player.MapWindow.CenterOnEntity(player);
-
-                // Draw unexplored tiles when flashlight is on
-                var flashLight = player.Inventory.GetItemOfType<Flashlight>();
-                bool discoverUnexploredTiles = flashLight != null && flashLight.LightOn;
-                GridManager.Grid.DrawFieldOfView(this, discoverUnexploredTiles);
-            }
         }
 
         public bool GetInteractedCell(out Point cellPosition)

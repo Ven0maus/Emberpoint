@@ -14,6 +14,12 @@ namespace Emberpoint.Core.GameObjects.Map
     {
         private bool _isCalibrated = false;
         private EmberCell _previousFlashlightCellState = null;
+        private readonly RecursiveShadowcastingFOV _fov;
+
+        public LightEngine()
+        {
+            _fov = new RecursiveShadowcastingFOV(GridManager.Grid.FieldOfView);
+        }
 
         /// <summary>
         /// Call this method instead from EmberGrid.CalibrateLightEngine();
@@ -109,15 +115,14 @@ namespace Emberpoint.Core.GameObjects.Map
         {
             if (cell.LightProperties.EmitsLight)
             {
-                var fov = new RecursiveShadowcastingFOV(GridManager.Grid.FieldOfView);
-                fov.Calculate(cell.Position, cell.LightProperties.LightRadius);
+                _fov.Calculate(cell.Position, cell.LightProperties.LightRadius);
                 var toChangeCells = new List<(EmberCell, float)>();
                 for (int x = 0; x < GridManager.Grid.GridSizeX; x++)
                 {
                     for (int y = 0; y < GridManager.Grid.GridSizeY; y++)
                     {
                         // If cell is in the field of view of the object
-                        if (fov.BooleanResultView[x, y])
+                        if (_fov.BooleanResultView[x, y])
                         {
                             var pos = new Point(x, y);
                             var distanceOfCenter = cell.Position.SquaredDistance(pos);

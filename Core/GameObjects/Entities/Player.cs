@@ -43,6 +43,14 @@ namespace Emberpoint.Core.GameObjects.Entities
             // OnMove will redraw fov, and flashlight needs to be handled before that
             base.OnMove(sender, args);
 
+            // Center viewpoint on player
+            MapWindow.CenterOnEntity(this);
+
+            // Draw unexplored tiles when flashlight is on
+            var flashLight = Inventory.GetItemOfType<Flashlight>();
+            bool discoverUnexploredTiles = flashLight != null && flashLight.LightOn;
+            GridManager.Grid.DrawFieldOfView(this, discoverUnexploredTiles);
+
             // Update visible objects in fov window
             _fovObjectsWindow.Update(this);
         }
