@@ -1,6 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.Resources;
 using Emberpoint.Core.UserInterface.Windows;
 using SadConsole;
 using System;
@@ -22,11 +23,14 @@ namespace Emberpoint.Core
             // Setup the engine and create the main window.
             SadConsole.Game.Create(Constants.GameWindowWidth, Constants.GameWindowHeight);
 
+            // Set the MonoGame container's title
+            Settings.WindowTitle = Strings.GameTitle;
+
             // Hook the start event so we can add consoles to the system.
             GameHost.Instance.OnStart = Init;
             // Hook the update event so we can check for key presses.
             GameHost.Instance.FrameUpdate += UpdateFrame;
-
+            
             // Start the game.
             GameHost.Instance.Run();
             GameHost.Instance.Dispose();

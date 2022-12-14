@@ -8,11 +8,7 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         public GameWindow(int width, int height) : base(width, height)
         {
-            // Set the XNA container's title
-            Settings.WindowTitle = Strings.GameTitle;
-
-            // Print the game title at the  top
-            Surface.Print((int)System.Math.Round((Width / 2) / 1.5f) - Resources.Strings.GameTitle.Length / 2, 1, Resources.Strings.GameTitle);
+            Initialize();
 
             // Set the current screen to the game window
             GameHost.Instance.Screen = this;
@@ -26,8 +22,17 @@ namespace Emberpoint.Core.UserInterface.Windows
         public void Refresh()
         {
             Surface.Clear();
-            Settings.WindowTitle = Resources.Strings.GameTitle;
-            Surface.Print((int)System.Math.Round((Width / 2) / 1.5f) - Resources.Strings.GameTitle.Length / 2, 1, Resources.Strings.GameTitle);
+            Initialize();
+        }
+
+        void Initialize()
+        {
+            
+
+            // Print the game title at the top
+            int x = (int) System.Math.Round(Width / 2 / 1.5f) - Strings.GameTitle.Length / 2;
+            Surface.Print(x, 1, Strings.GameTitle);
+
         }
     }
 }
