@@ -8,10 +8,9 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         public GameWindow(int width, int height) : base(width, height)
         {
-            Initialize();
-
             // Set the current screen to the game window
             GameHost.Instance.Screen = this;
+            Initialize();
         }
 
         public Console Console
@@ -27,8 +26,6 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         void Initialize()
         {
-            
-
             // Print the game title at the top
             int x = (int) System.Math.Round(Width / 2 / 1.5f) - Strings.GameTitle.Length / 2;
             Surface.Print(x, 1, Strings.GameTitle);

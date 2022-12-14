@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Emberpoint.Core</RootNamespace>
-    <ApplicationIcon />
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
     <StartupObject />
     <Authors>Venomous</Authors>
     <Product>Emberpoint</Product>
@@ -12,6 +12,18 @@
     <RepositoryUrl>https://github.com/Venom0us/Emberpoint</RepositoryUrl>
     <RepositoryType>OpenSource</RepositoryType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icon.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icon.bmp" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="GoRogue" Version="3.0.0-alpha14" />
