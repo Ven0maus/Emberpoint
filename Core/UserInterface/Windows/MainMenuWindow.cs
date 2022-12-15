@@ -133,7 +133,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Controls.Add(exitButton);
         }
 
-        public static MainMenuWindow Show()
+        public static MainMenuWindow Show(bool resetGameState = false)
         {
             var mainMenu = UserInterfaceManager.Get<MainMenuWindow>();
             if (mainMenu == null)
@@ -151,7 +151,8 @@ namespace Emberpoint.Core.UserInterface.Windows
                 mainMenu.Cursor.IsEnabled = false;
             }
             GameHost.Instance.Screen = mainMenu;
-            Game.Reset();
+            if (resetGameState)
+                Game.Reset();
             return mainMenu;
         }
 

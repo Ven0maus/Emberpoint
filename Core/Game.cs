@@ -51,10 +51,12 @@ namespace Emberpoint.Core
         {
             UserInterfaceManager.IsInitialized = false;
 
-            var skipInterfaces = new []
+            var skipInterfaces = new IUserInterface[]
             {
-                UserInterfaceManager.Get<MainMenuWindow>() as IUserInterface,
-                UserInterfaceManager.Get<KeybindingsWindow>() as IUserInterface, 
+                UserInterfaceManager.Get<MainMenuWindow>(),
+                UserInterfaceManager.Get<KeybindingsWindow>(),
+                UserInterfaceManager.Get<SettingsWindow>(),
+                UserInterfaceManager.Get<ContributorsWindow>(),
             };
 
             foreach (var inf in UserInterfaceManager.GetAll<IUserInterface>())
