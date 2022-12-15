@@ -20,9 +20,6 @@ namespace Emberpoint.Core.UserInterface.Windows
         public KeybindingsWindow KeybindingsWindow { get; private set; }
         public SettingsWindow SettingsWindow { get; private set; }
 
-        // Wrapper that combines this window with the background animation
-        public ScreenObject Container { get; private set; } = new ScreenObject();
-
         public SadConsole.Console Console
         {
             get { return this; }
@@ -37,13 +34,10 @@ namespace Emberpoint.Core.UserInterface.Windows
             DefaultForeground = Color.White;
 
             // Display the background animation
-            _ = new FullMoonBackgroundWindow(Container);
+            _ = new FullMoonBackgroundWindow(this);
 
             // Display the game title
             _ = new DrawFontTitleWindow(Strings.GameTitle, this, (0, 2));
-
-            // Add this console to the container
-            Container.Children.Add(this);
 
             Refresh();
         }
@@ -85,7 +79,6 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void InitializeButtons()
         {
-            int w2 = Constants.GameWindowWidth / 2;
             int h2 = Constants.GameWindowHeight / 2;
             int x = 10;
 
@@ -157,7 +150,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 mainMenu.IsFocused = true;
                 mainMenu.Cursor.IsEnabled = false;
             }
-            GameHost.Instance.Screen = mainMenu.Container;
+            GameHost.Instance.Screen = mainMenu;
             Game.Reset();
             return mainMenu;
         }

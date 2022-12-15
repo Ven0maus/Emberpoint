@@ -10,7 +10,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class FullMoonBackgroundWindow : ScreenSurface
     {
-        public FullMoonBackgroundWindow(ScreenObject parent) : base(Constants.GameWindowWidth, Constants.GameWindowHeight)
+        public FullMoonBackgroundWindow(ScreenSurface parent) : base(Constants.GameWindowWidth, Constants.GameWindowHeight)
         {
             Parent = parent;
 
@@ -23,6 +23,10 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             // load the image of the moon as a static 1 frame animation window
             var moon = AnimatedScreenSurface.FromImage("Full Moon", r + i + "fullmoon.png", (1, 1), 1f);
+
+            // resize and reposition this surface according to the size of the moon surface
+            (Surface as CellSurface)?.Resize(moon.Width, Surface.Height, moon.Width, Surface.Height, true);
+            Position = (parent.Surface.Width - Surface.Width, 0);
 
             // add the moon to the children of this surface
             Children.Add(moon);
