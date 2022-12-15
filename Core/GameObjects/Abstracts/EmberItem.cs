@@ -34,9 +34,9 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
             Amount = 1;
             _localizedName = name;
-            Appearance.Foreground = foregroundColor;
-            Appearance.Background = Color.Transparent;
-            Appearance.Glyph = glyph;
+            //Appearance.Foreground = foregroundColor;
+            //Appearance.Background = Color.Transparent;
+            //Appearance.Glyph = glyph;
         }
 
         public void RenderObject(Console console)
