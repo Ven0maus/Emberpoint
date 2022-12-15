@@ -37,7 +37,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             _ = new FullMoonBackgroundWindow(this);
 
             // Display the game title
-            _ = new DrawFontTitleWindow(Strings.GameTitle, this, (0, 2));
+            _ = new DrawFontTitleWindow(Strings.GameTitle, this, (0, 2), Constants.Fonts.BigIce);
 
             Refresh();
         }
