@@ -124,7 +124,7 @@ namespace Emberpoint.Core
                     {
                         throw new ArgumentException($"There has been a problem while loading the DrawFont {fontName}.");
                     }
-                    df = fontEnumerable.ToArray().First();
+                    df = fontEnumerable.First();
                     s_drawFonts.Add(df);
                     return df;
                 }
