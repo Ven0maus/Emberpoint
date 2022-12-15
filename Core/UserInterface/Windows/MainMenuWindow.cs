@@ -30,11 +30,14 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Set the XNA container's title
             Settings.WindowTitle = Strings.GameTitle;
 
-            DefaultBackground = Color.Black;
+            DefaultBackground = Color.Transparent;
             DefaultForeground = Color.White;
 
-            // Add it to the children of the main console
-            GameHost.Instance.Screen.Children.Add(this);
+            // Display the background animation
+            _ = new FullMoonBackgroundWindow(this);
+
+            // Display the game title
+            _ = new DrawFontTitleWindow(Strings.GameTitle, this, (0, 2), Constants.Fonts.BigIce);
 
             Refresh();
         }
@@ -44,7 +47,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Controls.Clear();
             Surface.Clear();
             InitializeButtons();
-            DrawGameTitle();
+            //DrawGameTitle();
         }
 
         private void DrawGameTitle()
@@ -76,10 +79,13 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public void InitializeButtons()
         {
+            int h2 = Constants.GameWindowHeight / 2;
+            int x = 10;
+
             var playButton = new Button(20, 3)
             {
                 Text = Strings.Play,
-                Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) - 4),
+                Position = new Point(x, h2 - 4),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -89,7 +95,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             var contributorsButton = new Button(20, 3)
             {
                 Text = Strings.Contributors,
-                Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2)),
+                Position = new Point(x, h2),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -99,7 +105,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             var keybindingsButton = new Button(20, 3)
             {
                 Text = Strings.Keybindings,
-                Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) + 4),
+                Position = new Point(x, h2 + 4),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -109,7 +115,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             var settingsButton = new Button(20, 3)
             {
                 Text = Strings.Settings,
-                Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) + 8),
+                Position = new Point(x, h2 + 8),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -119,7 +125,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             var exitButton = new Button(20, 3)
             {
                 Text = Strings.Exit,
-                Position = new Point((Constants.GameWindowWidth / 2) - 10, (Constants.GameWindowHeight / 2) + 12),
+                Position = new Point(x, h2 + 12),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -136,7 +142,6 @@ namespace Emberpoint.Core.UserInterface.Windows
                 KeybindingsManager.InitializeDefaultKeybindings();
 
                 mainMenu = new MainMenuWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
-                mainMenu.InitializeButtons();
                 UserInterfaceManager.Add(mainMenu);
             }
             else

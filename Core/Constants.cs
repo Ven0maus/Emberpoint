@@ -1,10 +1,12 @@
 ﻿using Emberpoint.Core.Resources;
 using SadConsole;
+using SadConsole.Readers;
 using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace Emberpoint.Core
@@ -35,11 +37,6 @@ namespace Emberpoint.Core
 
         public static readonly string ApplicationRoot = GetApplicationRoot();
         public static readonly ResourceHelper ResourceHelper = new ResourceHelper();
-
-        public static IFont Font
-        {
-            get { return GameHost.Instance.DefaultFont; }
-        }
 
         public static class Map
         {
@@ -86,6 +83,52 @@ namespace Emberpoint.Core
         {
             var appRoot = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.LastIndexOf("\\bin"));
             return appRoot.Substring(0, appRoot.LastIndexOf("\\") + 1);
+        }
+
+        public static class Fonts
+        {
+            static readonly string FontsDirectoryPath = "./Resources/Fonts/";
+            static readonly List<TheDrawFont> s_drawFonts = new();
+
+            public static IFont Default => GameHost.Instance.DefaultFont;
+            public static IFont ThickSquare8 => GetFont("thick_square_8x8.font");
+            public static TheDrawFont BigIce => GetDrawFont("BIGICE_F.TDF");
+            
+
+            static IFont GetFont(string fontName)
+            {
+                if (GameHost.Instance.Fonts.ContainsKey(fontName)) 
+                    return GameHost.Instance.Fonts[fontName];
+                else
+                {
+                    try
+                    {
+                        var font = GameHost.Instance.LoadFont(FontsDirectoryPath + fontName);
+                        return font;
+                    }
+                    catch (System.Runtime.Serialization.SerializationException)
+                    {
+                        throw new ArgumentException($"There has been a problem while loading the font {fontName}.");
+                    }
+                }
+            }
+
+            static TheDrawFont GetDrawFont(string fontName)
+            {
+                if (s_drawFonts.Find(f => f.Title == fontName) is TheDrawFont df)
+                    return df;
+                else
+                {
+                    var fontEnumerable = TheDrawFont.ReadFonts(FontsDirectoryPath + fontName);
+                    if (fontEnumerable is null)
+                    {
+                        throw new ArgumentException($"There has been a problem while loading the DrawFont {fontName}.");
+                    }
+                    df = fontEnumerable.First();
+                    s_drawFonts.Add(df);
+                    return df;
+                }
+            }
         }
     }
 }

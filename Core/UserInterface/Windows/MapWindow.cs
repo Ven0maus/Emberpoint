@@ -20,7 +20,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             View = new Rectangle(0, 0, 23, 10);
             Position = new Point(1, 1);
-            Font = Constants.Font;
+            Font = Constants.Fonts.Default;
             FontSize = Font.GetFontSize(Constants.Map.Size);
             GameHost.Instance.Screen.Children.Add(this);
 
