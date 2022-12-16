@@ -22,21 +22,23 @@ namespace Emberpoint.Core
             get { return _language ?? (Language = "en-US"); }
             set
             {
-                if (value == null) return;
+                if (value == null || !SupportedCultures.ContainsKey(value))
+                    throw new CultureNotFoundException("Culture not supported: " + value);
+
                 _language = value;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(value);
                 Game.CurrentCulture = Thread.CurrentThread.CurrentUICulture;
             }
         }
 
-        public static readonly Dictionary<string, Func<string>> SupportedCultures = new Dictionary<string, Func<string>>
+        public static readonly Dictionary<string, Func<string>> SupportedCultures = new()
         {
             { "en-US", () => Strings.English },
             { "nl-BE", () => Strings.Dutch },
         };
 
         public static readonly string ApplicationRoot = GetApplicationRoot();
-        public static readonly ResourceHelper ResourceHelper = new ResourceHelper();
+        public static readonly ResourceHelper ResourceHelper = new();
 
         public static class Map
         {
@@ -50,7 +52,7 @@ namespace Emberpoint.Core
         public static class Player
         {
             public const char Character = '@';
-            public static Color Foreground = Color.White;
+            public static readonly Color Foreground = Color.White;
             public const int FieldOfViewRadius = Items.FlashlightRadius;
             public const int DiscoverLightsRadius = 8;
         }
@@ -64,8 +66,8 @@ namespace Emberpoint.Core
 
         public static class Blueprint
         {
-            public static string BlueprintsDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints");
-            public static string BlueprintsConfigDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "Config");
+            public static readonly string BlueprintsDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints");
+            public static readonly string BlueprintsConfigDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "Config");
 
             public static class Prints
             {
@@ -75,7 +77,7 @@ namespace Emberpoint.Core
 
             public static class Tests
             {
-                public static string TestBlueprintsPath = Path.Combine(ApplicationRoot, "Tests", "TestObjects", "Blueprints", "BlueprintTexts");
+                public static readonly string TestBlueprintsPath = Path.Combine(ApplicationRoot, "Tests", "TestObjects", "Blueprints", "BlueprintTexts");
             }
         }
 
