@@ -14,6 +14,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class SettingsWindow : ControlsConsole, IUserInterface
     {
+        public KeybindingsWindow KeybindingsWindow { get; private set; }
         public Console Console => this;
 
         public SettingsWindow(int width, int height) : base(width, height)
@@ -39,19 +40,21 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Button name, (method, default value)
             var settings = new Dictionary<string, (EventHandler, string)> 
             {
-                { Strings.Language, (ChangeLanguage, Constants.SupportedCultures[Constants.Language]()) }
+                { Strings.Language, (ChangeLanguage, Constants.SupportedCultures[Constants.Language]()) },
+                { Strings.Keybindings, (ChangeKeybindings, null) }
             };
 
-            // Introduce columns/paging when need arises
+            // TODO: Introduce columns/paging when need arises
 
             var row = 12;
             foreach (var setting in settings)
             {
                 var pos = new Point(35, row);
-                var button = new Button(setting.Value.Item2.Length + 6, 3)
+                var buttonText = setting.Value.Item2 ?? setting.Key;
+                var button = new Button(buttonText.Length + 6, 3)
                 {
                     Name = setting.Key + ":",
-                    Text = setting.Value.Item2,
+                    Text = buttonText,
                     Position = pos,
                     UseMouse = true,
                     UseKeyboard = false,
@@ -63,7 +66,31 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
         }
 
-        private readonly Queue<string> _langQueue = new Queue<string>(Constants.SupportedCultures.Keys);
+        public void Transition(Console transitionConsole)
+        {
+            IsVisible = false;
+            IsFocused = false;
+            transitionConsole.IsVisible = true;
+            transitionConsole.IsFocused = true;
+            GameHost.Instance.Screen = transitionConsole;
+        }
+
+        private void ChangeKeybindings(object sender, EventArgs e)
+        {
+            if (KeybindingsWindow == null)
+            {
+                KeybindingsWindow = new KeybindingsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
+                UserInterfaceManager.Add(KeybindingsWindow);
+            }
+            else
+            {
+                KeybindingsWindow.IsVisible = true;
+            }
+
+            Transition(KeybindingsWindow);
+        }
+
+        private readonly Queue<string> _langQueue = new(Constants.SupportedCultures.Keys);
         private void ChangeLanguage(object sender, EventArgs e)
         {
             var current = Constants.Language;

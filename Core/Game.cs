@@ -13,9 +13,7 @@ namespace Emberpoint.Core
 {
     public static class Game
     {
-        private static MainMenuWindow _mainMenuWindow;
         public static Player Player { get; set; }
-
         public static CultureInfo CurrentCulture { get; internal set; }
 
         private static void Main()
@@ -28,23 +26,10 @@ namespace Emberpoint.Core
 
             // Hook the start event so we can add consoles to the system.
             GameHost.Instance.OnStart = Init;
-            // Hook the update event so we can check for key presses.
-            GameHost.Instance.FrameUpdate += UpdateFrame;
             
             // Start the game.
             GameHost.Instance.Run();
             GameHost.Instance.Dispose();
-        }
-
-        private static void UpdateFrame(object sender, GameHost e)
-        {
-            if (_mainMenuWindow?.KeybindingsWindow != null && _mainMenuWindow.KeybindingsWindow.WaitingForAnyKeyPress)
-            {
-                if (GameHost.Instance.Keyboard.KeysPressed.Any())
-                {
-                    _mainMenuWindow.KeybindingsWindow.ChangeKeybinding(GameHost.Instance.Keyboard.KeysPressed.First().Key);
-                }
-            }
         }
 
         public static void Reset()
@@ -83,7 +68,7 @@ namespace Emberpoint.Core
             Settings.ResizeMode = Settings.WindowResizeOptions.Stretch;
 
             // Shows the main menu
-            _mainMenuWindow = MainMenuWindow.Show();
+            MainMenuWindow.Show();
         }
     }
 }

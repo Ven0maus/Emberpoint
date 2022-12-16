@@ -9,7 +9,6 @@ using SadConsole.UI.Controls;
 using SadRogue.Primitives;
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 
 namespace Emberpoint.Core.UserInterface.Windows
@@ -17,7 +16,6 @@ namespace Emberpoint.Core.UserInterface.Windows
     public class MainMenuWindow : ControlsConsole, IUserInterface
     {
         public ContributorsWindow ContributorsWindow { get; set; }
-        public KeybindingsWindow KeybindingsWindow { get; private set; }
         public SettingsWindow SettingsWindow { get; private set; }
 
         public SadConsole.Console Console
@@ -47,45 +45,17 @@ namespace Emberpoint.Core.UserInterface.Windows
             Controls.Clear();
             Surface.Clear();
             InitializeButtons();
-            //DrawGameTitle();
-        }
-
-        private void DrawGameTitle()
-        {
-            string[] titleFragments = @"
- _____             _                                _         _   
-|  ___|           | |                              (_)       | |  
-| |__   _ __ ___  | |__    ___  _ __  _ __    ___   _  _ __  | |_ 
-|  __| | '_ ` _ \ | '_ \  / _ \| '__|| '_ \  / _ \ | || '_ \ | __|
-| |___ | | | | | || |_) ||  __/| |   | |_) || (_) || || | | || |_ 
-\____/ |_| |_| |_||_.__/  \___||_|   | .__/  \___/ |_||_| |_| \__|
-                                     | |                          
-                                     |_|                          
-"
-.Replace("\r", string.Empty).Split('\n');
-
-            int startPosX = (Constants.GameWindowWidth / 2) - (titleFragments.OrderByDescending(a => a.Length).First().Length / 2);
-            int startPosY = 4;
-
-            // Print title fragments
-            for (int y = 0; y < titleFragments.Length; y++)
-            {
-                for (int x = 0; x < titleFragments[y].Length; x++)
-                {
-                    Surface.SetGlyph(startPosX + x, startPosY + y, titleFragments[y][x], Color.White, Color.Transparent);
-                }
-            }
         }
 
         public void InitializeButtons()
         {
-            int h2 = Constants.GameWindowHeight / 2;
+            int halfWindowHeight = Constants.GameWindowHeight / 2;
             int x = 10;
 
             var playButton = new Button(20, 3)
             {
                 Text = Strings.Play,
-                Position = new Point(x, h2 - 4),
+                Position = new Point(x, halfWindowHeight - 4),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -95,27 +65,17 @@ namespace Emberpoint.Core.UserInterface.Windows
             var contributorsButton = new Button(20, 3)
             {
                 Text = Strings.Contributors,
-                Position = new Point(x, h2),
+                Position = new Point(x, halfWindowHeight),
                 UseMouse = true,
                 UseKeyboard = false,
             };
             contributorsButton.Click += ButtonPressContributors;
             Controls.Add(contributorsButton);
 
-            var keybindingsButton = new Button(20, 3)
-            {
-                Text = Strings.Keybindings,
-                Position = new Point(x, h2 + 4),
-                UseMouse = true,
-                UseKeyboard = false,
-            };
-            keybindingsButton.Click += ButtonPressKeybindings;
-            Controls.Add(keybindingsButton);
-
             var settingsButton = new Button(20, 3)
             {
                 Text = Strings.Settings,
-                Position = new Point(x, h2 + 8),
+                Position = new Point(x, halfWindowHeight + 4),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -125,7 +85,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             var exitButton = new Button(20, 3)
             {
                 Text = Strings.Exit,
-                Position = new Point(x, h2 + 12),
+                Position = new Point(x, halfWindowHeight + 8),
                 UseMouse = true,
                 UseKeyboard = false,
             };
@@ -133,7 +93,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Controls.Add(exitButton);
         }
 
-        public static MainMenuWindow Show(bool resetGameState = false)
+        public static void Show(bool resetGameState = false)
         {
             var mainMenu = UserInterfaceManager.Get<MainMenuWindow>();
             if (mainMenu == null)
@@ -153,7 +113,6 @@ namespace Emberpoint.Core.UserInterface.Windows
             GameHost.Instance.Screen = mainMenu;
             if (resetGameState)
                 Game.Reset();
-            return mainMenu;
         }
 
         private static void Hide(SadConsole.Console transitionConsole)
@@ -226,22 +185,6 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             // Transition to options window
             Transition(SettingsWindow);
-        }
-
-        public void ButtonPressKeybindings(object sender, EventArgs args)
-        {
-            if (KeybindingsWindow == null)
-            {
-                KeybindingsWindow = new KeybindingsWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
-                UserInterfaceManager.Add(KeybindingsWindow);
-            }
-            else
-            {
-                KeybindingsWindow.IsVisible = true;
-            }
-
-            // Transition to options window
-            Transition(KeybindingsWindow);
         }
 
         public void ButtonPressExit(object sender, EventArgs args)
