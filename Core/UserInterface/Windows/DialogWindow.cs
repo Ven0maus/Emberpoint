@@ -89,7 +89,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public void AddDialog(string dialogTitle, string[] dialogLines)
         {
             if (dialogLines == null || dialogLines.Length == 0)
-                throw new System.ArgumentOutOfRangeException("Missing dialog lines.");
+                throw new System.ArgumentOutOfRangeException(nameof(dialogLines), "Missing dialog lines.");
             var dialog = new DialogBuilder.Dialog(dialogTitle, dialogLines);
             _queuedDialogs.Enqueue(dialog);
             if (_displayedDialog == null)
