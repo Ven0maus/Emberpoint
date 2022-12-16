@@ -51,9 +51,18 @@ namespace Emberpoint.Core.UserInterface.Windows
             backButton.Click += (sender, args) =>
             {
                 IsVisible = false;
-                MainMenuWindow.Show();
+                Transition(UserInterfaceManager.Get<SettingsWindow>());
             };
             Controls.Add(backButton);
+        }
+
+        public void Transition(Console transitionConsole)
+        {
+            IsVisible = false;
+            IsFocused = false;
+            transitionConsole.IsVisible = true;
+            transitionConsole.IsFocused = true;
+            GameHost.Instance.Screen = transitionConsole;
         }
 
         private void DrawWindowTitle()
@@ -164,6 +173,18 @@ namespace Emberpoint.Core.UserInterface.Windows
             _buttonPressed = null;
             WaitingForAnyKeyPress = false;
             UseMouse = true;
+        }
+
+        public override bool ProcessKeyboard(Keyboard keyboard)
+        {
+            if (WaitingForAnyKeyPress)
+            {
+                if (GameHost.Instance.Keyboard.KeysPressed.Any())
+                {
+                    ChangeKeybinding(GameHost.Instance.Keyboard.KeysPressed.First().Key);
+                }
+            }
+            return base.ProcessKeyboard(keyboard);
         }
     }
 }
