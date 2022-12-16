@@ -27,16 +27,14 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         private Console _renderedConsole;
 
-        public EmberItem(int glyph, Color foregroundColor, int zIndex = 0, System.Func<string> name = null) : base(foregroundColor, Color.Transparent, glyph, zIndex)
+        public EmberItem(int glyph, Color foregroundColor, int zIndex = 0, System.Func<string> name = null) : 
+            base(foregroundColor, Color.Transparent, glyph, zIndex)
         {
             ObjectId = ItemManager.GetUniqueId();
             ItemManager.Add(this);
 
             Amount = 1;
             _localizedName = name;
-            Appearance.Foreground = foregroundColor;
-            Appearance.Background = Color.Transparent;
-            Appearance.Glyph = glyph;
         }
 
         public void RenderObject(Console console)

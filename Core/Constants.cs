@@ -85,17 +85,23 @@ namespace Emberpoint.Core
             return appRoot.Substring(0, appRoot.LastIndexOf("\\") + 1);
         }
 
+        public static class Colors
+        {
+            public static readonly Color WindowTitle = Color.Orange;
+            public static readonly Color WindowBorder = Color.Gray;
+        }
+
         public static class Fonts
         {
             static readonly string FontsDirectoryPath = "./Resources/Fonts/";
             static readonly List<TheDrawFont> s_drawFonts = new();
 
             public static IFont Default => GameHost.Instance.DefaultFont;
-            public static IFont ThickSquare8 => GetFont("thick_square_8x8.font");
-            public static TheDrawFont BigIce => GetDrawFont("BIGICE_F.TDF");
+            public static IFont ThickSquare8 => GetFont("ThickSquare8", "thick_square_8x8");
+            public static TheDrawFont BigIce => GetDrawFont("icefont", "BIGICE_F");
             
 
-            static IFont GetFont(string fontName)
+            static IFont GetFont(string fontName, string fontFileName)
             {
                 if (GameHost.Instance.Fonts.ContainsKey(fontName)) 
                     return GameHost.Instance.Fonts[fontName];
@@ -103,7 +109,7 @@ namespace Emberpoint.Core
                 {
                     try
                     {
-                        var font = GameHost.Instance.LoadFont(FontsDirectoryPath + fontName);
+                        var font = GameHost.Instance.LoadFont(FontsDirectoryPath + fontFileName + ".font");
                         return font;
                     }
                     catch (System.Runtime.Serialization.SerializationException)
@@ -113,13 +119,13 @@ namespace Emberpoint.Core
                 }
             }
 
-            static TheDrawFont GetDrawFont(string fontName)
+            static TheDrawFont GetDrawFont(string fontName, string fontFileName)
             {
                 if (s_drawFonts.Find(f => f.Title == fontName) is TheDrawFont df)
                     return df;
                 else
                 {
-                    var fontEnumerable = TheDrawFont.ReadFonts(FontsDirectoryPath + fontName);
+                    var fontEnumerable = TheDrawFont.ReadFonts(FontsDirectoryPath + fontFileName + ".TDF");
                     if (fontEnumerable is null)
                     {
                         throw new ArgumentException($"There has been a problem while loading the DrawFont {fontName}.");
