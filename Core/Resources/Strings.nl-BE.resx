@@ -204,6 +204,9 @@
   <data name="Play" xml:space="preserve">
     <value>Start spel</value>
   </data>
+  <data name="PressEnterPrompt" xml:space="preserve">
+    <value>Druk op 'Enter' om door te gaan</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Instellingen</value>
   </data>

@@ -56,17 +56,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         }
 
         public void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
-        {
-            CurrentBlueprintId = blueprint.ObjectId;
-
-            // Reset field of view when we move to another blueprint
-            ResetFieldOfView();
-
-            if (!(this is Player))
-            {
-                IsVisible = Game.Player != null && Game.Player.CurrentBlueprintId == CurrentBlueprintId;
-            }
-        }
+            => MoveToBlueprint(blueprint.ObjectId);
 
         public void MoveToBlueprint(int blueprintId)
         {
@@ -85,10 +75,6 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         {
             ObjectId = EntityManager.GetUniqueId();
             CurrentBlueprintId = blueprint != null ? blueprint.ObjectId : (GridManager.ActiveBlueprint != null ? GridManager.ActiveBlueprint.ObjectId : -1);
-
-            Appearance.Foreground = foreground;
-            Appearance.Background = background;
-            Appearance.Glyph = glyph;
 
             // Default stats
             MaxHealth = 100;
@@ -115,6 +101,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             }
             return false;
         }
+
         public bool CanInteract(int x, int y)
         {
             if (Health == 0) return false;
@@ -122,6 +109,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             var cell = GridManager.Grid.GetCell(x, y);
             return cell.CellProperties.Interactable && !EntityManager.EntityExistsAt(x, y, CurrentBlueprintId) && cell.CellProperties.IsExplored;
         }
+
         public bool CanMoveTowards(Point position)
         {
             if (Health == 0) return false;

@@ -85,6 +85,12 @@ namespace Emberpoint.Core
             return appRoot.Substring(0, appRoot.LastIndexOf("\\") + 1);
         }
 
+        public static class Colors
+        {
+            public static readonly Color WindowTitle = Color.Orange;
+            public static readonly Color WindowBorder = Color.Gray;
+        }
+
         public static class Fonts
         {
             static readonly string FontsDirectoryPath = "./Resources/Fonts/";
