@@ -322,6 +322,15 @@ namespace Emberpoint.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Press &apos;Enter&apos; to continue.
+        /// </summary>
+        public static string PressEnterPrompt {
+            get {
+                return ResourceManager.GetString("PressEnterPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {

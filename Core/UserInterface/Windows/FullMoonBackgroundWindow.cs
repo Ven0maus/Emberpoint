@@ -1,11 +1,4 @@
 ﻿using SadConsole;
-using SadRogue.Primitives;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {

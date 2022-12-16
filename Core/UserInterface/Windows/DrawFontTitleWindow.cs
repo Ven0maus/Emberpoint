@@ -1,8 +1,6 @@
 ﻿using SadConsole;
 using SadConsole.Readers;
 using SadRogue.Primitives;
-using System;
-using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
