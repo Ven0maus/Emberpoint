@@ -24,31 +24,25 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         public DialogWindow(int width, int height) : base(width, height)
         {
-            this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
-
             _queuedDialogs = new Queue<DialogBuilder.Dialog>();
-            _textConsole = new Console(Width - 2, Height - 2)
+            _textConsole = new Console(Width, Height)
             {
-                Position = new Point(1, 1),
                 DefaultBackground = Color.Black
             };
-
-            Position = new Point(5, Constants.GameWindowHeight - 7);
-
             Children.Add(_textConsole);
             GameHost.Instance.Screen.Children.Add(this);
         }
 
-        void DrawWindow(string title)
+        void DrawWindow(string title = "")
         {
             // draw borders
             this.DrawBorders(Width, Height, "O", "|", "-", Constants.Colors.WindowBorder);
 
             // calculate and apply position
-            Position = new Point(5, Constants.GameWindowHeight - Height - 2);
+            Position = new Point(5, Constants.GameWindowHeight - Height - 1);
 
             // print title
-            Surface.Print(3, 0, _displayedDialog.Title, Constants.Colors.WindowTitle);
+            Surface.Print(3, 0, title, Constants.Colors.WindowTitle);
 
             // print prompt in the bottom right corner
             int x = Width - Strings.PressEnterPrompt.Length - 4;
