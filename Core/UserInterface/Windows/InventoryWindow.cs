@@ -10,41 +10,22 @@ using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class InventoryWindow : Console, IUserInterface
+    public class InventoryWindow : Window, IUserInterface
     {
-        private readonly Console _textConsole;
-
-        public Console Console
-        {
-            get { return this; }
-        }
-
-        private readonly int _maxLineRows;
+        public Console Console => this;
         private readonly List<IItem> _inventory;
 
         public InventoryWindow(int width, int height) : base(width, height)
         {
-            this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
-            Surface.Print(3, 0, Strings.Inventory, Color.Orange);
-
             _inventory = new List<IItem>();
-            _maxLineRows = Height - 2;
-            _textConsole = new Console(Width - 2, Height - 2)
-            {
-                Position = new Point(2, 1),
-            };
-
-            Position = new Point(Constants.Map.Width + 7, 1);
-
-            Children.Add(_textConsole);
+            Title = Strings.Inventory;
+            Position = (Constants.Map.Width + 7, 1);
             GameHost.Instance.Screen.Children.Add(this);
+            Draw();
         }
 
         public void Refresh()
         {
-            Surface.Clear();
-            this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
-            Surface.Print(3, 0, Strings.Inventory, Color.Orange);
             UpdateInventoryText();
         }
 
@@ -127,28 +108,29 @@ namespace Emberpoint.Core.UserInterface.Windows
             return _inventory.OfType<T>().Any();
         }
 
+        // TODO: update this method to be able to display all items
         public void UpdateInventoryText()
         {
-            _textConsole.Clear();
-            _textConsole.Cursor.Position = new Point(0, 0);
+            Content.Clear();
+            Content.Cursor.Position = new Point(0, 0);
 
-            if (_inventory.Count > _maxLineRows)
+            if (_inventory.Count > Content.Height)
             {
-                foreach (var item in _inventory.OrderBy(x => x).Take(_maxLineRows - 1))
-                {
-                    _textConsole.Cursor.Print(new ColoredString("[" + (char)item.Glyph + "]", item.GlyphColor, Color.Transparent));
-                    _textConsole.Cursor.Print(item.DisplayName);
-                }
-                _textConsole.Cursor.Print("<More Items..>");
+                foreach (var item in _inventory.OrderBy(x => x).Take(Content.Height - 1))
+                    PrintItem(item);
+                Content.Cursor.Print("<More Items..>");
             }
             else
             {
                 foreach (var item in _inventory.OrderBy(x => x))
-                {
-                    _textConsole.Cursor.Print(new ColoredString("[" + (char)item.Glyph + "]", item.GlyphColor, Color.Transparent));
-                    _textConsole.Cursor.Print(item.DisplayName);
-                }
+                    PrintItem(item);
             }
+        }
+
+        void PrintItem(IItem item)
+        {
+            Content.Cursor.Print(new ColoredString("[" + (char)item.Glyph + "]", 
+                item.GlyphColor, Color.Transparent)).Print(item.DisplayName);
         }
     }
 }
