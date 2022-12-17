@@ -87,6 +87,22 @@ namespace Emberpoint.Core
             return appRoot.Substring(0, appRoot.LastIndexOf("\\") + 1);
         }
 
+        public static class BorderStyle
+        {
+            public static readonly char Topleft = '0';
+            public static readonly char TopRight = '0';
+            public static readonly char BottomLeft = '0';
+            public static readonly char BottomRight = '0';
+            public static readonly char Top = '-';
+            public static readonly char Left = '|';
+            public static readonly char Right = '|';
+            public static readonly char Bottom = '-';
+
+            public static readonly string Corner = "0";
+            public static readonly string HorizontalSide = "-";
+            public static readonly string VerticalSide = "|";
+        }
+
         public static class Colors
         {
             public static readonly Color WindowTitle = Color.Orange;

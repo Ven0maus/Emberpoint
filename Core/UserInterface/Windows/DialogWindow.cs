@@ -10,43 +10,18 @@ using System.Linq;
 namespace Emberpoint.Core.UserInterface.Windows
 {
 
-    public class DialogWindow : Console, IUserInterface
+    public class DialogWindow : Window, IUserInterface
     {
-        private readonly Console _textConsole;
         private readonly Queue<DialogBuilder.Dialog> _queuedDialogs;
-
         private DialogBuilder.Dialog _displayedDialog;
-
-        public Console Console
-        {
-            get { return this; }
-        }
+        public Console Console => this;
 
         public DialogWindow(int width, int height) : base(width, height)
         {
             _queuedDialogs = new Queue<DialogBuilder.Dialog>();
-            _textConsole = new Console(Width, Height)
-            {
-                DefaultBackground = Color.Black
-            };
-            Children.Add(_textConsole);
             GameHost.Instance.Screen.Children.Add(this);
-        }
-
-        void DrawWindow(string title = "")
-        {
-            // draw borders
-            this.DrawBorders(Width, Height, "O", "|", "-", Constants.Colors.WindowBorder);
-
-            // calculate and apply position
             Position = new Point(5, Constants.GameWindowHeight - Height - 1);
-
-            // print title
-            Surface.Print(3, 0, title, Constants.Colors.WindowTitle);
-
-            // print prompt in the bottom right corner
-            int x = Width - Strings.PressEnterPrompt.Length - 4;
-            Surface.Print(x, Height - 1, Strings.PressEnterPrompt, Constants.Colors.WindowTitle);
+            Prompt = Strings.PressEnterPrompt;
         }
 
         public void Refresh()
@@ -54,26 +29,21 @@ namespace Emberpoint.Core.UserInterface.Windows
             // Re-draw current dialog
             if (_displayedDialog != null)
             {
-                int padding = 1;
-                int contentHeight = _displayedDialog.Content.Length;
-                int maxLineLength = Width - padding * 2 - 2;
+                int lineCount = _displayedDialog.Content.Length;
+                if (Content.Height != lineCount)
+                {
+                    ResizeContentHeight(lineCount);
+                    Position = new Point(5, Constants.GameWindowHeight - Height - 1);
+                }
 
-                // resize the window to the amount of lines in the dialog
-                (Surface as CellSurface).Resize(Width, contentHeight + padding * 2 + 2, true);
-                DrawWindow(_displayedDialog.Title);
-
-                // resize and reposition the text window
-                (_textConsole.Surface as CellSurface).Resize(maxLineLength, contentHeight, true);
-                _textConsole.Position = (1 + padding, 1 + padding);
+                Content.Clear();
+                Title = _displayedDialog.Title;
 
                 // display the dialog
-                _textConsole.Cursor.Position = new Point(0, 0);
-                for (int y = 0; y < contentHeight; y++)
+                for (int y = 0; y < lineCount; y++)
                 {
                     string line = _displayedDialog.Content[y];
-                    // truncate lines of dialog that are too long
-                    line = line.Length > maxLineLength ? line[..(maxLineLength - 3)] + "...": line;
-                    _textConsole.Surface.Print(0, y, line);
+                    Content.Print(0, y, line);
                 }
             }
         }
