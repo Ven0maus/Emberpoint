@@ -10,7 +10,6 @@ namespace Emberpoint.Core.GameObjects.Interfaces
     {
         Renderer RenderConsole { get; }
         int ObjectId { get; }
-        bool IsVisible { get; set; }
         int CurrentBlueprintId { get; }
         IFOV FieldOfView { get; }
         int FieldOfViewRadius { get; set; }
