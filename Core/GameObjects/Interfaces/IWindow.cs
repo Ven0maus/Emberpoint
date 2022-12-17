@@ -5,27 +5,27 @@ namespace Emberpoint.Core.GameObjects.Interfaces
     internal interface IWindow
     {
         /// <summary>
-        /// Horizontal padding between the content console and the window border.
+        /// Horizontal padding between the content console and the <see cref="IWindow"/> border.
         /// </summary>
         int HorizontalPadding { get; set; }
 
         /// <summary>
-        /// Vertical padding between the content console and the window border.
+        /// Vertical padding between the content console and the <see cref="IWindow"/> border.
         /// </summary>
         int VerticalPadding { get; set; }
 
         /// <summary>
-        /// Text printed in the top left corner of the window.
+        /// Text printed in the top left corner of the <see cref="IWindow"/>.
         /// </summary>
         string Title { get; set; }
 
         /// <summary>
-        /// Text printed in the bottom right corner of the window.
+        /// Text printed in the bottom right corner of the <see cref="IWindow"/>.
         /// </summary>
         string Prompt { get; set; }
         
         /// <summary>
-        /// Internal <see cref="Console"/> that is used to print window's content.
+        /// Internal <see cref="Console"/> that is used to print contents of the <see cref="IWindow"/>.
         /// </summary>
         Console Content { get; }
 

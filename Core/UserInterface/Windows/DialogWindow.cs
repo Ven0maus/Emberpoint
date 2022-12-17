@@ -9,7 +9,6 @@ using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-
     public class DialogWindow : Window, IUserInterface
     {
         private readonly Queue<DialogBuilder.Dialog> _queuedDialogs;
@@ -20,7 +19,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             _queuedDialogs = new Queue<DialogBuilder.Dialog>();
             GameHost.Instance.Screen.Children.Add(this);
-            Position = new Point(5, Constants.GameWindowHeight - Height - 1);
+            Position = (5, Constants.GameWindowHeight - Height - 1);
             Prompt = Strings.PressEnterPrompt;
         }
 
@@ -33,7 +32,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 if (Content.Height != lineCount)
                 {
                     ResizeContentHeight(lineCount);
-                    Position = new Point(5, Constants.GameWindowHeight - Height - 1);
+                    Position = (5, Constants.GameWindowHeight - Height - 1);
                 }
 
                 Content.Clear();
