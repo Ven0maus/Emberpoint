@@ -1,6 +1,6 @@
 ﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using SadConsole;
 using SadRogue.Primitives;

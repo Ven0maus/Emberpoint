@@ -1,0 +1,11 @@
+﻿{
+  "name": "Items",
+  "tiles": [
+    {
+      "class": "Flashlight"
+    },
+    {
+      "class": "Battery"
+    }
+  ]
+}

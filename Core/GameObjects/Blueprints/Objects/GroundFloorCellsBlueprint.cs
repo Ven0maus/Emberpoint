@@ -4,8 +4,8 @@ using Emberpoint.Core.GameObjects.Map;
 
 namespace Emberpoint.Core.GameObjects.Blueprints
 {
-    public class GroundFloorBlueprint : Blueprint<EmberCell>
+    public class GroundFloorCellsBlueprint : CellBlueprint<EmberCell>
     {
-        public override Blueprint<EmberCell> StairsDownBlueprint { get { return new BasementBlueprint(); } }
+        public override CellBlueprint<EmberCell> StairsDownBlueprint { get { return new BasementCellsBlueprint(); } }
     }
 }

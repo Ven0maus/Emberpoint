@@ -39,7 +39,8 @@ namespace Emberpoint.Core.GameObjects.Map
         public int GridSizeX { get; }
         public int GridSizeY { get; }
 
-        public Blueprint<EmberCell> Blueprint { get; }
+        public CellBlueprint<EmberCell> CellBlueprint { get; }
+        public ItemBlueprint<EmberItem> ItemBlueprint { get; }
 
         private MapWindow _map;
         protected MapWindow Map
@@ -61,22 +62,36 @@ namespace Emberpoint.Core.GameObjects.Map
 
         private Console _renderedConsole;
 
-        public EmberGrid(Blueprint<EmberCell> blueprint)
+        public EmberGrid(CellBlueprint<EmberCell> cellBlueprint, ItemBlueprint<EmberItem> itemBlueprint)
         {
-            GridSizeX = blueprint.GridSizeX;
-            GridSizeY = blueprint.GridSizeY;
-            Blueprint = blueprint;
+            GridSizeX = cellBlueprint.GridSizeX;
+            GridSizeY = cellBlueprint.GridSizeY;
+            CellBlueprint = cellBlueprint;
+            ItemBlueprint = itemBlueprint;
 
             // Initialize cells
-            Cells = Blueprint.GetCells();
+            Cells = CellBlueprint.GetCells();
+
+            // Initialize items
+            foreach (var item in itemBlueprint.GetCells())
+                SetItem(item);
         }
 
-        public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells, Blueprint<EmberCell> blueprint = null)
+        public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells, 
+            CellBlueprint<EmberCell> cellBlueprint = null, ItemBlueprint<EmberItem> itemBlueprint = null)
         {
             GridSizeX = gridSizeX;
             GridSizeY = gridSizeY;
-            Blueprint = blueprint;
+            CellBlueprint = cellBlueprint;
+            ItemBlueprint = itemBlueprint;
             Cells = cells;
+
+            // Initialize items
+            if (itemBlueprint != null)
+            {
+                foreach (var item in itemBlueprint.GetCells())
+                    SetItem(item);
+            }
         }
 
         /// <summary>
@@ -187,9 +202,9 @@ namespace Emberpoint.Core.GameObjects.Map
             if (cell.EmberItem != null)
                 throw new Exception($"An item is already placed on position: {item.Position}");
 
-            item.RenderObject(Map.EntityRenderer);
             cell.EmberItem = item;
             cell.IsVisible = keepCellVisible;
+            item.RenderObject(Map.EntityRenderer);
         }
 
         public void RemoveItem(Point position) => RemoveItem(position.X, position.Y);

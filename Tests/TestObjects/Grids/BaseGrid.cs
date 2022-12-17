@@ -9,7 +9,7 @@ namespace Tests.TestObjects.Grids
         private BaseGrid(int gridSizeX, int gridSizeY, EmberCell[] cells) : base(gridSizeX, gridSizeY, cells)
         { }
 
-        private BaseGrid(Blueprint<EmberCell> blueprint) : base(blueprint)
+        private BaseGrid(CellBlueprint<EmberCell> blueprint) : base(blueprint)
         { }
 
         public static BaseGrid Create(int width, int height)
@@ -43,7 +43,7 @@ namespace Tests.TestObjects.Grids
             return new BaseGrid(width, height, cells);
         }
 
-        public static BaseGrid Create(Blueprint<EmberCell> blueprint)
+        public static BaseGrid Create(CellBlueprint<EmberCell> blueprint)
         {
             return new BaseGrid(blueprint);
         }

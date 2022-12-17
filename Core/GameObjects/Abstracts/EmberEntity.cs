@@ -54,7 +54,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             _fieldOfView = null;
         }
 
-        public void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
+        public void MoveToBlueprint<T>(CellBlueprint<T> blueprint) where T : EmberCell, new()
             => MoveToBlueprint(blueprint.ObjectId);
 
         public void MoveToBlueprint(int blueprintId)
@@ -70,7 +70,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             }
         }
 
-        public EmberEntity(Color foreground, Color background, int glyph, Blueprint<EmberCell> blueprint = null, int zIndex = 0, bool subscribeMoveEvent = true) : base(foreground, background, glyph, zIndex)
+        public EmberEntity(Color foreground, Color background, int glyph, CellBlueprint<EmberCell> blueprint = null, int zIndex = 0, bool subscribeMoveEvent = true) : base(foreground, background, glyph, zIndex)
         {
             ObjectId = EntityManager.GetUniqueId();
             CurrentBlueprintId = blueprint != null ? blueprint.ObjectId : (GridManager.ActiveBlueprint != null ? GridManager.ActiveBlueprint.ObjectId : -1);

@@ -20,9 +20,9 @@ namespace Tests
         [Test]
         public void ConvertBlueprintToCells_DoesNotFail()
         {
-            Assert.IsNotNull(_grid.Blueprint);
+            Assert.IsNotNull(_grid.CellBlueprint);
 
-            var cells = _grid.Blueprint.GetCells();
+            var cells = _grid.CellBlueprint.GetCells();
             Assert.IsNotNull(cells);
             Assert.IsTrue(cells.Length > 0);
         }
@@ -30,7 +30,7 @@ namespace Tests
         [Test]
         public void BlueprintTextFile_MatchesConvertedGridLayout()
         {
-            var testBlueprintFilePath = _grid.Blueprint.BlueprintPath;
+            var testBlueprintFilePath = _grid.CellBlueprint.BlueprintPath;
             var fileContent = File.ReadAllText(testBlueprintFilePath);
             var blueprint = fileContent.Replace("\r", "").Split('\n');
 

@@ -4,9 +4,9 @@ using Emberpoint.Core.GameObjects.Map;
 
 namespace Tests.TestObjects.Blueprints
 {
-    public class BaseBlueprint : Blueprint<EmberCell>
+    public class BaseBlueprint : CellBlueprint<EmberCell>
     {
-        public override Blueprint<EmberCell> StairsUpBlueprint => new BaseBlueprintExtra();
+        public override CellBlueprint<EmberCell> StairsUpBlueprint => new BaseBlueprintExtra();
         public BaseBlueprint() : base(Constants.Blueprint.Tests.TestBlueprintsPath)
         { }
     }

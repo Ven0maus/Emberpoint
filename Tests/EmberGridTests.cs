@@ -48,7 +48,7 @@ namespace Tests
             });
             GridManager.Grid.SetCell(up, false, false);
 
-            var entity = EntityManager.Create<BaseEntity>(new Point(2, 3), GridManager.Grid.Blueprint.ObjectId, GridManager.Grid);
+            var entity = EntityManager.Create<BaseEntity>(new Point(2, 3), GridManager.Grid.CellBlueprint.ObjectId, GridManager.Grid);
 
             Assert.IsTrue(entity.CurrentBlueprintId == currentBlueprint.ObjectId);
             Assert.IsTrue(entity.CurrentBlueprintId == GridManager.ActiveBlueprint.ObjectId);

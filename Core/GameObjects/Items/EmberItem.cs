@@ -1,10 +1,11 @@
-﻿using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
 using SadRogue.Primitives;
 using System;
 
-namespace Emberpoint.Core.GameObjects.Abstracts
+namespace Emberpoint.Core.GameObjects.Items
 {
     /// <summary>
     /// An item is also a renderable entity.
@@ -12,7 +13,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
     public abstract class EmberItem : EmberEntity, IItem
     {
         public int Amount { get; set; }
-        private readonly System.Func<string> _localizedName;
+        private readonly Func<string> _localizedName;
         public new string Name
         {
             get { return _localizedName?.Invoke() ?? GetType().Name; }
@@ -22,7 +23,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public virtual string DisplayName { get { return string.Format(" {0} : {1} \r\n", Name, Amount); } }
 
-        public EmberItem(int glyph, Color foregroundColor, int zIndex = 0, System.Func<string> name = null) : 
+        public EmberItem(int glyph, Color foregroundColor, int zIndex = 0, Func<string> name = null) :
             base(foregroundColor, Color.Transparent, glyph, null, zIndex, false)
         {
             ItemManager.Add(this);

@@ -18,7 +18,7 @@ namespace Emberpoint.Core.GameObjects.Interfaces
         void ResetFieldOfView();
         void MoveTowards(Point position, bool checkCanMove = true, Direction? direction = null, bool triggerMovementEffects = true);
         void MoveToBlueprint(int blueprintId);
-        void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new();
+        void MoveToBlueprint<T>(CellBlueprint<T> blueprint) where T : EmberCell, new();
         bool CanMoveTowards(Point position);
     }
 }

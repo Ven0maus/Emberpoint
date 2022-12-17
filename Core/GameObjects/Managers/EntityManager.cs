@@ -21,19 +21,24 @@ namespace Emberpoint.Core.GameObjects.Managers
         /// <returns></returns>
         public static T Create<T>(Point position, int blueprintId, EmberGrid grid = null) where T : IEntity
         {
+            return (T)Create(typeof(T), position, blueprintId, grid);
+        }
+
+        public static object Create(Type type, Point position, int blueprintId, EmberGrid grid = null)
+        {
             if (EntityExistsAt(position, blueprintId))
                 return default;
 
-            T entity;
+            EmberEntity entity;
             if (grid != null)
             {
-                entity = (T)Activator.CreateInstance(typeof(T), grid);
+                entity = (EmberEntity)Activator.CreateInstance(type, grid);
                 entity.Position = position;
                 entity.MoveToBlueprint(blueprintId);
             }
             else
             {
-                entity = Activator.CreateInstance<T>();
+                entity = (EmberEntity)Activator.CreateInstance(type);
                 entity.Position = position;
                 entity.MoveToBlueprint(blueprintId);
             }
@@ -67,7 +72,7 @@ namespace Emberpoint.Core.GameObjects.Managers
             EntityDatabase.Reset();
         }
 
-        public static void MovePlayerToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
+        public static void MovePlayerToBlueprint<T>(CellBlueprint<T> blueprint) where T : EmberCell, new()
         {
             // Set player's blueprint layer
             Game.Player.MoveToBlueprint(blueprint);
