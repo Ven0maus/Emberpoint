@@ -32,6 +32,12 @@ namespace Emberpoint.Core.GameObjects.Items
             _localizedName = name;
         }
 
+        public override void MoveToBlueprint(int blueprintId)
+        {
+            base.MoveToBlueprint(blueprintId);
+            IsVisible = true;
+        }
+
         public override string ToString()
         {
             return Name;

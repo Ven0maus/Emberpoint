@@ -74,7 +74,10 @@ namespace Emberpoint.Core.GameObjects.Map
 
             // Initialize items
             foreach (var item in itemBlueprint.GetCells())
+            {
+                item.IsVisible = true;
                 SetItem(item);
+            }
         }
 
         public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells, 

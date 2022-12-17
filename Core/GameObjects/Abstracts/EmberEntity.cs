@@ -57,7 +57,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public void MoveToBlueprint<T>(CellBlueprint<T> blueprint) where T : EmberCell, new()
             => MoveToBlueprint(blueprint.ObjectId);
 
-        public void MoveToBlueprint(int blueprintId)
+        public virtual void MoveToBlueprint(int blueprintId)
         {
             CurrentBlueprintId = blueprintId;
 
