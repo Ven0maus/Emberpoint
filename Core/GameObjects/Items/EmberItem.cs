@@ -21,7 +21,7 @@ namespace Emberpoint.Core.GameObjects.Items
         }
         public Color GlyphColor { get { return Appearance.Foreground; } set { Appearance.Foreground = value; } }
 
-        public virtual string DisplayName { get { return string.Format(" {0} : {1} \r\n", Name, Amount); } }
+        public virtual string DisplayName => string.Format(" {0,-12} : {1}", Name, Amount);
 
         public EmberItem(int glyph, Color foregroundColor, int zIndex = 0, Func<string> name = null) :
             base(foregroundColor, Color.Transparent, glyph, null, zIndex, false)

@@ -11,7 +11,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class WorldmapWindow : Console, IUserInterface
     {
-        public Console Console
+        public Console Content
         {
             get { return this; }
         }

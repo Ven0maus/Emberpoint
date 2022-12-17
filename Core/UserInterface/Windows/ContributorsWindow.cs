@@ -11,7 +11,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class ContributorsWindow : ControlsConsole, IUserInterface
     {
-        public Console Console => this;
+        public Console Content => this;
 
         public ContributorsWindow(int width, int height) : base(width, height)
         {

@@ -15,7 +15,7 @@ namespace Emberpoint.Core.UserInterface.Windows
     public class SettingsWindow : ControlsConsole, IUserInterface
     {
         public KeybindingsWindow KeybindingsWindow { get; private set; }
-        public Console Console => this;
+        public Console Content => this;
 
         public SettingsWindow(int width, int height) : base(width, height)
         {

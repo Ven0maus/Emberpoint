@@ -32,7 +32,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             DrawGameOverTitle();
         }
 
-        public Console Console => this;
+        public Console Content => this;
         public static void Show()
         {
             foreach (var inf in UserInterfaceManager.GetAll<IUserInterface>())

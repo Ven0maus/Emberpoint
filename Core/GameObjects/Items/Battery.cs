@@ -9,7 +9,8 @@ namespace Emberpoint.Core.GameObjects.Items
     {
         public int Power { get; private set; }
 
-        public override string DisplayName { get { return string.Format(" {0} : {1} : " + Strings.BatteryPower + " [{2}] \r\n", Name, Amount, Power); } }
+        public override string DisplayName =>
+            base.DisplayName + $" : {Strings.BatteryPower} [{Power}]";
 
         public Battery() : base('B', Color.YellowGreen, name: () => Strings.Battery)
         {
@@ -35,7 +36,7 @@ namespace Emberpoint.Core.GameObjects.Items
                 }
 
                 // TODO: Add localization, move to file?
-                dialogWindow.AddDialog("Batteries depleted.", new[] { "You ran out of batteries!", "Press enter to hide this message." });
+                dialogWindow.AddDialog("Batteries depleted.", new[] { "Oh dear, oh dear...", "You ran out of batteries!" });
                 return false;
             }
             return true;

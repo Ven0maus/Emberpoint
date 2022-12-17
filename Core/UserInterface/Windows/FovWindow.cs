@@ -10,34 +10,19 @@ using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class FovWindow : Console, IUserInterface
+    public class FovWindow : Window
     {
-        public Console Console => this;
-
-        private readonly int _maxLineRows;
-        private readonly Console _textConsole;
         private ILookup<char, CharObj> _charObjects;
         private readonly Dictionary<char, BlueprintTile> _blueprintTiles;
 
         public FovWindow(int width, int height) : base(width, height)
         {
-            this.DrawBorders(width, height, "O", "|", "-", Color.Gray);
-            Surface.Print(3, 0, Strings.ObjectsInView, Color.Orange);
             _blueprintTiles = Blueprint.GetTilesFromConfig();
-            _maxLineRows = Height - 2;
-
-            _textConsole = new Console(Width - 2, Height - 2)
-            {
-                Position = new Point(2, 1),
-            };
-
-            Position = new Point(Constants.Map.Width + 7, 3 + 25);
-
-            Children.Add(_textConsole);
+            Title = Strings.ObjectsInView;
+            Position = (Constants.Map.Width + 7, 3 + 24);
             GameHost.Instance.Screen.Children.Add(this);
         }
        
@@ -79,26 +64,24 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         private void UpdateText()
         {
-            _textConsole.Clear();
-            _textConsole.Cursor.Position = new Point(0, 0);
+            Content.Clear();
+            Content.Cursor.Position = new Point(0, 0);
 
             var orderedValues = _charObjects
                 .OrderBy(x => x.Key)
                 .SelectMany(pair => pair);
 
-            foreach (var charObj in orderedValues.Take(_maxLineRows - 1))
+            foreach (var charObj in orderedValues.Take(Content.Height - 1))
                 DrawCharObj(charObj);
 
-            if (_charObjects.Count > _maxLineRows)
-                _textConsole.Cursor.Print("<More Objects..>");
+            if (_charObjects.Count > Content.Height)
+                Content.Cursor.Print("<More Objects..>");
         }
 
         private void DrawCharObj(CharObj charObj)
         {
-            _textConsole.Cursor.Print(new ColoredString("[" + charObj.Glyph + "]:", charObj.GlyphColor, Color.Transparent));
-            _textConsole.Cursor.Print(' ' + charObj.Name());
-            _textConsole.Cursor.CarriageReturn();
-            _textConsole.Cursor.LineFeed();
+            Content.Cursor.Print(new ColoredString("[" + charObj.Glyph + "]:", charObj.GlyphColor, Color.Transparent));
+            Content.Cursor.Print(' ' + charObj.Name()).CarriageReturn().LineFeed();
         }
 
         public void Update(IEntity entity)
@@ -116,12 +99,8 @@ namespace Emberpoint.Core.UserInterface.Windows
             UpdateText();
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
-            Surface.Clear();
-            this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
-            Surface.Print(3, 0, Strings.ObjectsInView, Color.Orange);
-
             if (Game.Player != null)
                 Update(Game.Player);
         }

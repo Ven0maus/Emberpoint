@@ -14,7 +14,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 {
     public class KeybindingsWindow : ControlsConsole, IUserInterface
     {
-        public Console Console => this;
+        public Console Content => this;
 
         public KeybindingsWindow(int width, int height) : base(width, height)
         {
