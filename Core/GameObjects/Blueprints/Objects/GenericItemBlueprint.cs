@@ -1,8 +1,7 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
-using System.IO;
-using System;
-using System.Linq;
 using Emberpoint.Core.GameObjects.Items;
+using System.IO;
+using System.Linq;
 
 namespace Emberpoint.Core.GameObjects.Blueprints.Objects
 {
@@ -29,7 +28,11 @@ namespace Emberpoint.Core.GameObjects.Blueprints.Objects
 
             if (cellBlueprint.Length != itemBlueprint.Length &&
                 cellBlueprint.Max(a => a) != itemBlueprint.Max(a => a))
-                throw new Exception($"Invalid item blueprint({_blueprintName}), does not match layout of cell blueprint.");
+            {
+                // Invalid item blueprint, does not match layout of cell blueprint.
+                // So we copy the cell blueprint layout into it
+                itemBlueprint = cellBlueprint;
+            }
 
             bool modified = false;
             for (int y = 0; y < GridSizeY; y++)

@@ -1,7 +1,6 @@
 ﻿using SadConsole.Entities;
 using SadRogue.Primitives;
 using System;
-using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.GameObjects.Interfaces
 {

@@ -1,7 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Dialogs;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
 using SadConsole;
