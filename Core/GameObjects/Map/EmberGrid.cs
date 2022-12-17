@@ -197,7 +197,7 @@ namespace Emberpoint.Core.GameObjects.Map
             }
         }
 
-        public void SetItem(EmberItem item, bool keepCellVisible = true)
+        public void SetItem(EmberItem item)
         {
             var cell = GetNonClonedCell(item.Position.X, item.Position.Y);
             if (!cell.CellProperties.Walkable)
@@ -206,7 +206,8 @@ namespace Emberpoint.Core.GameObjects.Map
                 throw new Exception($"An item is already placed on position: {item.Position}");
 
             cell.EmberItem = item;
-            cell.IsVisible = keepCellVisible;
+            cell.IsVisible = cell.CellProperties.IsExplored;
+            item.IsVisible = cell.IsVisible;
             item.RenderObject(Map.EntityRenderer);
         }
 
@@ -312,7 +313,9 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 var cell = GetNonClonedCell(lightCell.Position.X, lightCell.Position.Y);
                 cell.CellProperties.IsExplored = true;
-                cell.IsVisible = cell.EmberItem == null || cell.IsVisible;
+                cell.IsVisible = true;
+                if (cell.EmberItem != null)
+                    cell.EmberItem.IsVisible = cell.IsVisible;
             }
 
             // Reset entity fov
@@ -343,7 +346,9 @@ namespace Emberpoint.Core.GameObjects.Map
                         cell.CellProperties.IsExplored = true;
                     }  
 
-                    cell.IsVisible = cell.EmberItem == null && cell.CellProperties.IsExplored;
+                    cell.IsVisible = cell.CellProperties.IsExplored;
+                    if (cell.EmberItem != null)
+                        cell.EmberItem.IsVisible = cell.IsVisible;
 
                     SetCellColors(cell);
                     SetCell(cell);
