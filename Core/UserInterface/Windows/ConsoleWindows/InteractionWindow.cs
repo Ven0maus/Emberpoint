@@ -1,7 +1,7 @@
 ﻿using Emberpoint.Core.Resources;
 using SadConsole;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
     public class InteractionWindow : Window
     {

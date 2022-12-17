@@ -1,6 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
-using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
 using SadRogue.Primitives;
 
 namespace Emberpoint.Core.GameObjects.Items

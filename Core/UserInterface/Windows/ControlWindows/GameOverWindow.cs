@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
 using SadConsole;
 using SadConsole.UI;
 using SadConsole.UI.Controls;
@@ -7,7 +8,7 @@ using SadRogue.Primitives;
 using System;
 using Console = SadConsole.Console;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
 {
     public class GameOverWindow : ControlsConsole, IUserInterface
     {
@@ -52,7 +53,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             UserInterfaceManager.Get<GameOverWindow>().IsVisible = false;
         }
-       
+
         private void InitializeButtons()
         {
             var returnToMainMenuButton = new Button(26, 3)
@@ -105,8 +106,8 @@ namespace Emberpoint.Core.UserInterface.Windows
 
             // Print title fragments
             for (var y = 0; y < titleFragments.Length; y++)
-            for (var x = 0; x < titleFragments[y].Length; x++)
-                Surface.SetGlyph(startPosX + x, startPosY + y, titleFragments[y][x], Color.White, Color.Transparent);
+                for (var x = 0; x < titleFragments[y].Length; x++)
+                    Surface.SetGlyph(startPosX + x, startPosY + y, titleFragments[y][x], Color.White, Color.Transparent);
         }
     }
 }

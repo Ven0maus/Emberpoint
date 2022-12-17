@@ -6,7 +6,7 @@ using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
-using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
 using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;

@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
     public class FovWindow : Window
     {
@@ -25,7 +25,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Position = (Constants.Map.Width + 7, 3 + 24);
             GameHost.Instance.Screen.Children.Add(this);
         }
-       
+
         private void ReinitializeCharObjects(EmberCell[] cells, bool updateText = true)
         {
             _charObjects = GetCellCharObjectPairs(cells).ToLookup(a => a.Glyph, a => a);

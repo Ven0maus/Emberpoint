@@ -1,7 +1,7 @@
 ﻿using Emberpoint.Core.Extensions;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.UserInterface.Windows.ControlWindows;
 using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;

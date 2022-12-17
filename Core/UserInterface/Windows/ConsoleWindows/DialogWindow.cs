@@ -3,7 +3,7 @@ using Emberpoint.Core.Resources;
 using SadConsole;
 using System.Collections.Generic;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
     public class DialogWindow : Window
     {
@@ -65,7 +65,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         /// </summary>
         public void ShowNext()
         {
-            if (_queuedDialogs.Count == 0) 
+            if (_queuedDialogs.Count == 0)
             {
                 _displayedDialog = null;
                 IsVisible = false;

@@ -2,7 +2,7 @@
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
 using SadConsole;
 using SadRogue.Primitives;
 using SadRogue.Primitives.GridViews;

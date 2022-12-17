@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using Console = SadConsole.Console;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
 {
     public class KeybindingsWindow : ControlsConsole, IUserInterface
     {
@@ -78,7 +78,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             |___/                             |___/     
 ".Replace("\r", string.Empty).Split('\n');
 
-            int startPosX = (Constants.GameWindowWidth / 2) - (titleFragments.OrderByDescending(a => a.Length).First().Length / 2) + 15;
+            int startPosX = Constants.GameWindowWidth / 2 - titleFragments.OrderByDescending(a => a.Length).First().Length / 2 + 15;
             int startPosY = 0;
 
             // Print title fragments
@@ -167,7 +167,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             if (_buttonPressed == null) throw new Exception("Oops?");
 
             KeybindingsManager.EditKeybinding((Keybindings)Enum.Parse(typeof(Keybindings), _buttonPressed.Name), newKey);
-            
+
             _buttonPressed.Text = newKey.ToString();
             _buttonPressed.IsDirty = true;
             _buttonPressed = null;

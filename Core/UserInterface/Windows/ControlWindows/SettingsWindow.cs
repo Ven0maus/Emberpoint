@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Console = SadConsole.Console;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
 {
     public class SettingsWindow : ControlsConsole, IUserInterface
     {
@@ -38,7 +38,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         private void InitializeSettings()
         {
             // Button name, (method, default value)
-            var settings = new Dictionary<string, (EventHandler, string)> 
+            var settings = new Dictionary<string, (EventHandler, string)>
             {
                 { Strings.Language, (ChangeLanguage, Constants.SupportedCultures[Constants.Language]()) },
                 { Strings.Keybindings, (ChangeKeybindings, null) }
@@ -148,7 +148,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                               |___/     
 ".Replace("\r", string.Empty).Split('\n');
 
-            int startPosX = (Constants.GameWindowWidth / 2) - (titleFragments.OrderByDescending(a => a.Length).First().Length / 2) + 6;
+            int startPosX = Constants.GameWindowWidth / 2 - titleFragments.OrderByDescending(a => a.Length).First().Length / 2 + 6;
             int startPosY = 0;
 
             // Print title fragments

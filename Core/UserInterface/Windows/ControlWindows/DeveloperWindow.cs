@@ -9,7 +9,7 @@ using SadRogue.Primitives;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
 {
     public class DeveloperWindow : ControlsConsole, IUserInterface
     {
@@ -48,7 +48,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 Position = new Point(1, 1)
             };
 
-            _maxLineRows = _textConsole.Height -1;
+            _maxLineRows = _textConsole.Height - 1;
             _maxLineLength = _textConsole.Width - 1;
 
             // Disable mouse, or it will steal mouse input from DeveloperConsole
@@ -105,7 +105,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Surface.Clear();
             // Draw borders for the controls console
             this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
-            Surface.Print(((Width / 2) - "Developer Console".Length / 2), 0, "Developer Console", Color.Orange);
+            Surface.Print(Width / 2 - "Developer Console".Length / 2, 0, "Developer Console", Color.Orange);
         }
 
         public void Show()
@@ -193,7 +193,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
 
             // Check for enter key press
-            for (int i=0; i < info.KeysPressed.Count; i++)
+            for (int i = 0; i < info.KeysPressed.Count; i++)
             {
                 if (info.KeysPressed[i].Key == Keys.Enter && _textInputInUse)
                 {
@@ -236,7 +236,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 _textInput.Text = string.Empty;
                 _textInputInUse = true;
             }
-            
+
             return base.ProcessMouse(state);
         }
 

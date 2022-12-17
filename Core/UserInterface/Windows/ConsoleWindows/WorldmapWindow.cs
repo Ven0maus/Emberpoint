@@ -7,7 +7,7 @@ using SadConsole;
 using SadConsole.Input;
 using SadRogue.Primitives;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
     public class WorldmapWindow : Console, IUserInterface
     {
@@ -16,7 +16,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             get { return this; }
         }
 
-        public WorldmapWindow(int width, int height) : base(width+2, height+2)
+        public WorldmapWindow(int width, int height) : base(width + 2, height + 2)
         {
             Position = new Point(4, 2);
             GameHost.Instance.Screen.Children.Add(this);
@@ -43,7 +43,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Surface.Clear();
             this.ColorFill(Color.Black);
             this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
-            Surface.Print((Width / 2) - (Strings.Map.Length / 2), 0, Strings.Map, Color.Orange);
+            Surface.Print(Width / 2 - Strings.Map.Length / 2, 0, Strings.Map, Color.Orange);
 
             if (GridManager.Grid != null)
                 DrawMap();
@@ -60,9 +60,9 @@ namespace Emberpoint.Core.UserInterface.Windows
         {
             // Make cells dark
             var darkGray = new Color(10, 10, 10, 255);
-            for (int x=1; x < Width-1; x++)
+            for (int x = 1; x < Width - 1; x++)
             {
-                for (int y=1; y < Height-1; y++)
+                for (int y = 1; y < Height - 1; y++)
                 {
                     Surface.SetGlyph(x, y, 0, darkGray, darkGray);
                 }
@@ -72,14 +72,14 @@ namespace Emberpoint.Core.UserInterface.Windows
             var exploredCells = GridManager.Grid.GetCells(a => a.CellProperties.IsExplored || IsBorderCell(a));
             foreach (var cell in exploredCells)
             {
-                Surface.SetGlyph(cell.Position.X + 1, cell.Position.Y + 1, cell.Glyph, 
+                Surface.SetGlyph(cell.Position.X + 1, cell.Position.Y + 1, cell.Glyph,
                     cell.CellProperties.NormalForeground, cell.CellProperties.NormalBackground);
             }
 
             // Draw player
             if (Game.Player != null)
             {
-                Surface.SetGlyph(Game.Player.Position.X + 1, Game.Player.Position.Y + 1, Game.Player.Glyph, 
+                Surface.SetGlyph(Game.Player.Position.X + 1, Game.Player.Position.Y + 1, Game.Player.Glyph,
                     Game.Player.Appearance.Foreground, Game.Player.Appearance.Background);
             }
         }

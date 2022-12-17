@@ -3,7 +3,7 @@ using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
-using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
 using GoRogue.FOV;
 using SadConsole;
 using SadConsole.Entities;

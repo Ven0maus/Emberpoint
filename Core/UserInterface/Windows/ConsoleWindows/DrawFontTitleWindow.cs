@@ -2,7 +2,7 @@
 using SadConsole.Readers;
 using SadRogue.Primitives;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
     internal class DrawFontTitleWindow : ScreenSurface
     {

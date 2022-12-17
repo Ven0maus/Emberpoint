@@ -2,7 +2,7 @@
 using Emberpoint.Core.Resources;
 using SadConsole;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
     public class GameWindow : Console, IUserInterface
     {
@@ -27,7 +27,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         void Initialize()
         {
             // Print the game title at the top
-            int x = (int) System.Math.Round(Width / 2 / 1.5f) - Strings.GameTitle.Length / 2;
+            int x = (int)System.Math.Round(Width / 2 / 1.5f) - Strings.GameTitle.Length / 2;
             Surface.Print(x, 1, Strings.GameTitle);
 
         }

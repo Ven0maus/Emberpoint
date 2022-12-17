@@ -1,5 +1,5 @@
 ﻿using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
 
 namespace Emberpoint.Core.GameObjects.Dialogs
 {

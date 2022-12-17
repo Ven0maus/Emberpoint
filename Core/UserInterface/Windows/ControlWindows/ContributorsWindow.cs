@@ -7,7 +7,7 @@ using SadRogue.Primitives;
 using System.Linq;
 using Console = SadConsole.Console;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
 {
     public class ContributorsWindow : ControlsConsole, IUserInterface
     {
@@ -59,7 +59,7 @@ namespace Emberpoint.Core.UserInterface.Windows
   \_____\___/|_| |_|\__|_|  |_|_.__/ \__,_|\__\___/|_|  |___/                                                       
 ".Replace("\r", string.Empty).Split('\n');
 
-            int startPosX = (Constants.GameWindowWidth / 2) - (titleFragments.OrderByDescending(a => a.Length).First().Length / 2) + 45;
+            int startPosX = Constants.GameWindowWidth / 2 - titleFragments.OrderByDescending(a => a.Length).First().Length / 2 + 45;
             int startPosY = 0;
 
             // Print title fragments

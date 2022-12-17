@@ -5,7 +5,7 @@ using SadConsole;
 using SadConsole.Entities;
 using SadRogue.Primitives;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
     public class MapWindow : Console, IUserInterface
     {

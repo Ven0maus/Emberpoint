@@ -1,7 +1,8 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
+using Emberpoint.Core.UserInterface.Windows.ControlWindows;
 using SadConsole;
 using SadConsole.Input;
 using SadRogue.Primitives;

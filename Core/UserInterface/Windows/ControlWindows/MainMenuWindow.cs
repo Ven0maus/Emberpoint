@@ -3,6 +3,7 @@ using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
 using SadConsole;
 using SadConsole.UI;
 using SadConsole.UI.Controls;
@@ -11,7 +12,7 @@ using System;
 using System.Globalization;
 using System.Threading;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
 {
     public class MainMenuWindow : ControlsConsole, IUserInterface
     {

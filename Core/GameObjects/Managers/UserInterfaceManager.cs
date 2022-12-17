@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.UserInterface.Windows;
+using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
+using Emberpoint.Core.UserInterface.Windows.ControlWindows;
 using SadConsole.UI.Controls;
 using SadConsole.UI.Themes;
 using System.Collections.Generic;

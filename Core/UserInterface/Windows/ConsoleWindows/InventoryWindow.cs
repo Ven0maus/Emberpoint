@@ -7,7 +7,7 @@ using SadRogue.Primitives;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Emberpoint.Core.UserInterface.Windows
+namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
     public class InventoryWindow : Window
     {
@@ -127,7 +127,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         void PrintItem(IItem item)
         {
-            Content.Cursor.Print(new ColoredString("[" + (char)item.Glyph + "]", item.GlyphColor, 
+            Content.Cursor.Print(new ColoredString("[" + (char)item.Glyph + "]", item.GlyphColor,
                 Color.Transparent)).Print(item.DisplayName).CarriageReturn().LineFeed();
         }
     }
