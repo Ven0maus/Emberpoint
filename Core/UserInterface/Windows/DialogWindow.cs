@@ -1,18 +1,14 @@
-﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.GameObjects.Dialogs;
-using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Dialogs;
 using Emberpoint.Core.Resources;
 using SadConsole;
-using SadRogue.Primitives;
 using System.Collections.Generic;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class DialogWindow : Window, IUserInterface
+    public class DialogWindow : Window
     {
         private readonly Queue<DialogBuilder.Dialog> _queuedDialogs;
         private DialogBuilder.Dialog _displayedDialog;
-        public Console Console => this;
 
         public DialogWindow(int width, int height) : base(width, height)
         {
@@ -22,7 +18,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Prompt = Strings.PressEnterPrompt;
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             // Re-draw current dialog
             if (_displayedDialog != null)

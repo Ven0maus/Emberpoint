@@ -10,14 +10,11 @@ using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class FovWindow : Window, IUserInterface
+    public class FovWindow : Window
     {
-        public Console Console => this;
-
         private ILookup<char, CharObj> _charObjects;
         private readonly Dictionary<char, BlueprintTile> _blueprintTiles;
 
@@ -102,7 +99,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             UpdateText();
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             if (Game.Player != null)
                 Update(Game.Player);

@@ -1,16 +1,11 @@
-﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.Resources;
+﻿using Emberpoint.Core.Resources;
 using SadConsole;
-using SadRogue.Primitives;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class InteractionWindow : Window, IUserInterface
+    public class InteractionWindow : Window
     {
         private System.Func<string> _currentMessage;
-
-        public Console Console => this;
 
         public InteractionWindow(int width, int height) : base(width, height)
         {
@@ -20,7 +15,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Draw();
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             if (!string.IsNullOrWhiteSpace(_currentMessage?.Invoke()))
                 PrintMessage(_currentMessage);

@@ -13,7 +13,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             Initialize();
         }
 
-        public Console Console
+        public Console Content
         {
             get { return this; }
         }

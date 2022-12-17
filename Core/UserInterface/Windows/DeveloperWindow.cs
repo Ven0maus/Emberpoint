@@ -28,7 +28,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
         }
 
-        public Console Console => this;
+        public Console Content => this;
         private readonly Console _textConsole;
         private readonly TextBox _textInput;
         private readonly List<Line> _previousLines;

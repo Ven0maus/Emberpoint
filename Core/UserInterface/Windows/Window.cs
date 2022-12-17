@@ -6,7 +6,7 @@ using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class Window : Console, IWindow
+    public abstract class Window : Console, IWindow, IUserInterface
     {
         string _title = string.Empty;
         string _prompt = string.Empty;
@@ -154,5 +154,9 @@ namespace Emberpoint.Core.UserInterface.Windows
             (Content.Surface as CellSurface).Resize(width, height, false);
             Content.Position = (1 + HorizontalPadding, 1 + VerticalPadding);
         }
+
+        public virtual void Refresh() { }
+        public virtual void BeforeCreate() { }
+        public virtual void AfterCreate() { }
     }
 }

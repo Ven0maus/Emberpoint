@@ -18,7 +18,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public ContributorsWindow ContributorsWindow { get; set; }
         public SettingsWindow SettingsWindow { get; private set; }
 
-        public SadConsole.Console Console
+        public SadConsole.Console Content
         {
             get { return this; }
         }
@@ -144,7 +144,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             UserInterfaceManager.Initialize();
 
             // Remove mainmenu and transition
-            Transition(UserInterfaceManager.Get<GameWindow>().Console);
+            Transition(UserInterfaceManager.Get<GameWindow>());
 
             // Instantiate player in the middle of the map
             var spawnPosition = GridManager.Grid.GetCell(a => a.LightProperties.Brightness > 0.3f && a.CellProperties.Walkable);

@@ -1,5 +1,4 @@
-﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
@@ -10,9 +9,8 @@ using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public class InventoryWindow : Window, IUserInterface
+    public class InventoryWindow : Window
     {
-        public Console Console => this;
         private readonly List<IItem> _inventory;
 
         public InventoryWindow(int width, int height) : base(width, height)
@@ -24,12 +22,12 @@ namespace Emberpoint.Core.UserInterface.Windows
             Draw();
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             UpdateInventoryText();
         }
 
-        public void AfterCreate()
+        public override void AfterCreate()
         {
             // Adding default Items to Inventory
             var items = new IItem[]

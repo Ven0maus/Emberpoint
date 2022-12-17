@@ -11,7 +11,7 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         public readonly Renderer EntityRenderer;
 
-        public Console Console
+        public Console Content
         {
             get { return this; }
         }
