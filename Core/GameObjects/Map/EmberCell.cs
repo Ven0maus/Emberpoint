@@ -1,4 +1,5 @@
 ﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using SadConsole;
@@ -14,6 +15,11 @@ namespace Emberpoint.Core.GameObjects.Map
         public EmberCellProperties CellProperties { get; set; }
         public LightEngineProperties LightProperties { get; set; }
         public EmberEffectProperties EffectProperties { get; set; }
+
+        /// <summary>
+        /// When an item is placed on the cell, this property will have a value.
+        /// </summary>
+        public EmberItem EmberItem { get; set; }
 
         public Point Position { get; set; }
 

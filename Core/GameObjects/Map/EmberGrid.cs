@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
 using SadConsole;
@@ -178,6 +179,30 @@ namespace Emberpoint.Core.GameObjects.Map
             }
         }
 
+        public void SetItem(EmberItem item, bool keepCellVisible = true)
+        {
+            var cell = GetNonClonedCell(item.Position.X, item.Position.Y);
+            if (!cell.CellProperties.Walkable)
+                throw new Exception($"This cell is invalid for item placement. ({item.Position})");
+            if (cell.EmberItem != null)
+                throw new Exception($"An item is already placed on position: {item.Position}");
+
+            item.RenderObject(Map.EntityRenderer);
+            cell.EmberItem = item;
+            cell.IsVisible = keepCellVisible;
+        }
+
+        public void RemoveItem(Point position) => RemoveItem(position.X, position.Y);
+        public void RemoveItem(int x, int y)
+        {
+            var cell = GetNonClonedCell(x, y);
+            if (cell.EmberItem == null) return;
+
+            cell.EmberItem.UnRenderObject();
+            cell.EmberItem = null;
+            cell.IsVisible = true;
+        }
+
         public void RenderObject(Console console)
         {
             _renderedConsole = console;
@@ -269,7 +294,7 @@ namespace Emberpoint.Core.GameObjects.Map
             {
                 var cell = GetNonClonedCell(lightCell.Position.X, lightCell.Position.Y);
                 cell.CellProperties.IsExplored = true;
-                cell.IsVisible = true;
+                cell.IsVisible = cell.EmberItem == null || cell.IsVisible;
             }
 
             // Reset entity fov
@@ -300,7 +325,7 @@ namespace Emberpoint.Core.GameObjects.Map
                         cell.CellProperties.IsExplored = true;
                     }  
 
-                    cell.IsVisible = cell.CellProperties.IsExplored;
+                    cell.IsVisible = cell.EmberItem == null && cell.CellProperties.IsExplored;
 
                     SetCellColors(cell);
                     SetCell(cell);

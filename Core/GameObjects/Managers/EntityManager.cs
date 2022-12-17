@@ -22,9 +22,7 @@ namespace Emberpoint.Core.GameObjects.Managers
         public static T Create<T>(Point position, int blueprintId, EmberGrid grid = null) where T : IEntity
         {
             if (EntityExistsAt(position, blueprintId))
-            {
                 return default;
-            }
 
             T entity;
             if (grid != null)
