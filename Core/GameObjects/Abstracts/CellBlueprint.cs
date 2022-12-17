@@ -1,6 +1,8 @@
 using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Blueprints.Objects;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
@@ -150,9 +152,9 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         {
             string stairsName = cell.CellProperties.Name.Equals(Strings.StairsUp, StringComparison.OrdinalIgnoreCase) ? Strings.StairsDown : Strings.StairsUp;
             CellBlueprint<EmberCell> blueprint = cell.CellProperties.Name.Equals(Strings.StairsUp, StringComparison.OrdinalIgnoreCase) ? GridManager.ActiveBlueprint.StairsUpBlueprint : GridManager.ActiveBlueprint.StairsDownBlueprint;
-
+            ItemBlueprint<EmberItem> itemBlueprint = new GenericItemBlueprint(blueprint.ObjectId, blueprint.GetType().Name.Replace("Cells", "Items"));
             // Initialize new blueprint with tracking of the previous
-            GridManager.InitializeBlueprint(blueprint, true);
+            GridManager.InitializeBlueprint(blueprint, itemBlueprint, true);
 
             // Sync entities to blueprint
             if (entity is Player)

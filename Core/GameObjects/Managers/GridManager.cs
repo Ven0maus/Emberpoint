@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Blueprints.Objects;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Map;
 using System;
 using System.Collections.Generic;
@@ -44,25 +45,29 @@ namespace Emberpoint.Core.GameObjects.Managers
             }
         }
 
-        public static void InitializeBlueprint<T>(CellBlueprint<T> blueprint, bool saveGridData) where T : EmberCell, new()
+        public static void InitializeBlueprint<TCell, TItem>(CellBlueprint<TCell> cellBlueprint, ItemBlueprint<TItem> itemBlueprint, bool saveGridData) 
+            where TCell : EmberCell, new()
+            where TItem : EmberItem
         {
             if (!saveGridData)
             {
-                Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells(), blueprint as CellBlueprint<EmberCell>);
+                Grid = new EmberGrid(cellBlueprint.GridSizeX, cellBlueprint.GridSizeY, cellBlueprint.GetCells(), 
+                    cellBlueprint as CellBlueprint<EmberCell>, itemBlueprint as ItemBlueprint<EmberItem>);
                 Grid.CalibrateLightEngine();
                 return;
             }
 
-            if (_blueprintGridCache.TryGetValue(blueprint.GetType(), out EmberGrid grid))
+            if (_blueprintGridCache.TryGetValue(cellBlueprint.GetType(), out EmberGrid grid))
             {
                 Grid = grid;
             }
             else
             {
-                Grid = new EmberGrid(blueprint.GridSizeX, blueprint.GridSizeY, blueprint.GetCells(), blueprint as CellBlueprint<EmberCell>);
+                Grid = new EmberGrid(cellBlueprint.GridSizeX, cellBlueprint.GridSizeY, cellBlueprint.GetCells(), 
+                    cellBlueprint as CellBlueprint<EmberCell>, itemBlueprint as ItemBlueprint<EmberItem>);
                 Grid.CalibrateLightEngine();
 
-                _blueprintGridCache.Add(blueprint.GetType(), Grid);
+                _blueprintGridCache.Add(cellBlueprint.GetType(), Grid);
             }
         }
 
