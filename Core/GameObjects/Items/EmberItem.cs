@@ -1,55 +1,41 @@
-﻿using Emberpoint.Core.GameObjects.Interfaces;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
-using SadConsole;
-using SadConsole.Entities;
 using SadRogue.Primitives;
+using System;
 
-namespace Emberpoint.Core.GameObjects.Abstracts
+namespace Emberpoint.Core.GameObjects.Items
 {
     /// <summary>
     /// An item is also a renderable entity.
     /// </summary>
-    public abstract class EmberItem : Entity, IItem
+    public abstract class EmberItem : EmberEntity, IItem
     {
-        public int ObjectId { get; }
         public int Amount { get; set; }
-        private readonly System.Func<string> _localizedName;
+        private readonly Func<string> _localizedName;
         public new string Name
         {
             get { return _localizedName?.Invoke() ?? GetType().Name; }
             private set { }
         }
-        public int Glyph { get { return Appearance.Glyph; } set { Appearance.Glyph = value; } }
         public Color GlyphColor { get { return Appearance.Foreground; } set { Appearance.Foreground = value; } }
 
         public virtual string DisplayName { get { return string.Format(" {0} : {1} \r\n", Name, Amount); } }
 
-        private Console _renderedConsole;
-
-        public EmberItem(int glyph, Color foregroundColor, int zIndex = 0, System.Func<string> name = null) : 
-            base(foregroundColor, Color.Transparent, glyph, zIndex)
+        public EmberItem(int glyph, Color foregroundColor, int zIndex = 0, Func<string> name = null) :
+            base(foregroundColor, Color.Transparent, glyph, null, zIndex, false)
         {
-            ObjectId = ItemManager.GetUniqueId();
             ItemManager.Add(this);
 
             Amount = 1;
             _localizedName = name;
         }
 
-        public void RenderObject(Console console)
+        public override void MoveToBlueprint(int blueprintId)
         {
-            _renderedConsole = console;
-            console.Children.Add(this);
-        }
-
-        public void UnRenderObject()
-        {
-            if (_renderedConsole != null)
-            {
-                _renderedConsole.Children.Remove(this);
-                _renderedConsole = null;
-            }
+            base.MoveToBlueprint(blueprintId);
+            IsVisible = true;
         }
 
         public override string ToString()
@@ -68,12 +54,12 @@ namespace Emberpoint.Core.GameObjects.Abstracts
 
         public override bool Equals(object obj)
         {
-            return Equals((IItem)obj);
+            return obj != null && obj is IItem item && Equals(item);
         }
 
         public override int GetHashCode()
         {
-            return 0;
+            return HashCode.Combine(Position.X, Position.Y);
         }
 
         public int CompareTo(IItem other)

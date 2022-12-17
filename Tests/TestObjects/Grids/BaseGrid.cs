@@ -1,6 +1,9 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using SadRogue.Primitives;
+using Tests.TestObjects.Entities;
 
 namespace Tests.TestObjects.Grids
 {
@@ -9,7 +12,8 @@ namespace Tests.TestObjects.Grids
         private BaseGrid(int gridSizeX, int gridSizeY, EmberCell[] cells) : base(gridSizeX, gridSizeY, cells)
         { }
 
-        private BaseGrid(Blueprint<EmberCell> blueprint) : base(blueprint)
+        private BaseGrid(CellBlueprint<EmberCell> cellBlueprint) 
+            : base(cellBlueprint, null)
         { }
 
         public static BaseGrid Create(int width, int height)
@@ -43,9 +47,20 @@ namespace Tests.TestObjects.Grids
             return new BaseGrid(width, height, cells);
         }
 
-        public static BaseGrid Create(Blueprint<EmberCell> blueprint)
+        public static BaseGrid Create(CellBlueprint<EmberCell> cellBlueprint, ItemBlueprint<IEntity> itemBlueprint)
         {
-            return new BaseGrid(blueprint);
+            var grid = new BaseGrid(cellBlueprint);
+            if (itemBlueprint != null)
+            {
+                foreach (var item in itemBlueprint.GetCells())
+                {
+                    var entity = EntityManager.Create<BaseEntity>(item.Position, -1, grid);
+                    entity.Glyph = item.Glyph;
+                    entity.MoveToBlueprint(grid.CellBlueprint);
+                    entity.ChangeGrid(grid);
+                }
+            }
+            return grid;
         }
     }
 }

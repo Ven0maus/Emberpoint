@@ -28,7 +28,9 @@ namespace Tests
         public void CellsAreNotExplored_EvenWhen_AreaHasLights()
         {
             // Initialize a blueprint for testing
-            _grid = BaseGrid.Create(new BaseBlueprint());
+            var cellBlueprint = new BaseBlueprintCells();
+            _grid = BaseGrid.Create(cellBlueprint, new GenericTestItemBlueprint(cellBlueprint.ObjectId,
+                cellBlueprint.GetType().Name.Replace("Cells", "Items")));
             GridManager.InitializeCustomGrid(_grid);
 
             // Create entity and calculate fov + draw it
@@ -48,7 +50,9 @@ namespace Tests
         public void CellsAreExplored_WhenEntityIsNear_LightSource()
         {
             // Initialize a blueprint for testing
-            _grid = BaseGrid.Create(new BaseBlueprint());
+            var cellBlueprint = new BaseBlueprintCells();
+            _grid = BaseGrid.Create(cellBlueprint, new GenericTestItemBlueprint(cellBlueprint.ObjectId,
+                cellBlueprint.GetType().Name.Replace("Cells", "Items")));
             GridManager.InitializeCustomGrid(_grid);
 
             // Create entity and calculate fov + draw it
