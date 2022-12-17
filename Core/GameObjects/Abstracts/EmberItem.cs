@@ -23,7 +23,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public int Glyph { get { return Appearance.Glyph; } set { Appearance.Glyph = value; } }
         public Color GlyphColor { get { return Appearance.Foreground; } set { Appearance.Foreground = value; } }
 
-        public virtual string DisplayName { get { return string.Format(" {0} : {1} \r\n", Name, Amount); } }
+        public virtual string DisplayName => string.Format(" {0,-12} : {1}", Name, Amount);
 
         private Console _renderedConsole;
 
