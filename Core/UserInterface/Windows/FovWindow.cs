@@ -3,6 +3,7 @@ using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
+using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
 using SadConsole;
 using SadRogue.Primitives;
@@ -17,35 +18,50 @@ namespace Emberpoint.Core.UserInterface.Windows
     {
         public Console Console => this;
 
-        //Recreated with ReinitializeCharObjects()
-        private Dictionary<char, CharObj> _charObjects;
+        private ILookup<char, CharObj> _charObjects;
         private readonly Dictionary<char, BlueprintTile> _blueprintTiles;
 
         public FovWindow(int width, int height) : base(width, height)
         {
-            _charObjects = new Dictionary<char, CharObj>();
             _blueprintTiles = Blueprint.GetTilesFromConfig();
             Title = Strings.ObjectsInView;
             Position = (Constants.Map.Width + 7, 3 + 24);
             GameHost.Instance.Screen.Children.Add(this);
         }
        
-        private void ReinitializeCharObjects(IEnumerable<char> characters, bool updateText = true)
+        private void ReinitializeCharObjects(EmberCell[] cells, bool updateText = true)
         {
-            _charObjects = new Dictionary<char, CharObj>(GetCharObjectPairs(characters));
+            _charObjects = GetCellCharObjectPairs(cells).ToLookup(a => a.Glyph, a => a);
 
             if (updateText)
                 UpdateText();
         }
 
-        private IEnumerable<KeyValuePair<char, CharObj>> GetCharObjectPairs(IEnumerable<char> characters)
+        private IEnumerable<CharObj> GetCellCharObjectPairs(EmberCell[] cells)
         {
-            foreach (var character in characters)
+            var cellObjects = cells
+                .Where(a => a.EmberItem == null)
+                .Select(a => (char)a.Glyph)
+                .Distinct();
+
+            foreach (var character in cellObjects)
             {
                 if (!_blueprintTiles.TryGetValue(character, out var tile) || tile.Name == null) continue;
                 var glyphColor = MonoGameExtensions.GetColorByString(tile.Foreground);
                 if (glyphColor.A == 0) continue; // Don't render transparent tiles on the fov window
-                yield return new KeyValuePair<char, CharObj>(character, new CharObj(tile.Glyph, glyphColor, () => Constants.ResourceHelper.ReadProperty(tile.Name, tile.Name ?? "")));
+                yield return new CharObj(tile.Glyph, glyphColor, () => Constants.ResourceHelper.ReadProperty(tile.Name, tile.Name ?? ""), false);
+            }
+
+            var itemObjects = cells
+                .Where(a => a.EmberItem != null)
+                .Select(a => a.EmberItem)
+                .DistinctBy(a => (char)a.Glyph);
+
+            foreach (var item in itemObjects)
+            {
+                var glyphColor = item.Appearance.Foreground;
+                if (glyphColor.A == 0) continue; // Don't render transparent tiles on the fov window
+                yield return new CharObj((char)item.Glyph, glyphColor, () => item.Name, true);
             }
         }
 
@@ -54,7 +70,9 @@ namespace Emberpoint.Core.UserInterface.Windows
             Content.Clear();
             Content.Cursor.Position = new Point(0, 0);
 
-            var orderedValues = _charObjects.OrderBy(x => x.Key).Select(pair => pair.Value);
+            var orderedValues = _charObjects
+                .OrderBy(x => x.Key)
+                .SelectMany(pair => pair);
 
             foreach (var charObj in orderedValues.Take(Content.Height - 1))
                 DrawCharObj(charObj);
@@ -75,15 +93,12 @@ namespace Emberpoint.Core.UserInterface.Windows
             var farBrightCells = GetBrightCellsInFov(entity, radius + 3);
 
             // Gets cells player can see after FOV refresh.
-            var cells = GridManager.Grid.GetExploredCellsInFov(entity)
-                .Select(a => (char)a.Glyph)
-                //Merge in bright cells before FOV refresh.
+            var cellCollection = GridManager.Grid.GetExploredCellsInFov(entity)
                 .Union(farBrightCells)
-                //Take only unique cells as an array.
-                .Distinct();
+                .ToArray();
 
             // Draw visible cells to the FOV window
-            ReinitializeCharObjects(characters: cells, updateText: false);
+            ReinitializeCharObjects(cells: cellCollection, updateText: false);
             UpdateText();
         }
 
@@ -93,11 +108,10 @@ namespace Emberpoint.Core.UserInterface.Windows
                 Update(Game.Player);
         }
 
-        private IEnumerable<char> GetBrightCellsInFov(IEntity entity, int fovRadius)
+        private static IEnumerable<EmberCell> GetBrightCellsInFov(IEntity entity, int fovRadius)
         {
             return GridManager.Grid.GetExploredCellsInFov(entity, fovRadius)
-                .Where(a => a.LightProperties.Brightness > 0f)
-                .Select(a => (char)a.Glyph);
+                .Where(a => a.LightProperties.Brightness > 0f);
         }
 
         private readonly struct CharObj
@@ -105,12 +119,14 @@ namespace Emberpoint.Core.UserInterface.Windows
             public readonly char Glyph;
             public readonly Color GlyphColor;
             public readonly Func<string> Name;
+            public readonly bool IsItemChar;
 
-            public CharObj(char glyph, Color glyphColor, Func<string> name)
+            public CharObj(char glyph, Color glyphColor, Func<string> name, bool isItemChar)
             {
                 Glyph = glyph;
                 GlyphColor = glyphColor;
                 Name = name;
+                IsItemChar = isItemChar;
             }
         }
 

@@ -34,7 +34,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public void AfterCreate()
         {
             // Initialize grid and render it on the map
-            GridManager.InitializeBlueprint<GroundFloorBlueprint>(true);
+            GridManager.InitializeBlueprint<GroundFloorCellsBlueprint>(true);
             GridManager.Grid.RenderObject(this);
         }
 

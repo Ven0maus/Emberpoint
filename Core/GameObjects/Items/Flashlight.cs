@@ -1,6 +1,6 @@
-﻿using Emberpoint.Core.GameObjects.Abstracts;
-using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
+using Emberpoint.Core.UserInterface.Windows;
 using SadRogue.Primitives;
 using System.Timers;
 
@@ -12,11 +12,13 @@ namespace Emberpoint.Core.GameObjects.Items
         public Battery Battery { get; set; }
 
         private readonly Timer _drainTimer;
+        private readonly FovWindow _fovObjectsWindow;
 
         public Flashlight() : base('F', Color.LightSkyBlue, name: () => Strings.Flashlight)
         {
             _drainTimer = new Timer(1000);
             _drainTimer.Elapsed += DrainTimer_Elapsed;
+            _fovObjectsWindow = UserInterfaceManager.Get<FovWindow>();
         }
 
         private void DrainTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -60,6 +62,10 @@ namespace Emberpoint.Core.GameObjects.Items
                 Game.Player.FieldOfViewRadius = 0;
                 EntityManager.RecalculatFieldOfView(Game.Player);
 
+                // Update interfaces
+                Game.Player.MapWindow.Refresh();
+                _fovObjectsWindow.Update(Game.Player);
+
                 // Stop drain timer
                 _drainTimer.Stop();
             }
@@ -72,6 +78,10 @@ namespace Emberpoint.Core.GameObjects.Items
                 var flashLight = Game.Player.Inventory.GetItemOfType<Flashlight>();
                 bool discoverUnexploredTiles = flashLight != null && flashLight.LightOn;
                 GridManager.Grid.DrawFieldOfView(Game.Player, discoverUnexploredTiles);
+
+                // Update interfaces
+                Game.Player.MapWindow.Refresh();
+                _fovObjectsWindow.Update(Game.Player);
 
                 // Start drain timer
                 _drainTimer.Start();

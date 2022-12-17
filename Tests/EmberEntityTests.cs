@@ -1,4 +1,6 @@
-﻿using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Items;
+using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
 using NUnit.Framework;
 using SadRogue.Primitives;
@@ -29,7 +31,8 @@ namespace Tests
         [Test]
         public void EntitiesSynced_AfterPlayerMoves_ToNewBlueprint()
         {
-            GridManager.InitializeBlueprint<BaseBlueprintExtra>(false);
+            var extraCellsBlueprint = new BaseBlueprintExtraCells();
+            GridManager.InitializeBlueprint(extraCellsBlueprint, (ItemBlueprint<EmberItem>)null, false);
 
             var entity1 = EntityManager.Create<BaseEntity>(new Point(1, 1), -1, _grid);
             var entity2 = EntityManager.Create<BaseEntity>(new Point(2, 1), -1, _grid);
@@ -64,10 +67,15 @@ namespace Tests
             Assert.IsNotNull(stairsDown);
 
             // Add an additional effect to adjust grid for this entity
+            stairsDown.EffectProperties.ClearMovementEffects();
             stairsDown.EffectProperties.AddMovementEffect((e) =>
             {
+                var cellBlueprint = new BaseBlueprintCells();
+                GridManager.InitializeBlueprint(cellBlueprint, (ItemBlueprint<EmberItem>)null, true);
+                ((BaseEntity)e).MoveToBlueprint(GridManager.ActiveBlueprint);
                 ((BaseEntity)e).ChangeGrid(GridManager.Grid);
             });
+            GridManager.Grid.SetCell(stairsDown);
 
             // Move onto stairs down, and trigger its effect
             var prevBlueprint = GridManager.ActiveBlueprint.ObjectId;

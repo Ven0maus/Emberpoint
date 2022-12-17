@@ -55,7 +55,7 @@ namespace Tests.TestObjects.Entities
             }
         }
 
-        public int Glyph => throw new NotImplementedException();
+        public int Glyph { get; set; }
 
         public Renderer RenderConsole => throw new NotImplementedException("Unit tests do not use XNA consoles.");
 
@@ -78,13 +78,13 @@ namespace Tests.TestObjects.Entities
         {
             _grid = grid;
             ObjectId = EntityManager.GetUniqueId();
-            CurrentBlueprintId = grid.Blueprint == null ? -1 : grid.Blueprint.ObjectId;
+            CurrentBlueprintId = grid.CellBlueprint == null ? -1 : grid.CellBlueprint.ObjectId;
             Moved += OnMove;
             MaxHealth = 100; // Default stats
             Facing = Direction.Down;
         }
 
-        public void MoveToBlueprint<T>(Blueprint<T> blueprint) where T : EmberCell, new()
+        public void MoveToBlueprint<T>(CellBlueprint<T> blueprint) where T : EmberCell, new()
         {
             CurrentBlueprintId = blueprint.ObjectId;
 

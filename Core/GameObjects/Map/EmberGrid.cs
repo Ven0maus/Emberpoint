@@ -1,5 +1,6 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
 using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.UserInterface.Windows;
 using SadConsole;
@@ -38,7 +39,8 @@ namespace Emberpoint.Core.GameObjects.Map
         public int GridSizeX { get; }
         public int GridSizeY { get; }
 
-        public Blueprint<EmberCell> Blueprint { get; }
+        public CellBlueprint<EmberCell> CellBlueprint { get; }
+        public ItemBlueprint<EmberItem> ItemBlueprint { get; }
 
         private MapWindow _map;
         protected MapWindow Map
@@ -60,22 +62,42 @@ namespace Emberpoint.Core.GameObjects.Map
 
         private Console _renderedConsole;
 
-        public EmberGrid(Blueprint<EmberCell> blueprint)
+        public EmberGrid(CellBlueprint<EmberCell> cellBlueprint, ItemBlueprint<EmberItem> itemBlueprint)
         {
-            GridSizeX = blueprint.GridSizeX;
-            GridSizeY = blueprint.GridSizeY;
-            Blueprint = blueprint;
+            GridSizeX = cellBlueprint.GridSizeX;
+            GridSizeY = cellBlueprint.GridSizeY;
+            CellBlueprint = cellBlueprint;
+            ItemBlueprint = itemBlueprint;
 
             // Initialize cells
-            Cells = Blueprint.GetCells();
+            Cells = CellBlueprint.GetCells();
+
+            // Initialize items
+            if (itemBlueprint != null)
+            {
+                foreach (var item in itemBlueprint.GetCells())
+                {
+                    item.IsVisible = true;
+                    SetItem(item);
+                }
+            }
         }
 
-        public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells, Blueprint<EmberCell> blueprint = null)
+        public EmberGrid(int gridSizeX, int gridSizeY, EmberCell[] cells, 
+            CellBlueprint<EmberCell> cellBlueprint = null, ItemBlueprint<EmberItem> itemBlueprint = null)
         {
             GridSizeX = gridSizeX;
             GridSizeY = gridSizeY;
-            Blueprint = blueprint;
+            CellBlueprint = cellBlueprint;
+            ItemBlueprint = itemBlueprint;
             Cells = cells;
+
+            // Initialize items
+            if (itemBlueprint != null)
+            {
+                foreach (var item in itemBlueprint.GetCells())
+                    SetItem(item);
+            }
         }
 
         /// <summary>
@@ -178,6 +200,31 @@ namespace Emberpoint.Core.GameObjects.Map
             }
         }
 
+        public void SetItem(EmberItem item)
+        {
+            var cell = GetNonClonedCell(item.Position.X, item.Position.Y);
+            if (!cell.CellProperties.Walkable)
+                throw new Exception($"This cell is invalid for item placement. ({item.Position})");
+            if (cell.EmberItem != null)
+                throw new Exception($"An item is already placed on position: {item.Position}");
+
+            cell.EmberItem = item;
+            cell.IsVisible = cell.CellProperties.IsExplored;
+            item.IsVisible = cell.IsVisible;
+            item.RenderObject(Map.EntityRenderer);
+        }
+
+        public void RemoveItem(Point position) => RemoveItem(position.X, position.Y);
+        public void RemoveItem(int x, int y)
+        {
+            var cell = GetNonClonedCell(x, y);
+            if (cell.EmberItem == null) return;
+
+            cell.EmberItem.UnRenderObject();
+            cell.EmberItem = null;
+            cell.IsVisible = true;
+        }
+
         public void RenderObject(Console console)
         {
             _renderedConsole = console;
@@ -270,6 +317,8 @@ namespace Emberpoint.Core.GameObjects.Map
                 var cell = GetNonClonedCell(lightCell.Position.X, lightCell.Position.Y);
                 cell.CellProperties.IsExplored = true;
                 cell.IsVisible = true;
+                if (cell.EmberItem != null)
+                    cell.EmberItem.IsVisible = cell.IsVisible;
             }
 
             // Reset entity fov
@@ -301,6 +350,8 @@ namespace Emberpoint.Core.GameObjects.Map
                     }  
 
                     cell.IsVisible = cell.CellProperties.IsExplored;
+                    if (cell.EmberItem != null)
+                        cell.EmberItem.IsVisible = cell.IsVisible;
 
                     SetCellColors(cell);
                     SetCell(cell);

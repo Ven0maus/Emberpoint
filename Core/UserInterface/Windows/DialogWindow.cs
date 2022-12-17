@@ -5,7 +5,6 @@ using Emberpoint.Core.Resources;
 using SadConsole;
 using SadRogue.Primitives;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {

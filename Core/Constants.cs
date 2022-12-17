@@ -66,18 +66,21 @@ namespace Emberpoint.Core
 
         public static class Blueprint
         {
-            public static readonly string BlueprintsDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints");
-            public static readonly string BlueprintsConfigDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "Config");
+            public static readonly string ItemsBlueprintsDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "ItemBlueprints");
+            public static readonly string CellBlueprintsDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "CellBlueprints");
+            public static readonly string CellBlueprintsConfigDirectoryPath = Path.Combine(ApplicationRoot, "Core", "GameObjects", "Blueprints", "Config");
 
             public static class Prints
             {
+                public const string Items = "Items";
                 public const string BlueprintTiles = "BlueprintTiles";
                 public const string SpecialCharacters = "SpecialCharacters";
             }
 
             public static class Tests
             {
-                public static readonly string TestBlueprintsPath = Path.Combine(ApplicationRoot, "Tests", "TestObjects", "Blueprints", "BlueprintTexts");
+                public static readonly string TestCellBlueprintsPath = Path.Combine(ApplicationRoot, "Tests", "TestObjects", "Blueprints", "CellBlueprintTexts");
+                public static readonly string TestItemBlueprintsPath = Path.Combine(ApplicationRoot, "Tests", "TestObjects", "Blueprints", "ItemBlueprintTexts");
             }
         }
 
