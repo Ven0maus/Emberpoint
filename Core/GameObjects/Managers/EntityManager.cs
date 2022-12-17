@@ -29,16 +29,16 @@ namespace Emberpoint.Core.GameObjects.Managers
             if (EntityExistsAt(position, blueprintId))
                 return default;
 
-            EmberEntity entity;
+            IEntity entity;
             if (grid != null)
             {
-                entity = (EmberEntity)Activator.CreateInstance(type, grid);
+                entity = (IEntity)Activator.CreateInstance(type, grid);
                 entity.Position = position;
                 entity.MoveToBlueprint(blueprintId);
             }
             else
             {
-                entity = (EmberEntity)Activator.CreateInstance(type);
+                entity = (IEntity)Activator.CreateInstance(type);
                 entity.Position = position;
                 entity.MoveToBlueprint(blueprintId);
             }

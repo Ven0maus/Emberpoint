@@ -55,7 +55,7 @@ namespace Tests.TestObjects.Entities
             }
         }
 
-        public int Glyph => throw new NotImplementedException();
+        public int Glyph { get; set; }
 
         public Renderer RenderConsole => throw new NotImplementedException("Unit tests do not use XNA consoles.");
 

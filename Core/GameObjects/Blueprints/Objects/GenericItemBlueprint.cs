@@ -1,18 +1,23 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Items;
 using System.IO;
 using System.Linq;
 
 namespace Emberpoint.Core.GameObjects.Blueprints.Objects
 {
-    public class GenericItemBlueprint : ItemBlueprint<EmberItem>
+    public class GenericItemBlueprint<T> : ItemBlueprint<T>
+        where T : IEntity
     {
-        private readonly string _blueprintName;
-
-        public GenericItemBlueprint(int cellBlueprintId, string blueprintName) : 
-            base(cellBlueprintId, blueprintName)
+        public GenericItemBlueprint(int cellBlueprintId, string blueprintName) 
+            : base(cellBlueprintId, blueprintName)
         {
-            _blueprintName = blueprintName;
+            UpdateItemBlueprint();
+        }
+
+        public GenericItemBlueprint(int cellBlueprintId, string blueprintName, string customCellsPath, string customItemsPath) 
+            : base(cellBlueprintId, blueprintName, customCellsPath, customItemsPath)
+        {
             UpdateItemBlueprint();
         }
 
@@ -26,15 +31,16 @@ namespace Emberpoint.Core.GameObjects.Blueprints.Objects
             var cellBlueprint = cellBlueprintText.Replace("\r", "").Split('\n');
             var itemBlueprint = itemBlueprintText.Replace("\r", "").Split('\n');
 
+            bool modified = false;
             if (cellBlueprint.Length != itemBlueprint.Length &&
                 cellBlueprint.Max(a => a) != itemBlueprint.Max(a => a))
             {
                 // Invalid item blueprint, does not match layout of cell blueprint.
                 // So we copy the cell blueprint layout into it
                 itemBlueprint = cellBlueprint;
+                modified = true;
             }
 
-            bool modified = false;
             for (int y = 0; y < GridSizeY; y++)
             {
                 var cArray = itemBlueprint[y].ToCharArray();
@@ -63,5 +69,16 @@ namespace Emberpoint.Core.GameObjects.Blueprints.Objects
             if (modified)
                 File.WriteAllText(ItemBlueprintPath, string.Join("\n", itemBlueprint));
         }
+    }
+
+    public class GenericItemBlueprint : GenericItemBlueprint<EmberItem>
+    {
+        public GenericItemBlueprint(int cellBlueprintId, string blueprintName)
+            : base(cellBlueprintId, blueprintName)
+        { }
+
+        public GenericItemBlueprint(int cellBlueprintId, string blueprintName, string customCellsPath, string customItemsPath)
+            : base(cellBlueprintId, blueprintName, customCellsPath, customItemsPath)
+        { }
     }
 }

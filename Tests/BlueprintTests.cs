@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.GameObjects.Blueprints.Objects;
+using Emberpoint.Core.GameObjects.Managers;
 using NUnit.Framework;
 using System.IO;
 using Tests.TestObjects.Blueprints;
@@ -13,7 +14,9 @@ namespace Tests
         protected override void Setup()
         {
             // Setup a grid based on a blueprint
-            _grid = BaseGrid.Create(new BaseBlueprint());
+            var cellBlueprint = new BaseBlueprintCells();
+            _grid = BaseGrid.Create(cellBlueprint, new GenericTestItemBlueprint(cellBlueprint.ObjectId, 
+                cellBlueprint.GetType().Name.Replace("Cells", "Items")));
             GridManager.InitializeCustomGrid(_grid);
         }
 

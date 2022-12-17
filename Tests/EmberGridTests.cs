@@ -1,7 +1,9 @@
 ﻿using Emberpoint.Core.GameObjects.Abstracts;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using NUnit.Framework;
 using SadRogue.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tests.TestObjects.Blueprints;
@@ -25,7 +27,8 @@ namespace Tests
         [Test]
         public void CanChangeBlueprintByCellEffect()
         {
-            GridManager.InitializeBlueprint<BaseBlueprint>(true);
+            var cellBlueprint = new BaseBlueprintCells();
+            GridManager.InitializeBlueprint(cellBlueprint, (ItemBlueprint<EmberItem>)null, true);
             var currentBlueprint = GridManager.ActiveBlueprint;
 
             Assert.IsFalse(GridManager.Grid.GetCell(1, 1).LightProperties.EmitsLight);
@@ -42,7 +45,8 @@ namespace Tests
             up.EffectProperties.AddMovementEffect((e) =>
             {
                 // Initialize new blueprint with tracking of the previous
-                GridManager.InitializeBlueprint<BaseBlueprintExtra>(true);
+                var extraCellBlueprint = new BaseBlueprintExtraCells();
+                GridManager.InitializeBlueprint(extraCellBlueprint, (ItemBlueprint<EmberItem>)null, true);
                 ((BaseEntity)e).MoveToBlueprint(GridManager.ActiveBlueprint);
                 System.Diagnostics.Debug.WriteLine("Moving up!");
             });
@@ -72,7 +76,8 @@ namespace Tests
             down.EffectProperties.AddMovementEffect((e) =>
             {
                 // Initialize new blueprint with tracking of the previous
-                GridManager.InitializeBlueprint<BaseBlueprint>(true);
+                var extraCellBlueprint = new BaseBlueprintCells();
+                GridManager.InitializeBlueprint(extraCellBlueprint, (ItemBlueprint<EmberItem>)null, true);
                 ((BaseEntity)e).MoveToBlueprint(GridManager.ActiveBlueprint);
             });
             GridManager.Grid.SetCell(down, false, false);
@@ -136,12 +141,14 @@ namespace Tests
         public void Glyphs_AreNot_SharedInMultiple_Configs()
         {
             var configs = Blueprint.GetConfigurations();
-            var tiles = configs
+
+            var cells = configs
+                .Where(a => !a.Name.Equals("Items", StringComparison.OrdinalIgnoreCase))
                 .SelectMany(config => config.Tiles
                 .Select(a => new KeyValuePair<char, BlueprintTile>(a.Glyph, a)));
 
-            var hashSet = tiles.Select(a => a.Key).ToHashSet();
-            Assert.AreEqual(tiles.Count(), hashSet.Count);
+            var hashSetCells = cells.Select(a => a.Key).ToHashSet();
+            Assert.AreEqual(cells.Count(), hashSetCells.Count);
         }
     }
 }

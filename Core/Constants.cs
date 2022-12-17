@@ -79,7 +79,8 @@ namespace Emberpoint.Core
 
             public static class Tests
             {
-                public static readonly string TestBlueprintsPath = Path.Combine(ApplicationRoot, "Tests", "TestObjects", "Blueprints", "BlueprintTexts");
+                public static readonly string TestCellBlueprintsPath = Path.Combine(ApplicationRoot, "Tests", "TestObjects", "Blueprints", "CellBlueprintTexts");
+                public static readonly string TestItemBlueprintsPath = Path.Combine(ApplicationRoot, "Tests", "TestObjects", "Blueprints", "ItemBlueprintTexts");
             }
         }
 

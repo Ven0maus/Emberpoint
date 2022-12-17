@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.GameObjects.Items;
+﻿using Emberpoint.Core.GameObjects.Interfaces;
+using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Managers;
 using SadRogue.Primitives;
 using System;
@@ -11,7 +12,7 @@ using System.Runtime.CompilerServices;
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
     public abstract class ItemBlueprint<T> : Blueprint
-        where T : EmberItem
+        where T : IEntity
     {
         public int GridSizeX { get; private set; }
         public int GridSizeY { get; private set; }
@@ -25,18 +26,24 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         protected ItemBlueprint(int cellBlueprintId, string blueprintName)
         {
             _cellBlueprintId = cellBlueprintId;
-            InitializeBlueprint(blueprintName);
+            InitializeBlueprint(Constants.Blueprint.CellBlueprintsDirectoryPath, 
+                Constants.Blueprint.ItemsBlueprintsDirectoryPath, blueprintName);
         }
 
-        private void InitializeBlueprint(string blueprintName = null)
+        protected ItemBlueprint(int cellBlueprintId, string blueprintName, string customCellsPath, string customItemsPath)
+        {
+            _cellBlueprintId = cellBlueprintId;
+            InitializeBlueprint(customCellsPath, customItemsPath, blueprintName);
+        }
+
+        private void InitializeBlueprint(string customCellsPath, string customItemsPath, string blueprintName)
         {
             // Take the class name of the Blueprint class provided
             blueprintName ??= GetType().Name;
-            ItemBlueprintPath = Path.Combine(Constants.Blueprint.ItemsBlueprintsDirectoryPath, blueprintName + ".txt");
-            CellBlueprintPath = Path.Combine(Constants.Blueprint.CellBlueprintsDirectoryPath, 
-                blueprintName.Replace("Items", "Cells") + ".txt");
+            ItemBlueprintPath = Path.Combine(customItemsPath, blueprintName + ".txt");
+            CellBlueprintPath = Path.Combine(customCellsPath, blueprintName.Replace("Items", "Cells") + ".txt");
             if (!File.Exists(ItemBlueprintPath))
-                throw new Exception("Blueprint file was not found for '" + GetType().Name + "'.");
+                throw new Exception("Blueprint file with name ("+ blueprintName + ") was not found for '" + GetType().Name + "'.");
 
             // General configurations
             ValidateConfigurationPaths();
@@ -58,7 +65,7 @@ namespace Emberpoint.Core.GameObjects.Abstracts
             var specialChars = configs["SpecialCharacters"].ToDictionary(a => a.Glyph, a => a);
             var itemsNamespace = typeof(EmberItem).Namespace;
             var typeCache = configs["Items"].ToDictionary(a => a.Class, a => Type.GetType(itemsNamespace + "." + a.Class));
-            var itemCache = configs["Items"].ToDictionary(a => a.Class, a => (EmberItem)Activator.CreateInstance(typeCache[a.Class]));
+            var itemCache = configs["Items"].ToDictionary(a => a.Class, a => (IEntity)Activator.CreateInstance(typeCache[a.Class]));
             var itemChars = configs["Items"].ToDictionary(a => (char)itemCache[a.Class].Glyph, a => a);
             var name = GetType().Name;
 

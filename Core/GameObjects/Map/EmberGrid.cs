@@ -73,10 +73,13 @@ namespace Emberpoint.Core.GameObjects.Map
             Cells = CellBlueprint.GetCells();
 
             // Initialize items
-            foreach (var item in itemBlueprint.GetCells())
+            if (itemBlueprint != null)
             {
-                item.IsVisible = true;
-                SetItem(item);
+                foreach (var item in itemBlueprint.GetCells())
+                {
+                    item.IsVisible = true;
+                    SetItem(item);
+                }
             }
         }
 
