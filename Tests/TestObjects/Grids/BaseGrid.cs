@@ -2,9 +2,7 @@
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
-using NUnit.Framework;
 using SadRogue.Primitives;
-using System;
 using Tests.TestObjects.Entities;
 
 namespace Tests.TestObjects.Grids

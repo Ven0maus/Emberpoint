@@ -1,5 +1,4 @@
-﻿using Emberpoint.Core.GameObjects.Blueprints.Objects;
-using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.GameObjects.Managers;
 using NUnit.Framework;
 using System.IO;
 using Tests.TestObjects.Blueprints;
