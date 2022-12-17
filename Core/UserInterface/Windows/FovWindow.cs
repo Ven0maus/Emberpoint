@@ -26,7 +26,7 @@ namespace Emberpoint.Core.UserInterface.Windows
             _charObjects = new Dictionary<char, CharObj>();
             _blueprintTiles = Blueprint.GetTilesFromConfig();
             Title = Strings.ObjectsInView;
-            Position = (Constants.Map.Width + 7, 3 + 25);
+            Position = (Constants.Map.Width + 7, 3 + 24);
             GameHost.Instance.Screen.Children.Add(this);
         }
        
