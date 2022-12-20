@@ -1,11 +1,38 @@
 ﻿using SadRogue.Primitives;
 using System;
+using System.Collections;
 using System.Globalization;
 
 namespace Emberpoint.Core.Extensions
 {
     public static class MonoGameExtensions
     {
+        public static Point[] Get4Neighbors(this Point point)
+        {
+            return new[] 
+            { 
+                new Point(point.X - 1, point.Y),
+                new Point(point.X + 1, point.Y),
+                new Point(point.X, point.Y - 1),
+                new Point(point.X, point.Y + 1)
+            };
+        }
+
+        public static Point[] Get8Neighbors(this Point point)
+        {
+            return new[]
+            {
+                new Point(point.X - 1, point.Y),
+                new Point(point.X + 1, point.Y),
+                new Point(point.X, point.Y - 1),
+                new Point(point.X, point.Y + 1),
+                new Point(point.X - 1, point.Y - 1),
+                new Point(point.X + 1, point.Y + 1),
+                new Point(point.X - 1, point.Y + 1),
+                new Point(point.X + 1, point.Y - 1)
+            };
+        }
+
         public static Point Translate(this Point point, int x, int y)
         {
             return new Point(point.X + x, point.Y + y);

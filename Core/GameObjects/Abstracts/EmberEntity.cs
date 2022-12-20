@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.GameObjects.Entities;
+﻿using Emberpoint.Core.Extensions;
+using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
@@ -8,6 +9,7 @@ using GoRogue.FOV;
 using SadConsole;
 using SadConsole.Entities;
 using SadRogue.Primitives;
+using System.Linq;
 
 namespace Emberpoint.Core.GameObjects.Abstracts
 {
@@ -93,13 +95,35 @@ namespace Emberpoint.Core.GameObjects.Abstracts
         public bool GetInteractedCell(out Point cellPosition)
         {
             cellPosition = default;
-            var facingPosition = Position + Facing;
-            if (CanInteract(facingPosition.X, facingPosition.Y))
+
+            var neighbors = Position.Get4Neighbors()
+                .Where(a => GridManager.Grid.InBounds(a))
+                .Where(a => CanInteract(a.X, a.Y));
+
+            int count = 0;
+            foreach (var neighbor in neighbors)
             {
-                cellPosition = new Point(facingPosition.X, facingPosition.Y);
-                return true;
+                if (CanInteract(neighbor.X, neighbor.Y))
+                {
+                    cellPosition = new Point(neighbor.X, neighbor.Y);
+                    count++;
+                }
             }
-            return false;
+
+            if (count > 1)
+            {
+                var facingPosition = Position + Facing;
+                if (CanInteract(facingPosition.X, facingPosition.Y))
+                {
+                    cellPosition = new Point(facingPosition.X, facingPosition.Y);
+                    return true;
+                }
+                else
+                {
+                    cellPosition = default;
+                }
+            }
+            return count == 1;
         }
 
         public bool CanInteract(int x, int y)
