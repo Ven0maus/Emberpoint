@@ -101,7 +101,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 };
 
                 // make sure the previous title is erased
-                Surface.Print(1, y, new string(Constants.BorderStyle.Top, Width - 1), Constants.Colors.WindowBorder);
+                Surface.Print(1, y, new string(Constants.BorderStyle.Top, Width - 2), Constants.Colors.WindowBorder);
 
                 if (alignment == HorizontalAlignment.Left)
                 {
