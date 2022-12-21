@@ -13,6 +13,10 @@ namespace Emberpoint.Core.UserInterface.Windows
         int _horizontalPadding;
         int _verticalPadding;
 
+        // assuming the following will only be set once before setting the Title prop
+        public HorizontalAlignment TitleAlignment { get; set; } = HorizontalAlignment.Left;
+        public HorizontalAlignment PromptAlignment { get; set; } = HorizontalAlignment.Right;
+
         public BorderedWindow(int width, int height, int hPadding = 1, int vPadding = 1) : base(width, height)
         {
             Content = new Console(1, 1) { Parent = this };
@@ -75,31 +79,55 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
         }
 
-        void PrintTitle()
+        void PrintTitle() =>
+            PrintBorderText(WindowSide.Top, Title, TitleAlignment);
+
+        void PrintPrompt() =>
+            PrintBorderText(WindowSide.Bottom, Prompt, PromptAlignment);
+
+        void PrintBorderText(WindowSide verticalSide, string text, HorizontalAlignment alignment)
         {
-            int maxLength = Width - 6;
-            if (maxLength > 0 && _title.Length > 0)
+            int maxLength = Width - Constants.BorderTextPadding * 2;
+            if (maxLength > 0 && text.Length > 0)
             {
-                // truncate title
-                string title = _title.Length > maxLength ? _title[..maxLength] : _title;
+                // truncate text
+                string t = text.Length > maxLength ? text[..maxLength] : text;
+
+                // calculate Y position for the Print
+                int y = verticalSide switch
+                {
+                    WindowSide.Top => 0,
+                    _ => Height - 1
+                };
 
                 // make sure the previous title is erased
-                Surface.Print(1, 0, new string(Constants.BorderStyle.Top, Width - 2), Constants.Colors.WindowBorder);
+                Surface.Print(1, y, new string(Constants.BorderStyle.Top, Width - 1), Constants.Colors.WindowBorder);
 
-                // print new title
-                Surface.Print(3, 0, title, Constants.Colors.WindowTitle);
+                if (alignment == HorizontalAlignment.Left)
+                {
+                    Surface.Print(Constants.BorderTextPadding, y, t, Constants.Colors.WindowTitle);
+                }
+                else if (alignment == HorizontalAlignment.Center)
+                {
+                    Surface.Print(Width / 2 - t.Length / 2, y, t, Constants.Colors.WindowTitle);
+                }
+                else
+                {
+                    Surface.Print(Width - t.Length - Constants.BorderTextPadding, y, t, Constants.Colors.WindowTitle);
+                }
             }
         }
 
-        void PrintPrompt()
-        {
-            int maxLength = Width - 6;
-            if (maxLength > 0 && _prompt.Length > 0)
-            {
-                string prompt = _prompt.Length > maxLength ? _prompt[..maxLength] : _prompt;
-                Surface.Print(Width - prompt.Length - 3, Height - 1, _prompt, Constants.Colors.WindowTitle);
-            }
-        }
+        //void PrintPrompt()
+        //{
+        //    int maxLength = Width - Constants.BorderTextPadding * 2;
+        //    if (maxLength > 0 && _prompt.Length > 0)
+        //    {
+        //        string prompt = _prompt.Length > maxLength ? _prompt[..maxLength] : _prompt;
+        //        Surface.Print(Width - prompt.Length - Constants.BorderTextPadding, Height - 1, 
+        //            _prompt, Constants.Colors.WindowTitle);
+        //    }
+        //}
 
         /// <inheritdoc/>
         public Console Content { get; }
@@ -159,5 +187,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public virtual void Refresh() { }
         public virtual void BeforeCreate() { }
         public virtual void AfterCreate() { }
+
+        enum WindowSide { Left, Top, Right, Bottom }
     }
 }

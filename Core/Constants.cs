@@ -90,6 +90,9 @@ namespace Emberpoint.Core
             return appRoot.Substring(0, appRoot.LastIndexOf("\\") + 1);
         }
 
+        // padding for the text displayed on the top and bottom border of BorderedWindow
+        public static readonly int BorderTextPadding = 3;
+
         public static class BorderStyle
         {
             public static readonly char Topleft = 'O';

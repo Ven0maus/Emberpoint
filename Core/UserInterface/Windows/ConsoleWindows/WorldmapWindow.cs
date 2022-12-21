@@ -13,6 +13,7 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
     {
         public WorldmapWindow(int width, int height) : base(width + 2, height + 2, 0, 0)
         {
+            TitleAlignment = HorizontalAlignment.Center;
             Title = Strings.Map;
             Position = new Point(4, 2);
         }
@@ -35,8 +36,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 
         public override void Refresh()
         {
-            //Surface.Print(Width / 2 - Strings.Map.Length / 2, 0, Strings.Map, Color.Orange);
-
             if (GridManager.Grid != null)
                 DrawMap();
         }
