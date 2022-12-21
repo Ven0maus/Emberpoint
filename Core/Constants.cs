@@ -90,23 +90,23 @@ namespace Emberpoint.Core
             return appRoot.Substring(0, appRoot.LastIndexOf("\\") + 1);
         }
 
-        // padding for the text displayed on the top and bottom border of BorderedWindow
-        public static readonly int BorderTextPadding = 3;
-
         public static class BorderStyle
         {
-            public static readonly char Topleft = 'O';
-            public static readonly char TopRight = 'O';
-            public static readonly char BottomLeft = 'O';
-            public static readonly char BottomRight = 'O';
-            public static readonly char Top = '-';
-            public static readonly char Left = '|';
-            public static readonly char Right = '|';
-            public static readonly char Bottom = '-';
+            public const char Topleft = 'O';
+            public const char TopRight = 'O';
+            public const char BottomLeft = 'O';
+            public const char BottomRight = 'O';
+            public const char Top = '-';
+            public const char Left = '|';
+            public const char Right = '|';
+            public const char Bottom = '-';
 
-            public static readonly string Corner = "O";
-            public static readonly string HorizontalSide = "-";
-            public static readonly string VerticalSide = "|";
+            public const string Corner = "O";
+            public const string HorizontalSide = "-";
+            public const string VerticalSide = "|";
+
+            // padding for the text displayed on the top and bottom border of BorderedWindow
+            public const int TextPadding = 3;
         }
 
         public static class Colors

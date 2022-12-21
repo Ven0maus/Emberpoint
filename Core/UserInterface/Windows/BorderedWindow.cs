@@ -87,7 +87,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
         void PrintBorderText(WindowSide verticalSide, string text, HorizontalAlignment alignment)
         {
-            int maxLength = Width - Constants.BorderTextPadding * 2;
+            int maxLength = Width - Constants.BorderStyle.TextPadding * 2;
             if (maxLength > 0 && text.Length > 0)
             {
                 // truncate text
@@ -105,7 +105,7 @@ namespace Emberpoint.Core.UserInterface.Windows
 
                 if (alignment == HorizontalAlignment.Left)
                 {
-                    Surface.Print(Constants.BorderTextPadding, y, t, Constants.Colors.WindowTitle);
+                    Surface.Print(Constants.BorderStyle.TextPadding, y, t, Constants.Colors.WindowTitle);
                 }
                 else if (alignment == HorizontalAlignment.Center)
                 {
@@ -113,7 +113,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 }
                 else
                 {
-                    Surface.Print(Width - t.Length - Constants.BorderTextPadding, y, t, Constants.Colors.WindowTitle);
+                    Surface.Print(Width - t.Length - Constants.BorderStyle.TextPadding, y, t, Constants.Colors.WindowTitle);
                 }
             }
         }
