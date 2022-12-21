@@ -118,17 +118,6 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
         }
 
-        //void PrintPrompt()
-        //{
-        //    int maxLength = Width - Constants.BorderTextPadding * 2;
-        //    if (maxLength > 0 && _prompt.Length > 0)
-        //    {
-        //        string prompt = _prompt.Length > maxLength ? _prompt[..maxLength] : _prompt;
-        //        Surface.Print(Width - prompt.Length - Constants.BorderTextPadding, Height - 1, 
-        //            _prompt, Constants.Colors.WindowTitle);
-        //    }
-        //}
-
         /// <inheritdoc/>
         public Console Content { get; }
 
