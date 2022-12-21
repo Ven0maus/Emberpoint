@@ -80,12 +80,12 @@ namespace Emberpoint.Core.UserInterface.Windows
         }
 
         void PrintTitle() =>
-            PrintBorderText(WindowSide.Top, Title, TitleAlignment);
+            PrintBorderText(VerticalSide.Top, Title, TitleAlignment);
 
         void PrintPrompt() =>
-            PrintBorderText(WindowSide.Bottom, Prompt, PromptAlignment);
+            PrintBorderText(VerticalSide.Bottom, Prompt, PromptAlignment);
 
-        void PrintBorderText(WindowSide verticalSide, string text, HorizontalAlignment alignment)
+        void PrintBorderText(VerticalSide verticalSide, string text, HorizontalAlignment alignment)
         {
             int maxLength = Width - Constants.BorderStyle.TextPadding * 2;
             if (maxLength > 0 && text.Length > 0)
@@ -96,7 +96,7 @@ namespace Emberpoint.Core.UserInterface.Windows
                 // calculate Y position for the Print
                 int y = verticalSide switch
                 {
-                    WindowSide.Top => 0,
+                    VerticalSide.Top => 0,
                     _ => Height - 1
                 };
 
@@ -177,6 +177,6 @@ namespace Emberpoint.Core.UserInterface.Windows
         public virtual void BeforeCreate() { }
         public virtual void AfterCreate() { }
 
-        enum WindowSide { Left, Top, Right, Bottom }
+        enum VerticalSide { Top, Bottom }
     }
 }
