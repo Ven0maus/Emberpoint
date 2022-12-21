@@ -3,7 +3,7 @@ using SadConsole;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class InteractionWindow : Window
+    public class InteractionWindow : BorderedWindow
     {
         private System.Func<string> _currentMessage;
 
@@ -11,8 +11,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
         {
             Title = Strings.Interaction;
             Position = (Constants.Map.Width + 7, 18);
-            GameHost.Instance.Screen.Children.Add(this);
-            Draw();
         }
 
         public override void Refresh()

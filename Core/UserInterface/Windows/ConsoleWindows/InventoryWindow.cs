@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class InventoryWindow : Window
+    public class InventoryWindow : BorderedWindow
     {
         private readonly List<IItem> _inventory;
 
@@ -18,8 +18,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
             _inventory = new List<IItem>();
             Title = Strings.Inventory;
             Position = (Constants.Map.Width + 7, 1);
-            GameHost.Instance.Screen.Children.Add(this);
-            Draw();
         }
 
         public override void Refresh()

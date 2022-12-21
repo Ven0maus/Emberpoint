@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class FovWindow : Window
+    public class FovWindow : BorderedWindow
     {
         private ILookup<char, CharObj> _charObjects;
         private readonly Dictionary<char, BlueprintTile> _blueprintTiles;
@@ -23,7 +23,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
             _blueprintTiles = Blueprint.GetTilesFromConfig();
             Title = Strings.ObjectsInView;
             Position = (Constants.Map.Width + 7, 3 + 24);
-            GameHost.Instance.Screen.Children.Add(this);
         }
 
         private void ReinitializeCharObjects(EmberCell[] cells, bool updateText = true)

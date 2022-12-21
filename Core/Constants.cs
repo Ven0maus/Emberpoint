@@ -92,18 +92,21 @@ namespace Emberpoint.Core
 
         public static class BorderStyle
         {
-            public static readonly char Topleft = '0';
-            public static readonly char TopRight = '0';
-            public static readonly char BottomLeft = '0';
-            public static readonly char BottomRight = '0';
-            public static readonly char Top = '-';
-            public static readonly char Left = '|';
-            public static readonly char Right = '|';
-            public static readonly char Bottom = '-';
+            public const char Topleft = 'O';
+            public const char TopRight = 'O';
+            public const char BottomLeft = 'O';
+            public const char BottomRight = 'O';
+            public const char Top = '-';
+            public const char Left = '|';
+            public const char Right = '|';
+            public const char Bottom = '-';
 
-            public static readonly string Corner = "0";
-            public static readonly string HorizontalSide = "-";
-            public static readonly string VerticalSide = "|";
+            public const string Corner = "O";
+            public const string HorizontalSide = "-";
+            public const string VerticalSide = "|";
+
+            // padding for the text displayed on the top and bottom border of BorderedWindow
+            public const int TextPadding = 3;
         }
 
         public static class Colors

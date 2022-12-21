@@ -6,16 +6,21 @@ using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public abstract class Window : Console, IWindow, IUserInterface
+    public abstract class BorderedWindow : Console, IBorderedWindow, IUserInterface
     {
         string _title = string.Empty;
         string _prompt = string.Empty;
         int _horizontalPadding;
         int _verticalPadding;
 
-        public Window(int width, int height, int hPadding = 1, int vPadding = 1) : base(width, height)
+        // assuming the following will only be set once before setting the Title prop
+        public HorizontalAlignment TitleAlignment { get; set; } = HorizontalAlignment.Left;
+        public HorizontalAlignment PromptAlignment { get; set; } = HorizontalAlignment.Right;
+
+        public BorderedWindow(int width, int height, int hPadding = 1, int vPadding = 1) : base(width, height)
         {
             Content = new Console(1, 1) { Parent = this };
+            GameHost.Instance.Screen.Children.Add(this);
             _horizontalPadding = hPadding;
             _verticalPadding = vPadding;
             ResizeContent();
@@ -74,29 +79,42 @@ namespace Emberpoint.Core.UserInterface.Windows
             }
         }
 
-        void PrintTitle()
+        void PrintTitle() =>
+            PrintBorderText(VerticalSide.Top, Title, TitleAlignment);
+
+        void PrintPrompt() =>
+            PrintBorderText(VerticalSide.Bottom, Prompt, PromptAlignment);
+
+        void PrintBorderText(VerticalSide verticalSide, string text, HorizontalAlignment alignment)
         {
-            int maxLength = Width - 6;
-            if (maxLength > 0 && _title.Length > 0)
+            int maxLength = Width - Constants.BorderStyle.TextPadding * 2;
+            if (maxLength > 0 && text.Length > 0)
             {
-                // truncate title
-                string title = _title.Length > maxLength ? _title[..maxLength] : _title;
+                // truncate text
+                string t = text.Length > maxLength ? text[..maxLength] : text;
+
+                // calculate Y position for the Print
+                int y = verticalSide switch
+                {
+                    VerticalSide.Top => 0,
+                    _ => Height - 1
+                };
 
                 // make sure the previous title is erased
-                Surface.Print(1, 0, new string(Constants.BorderStyle.Top, Width - 2), Constants.Colors.WindowBorder);
+                Surface.Print(1, y, new string(Constants.BorderStyle.Top, Width - 2), Constants.Colors.WindowBorder);
 
-                // print new title
-                Surface.Print(3, 0, title, Constants.Colors.WindowTitle);
-            }
-        }
-
-        void PrintPrompt()
-        {
-            int maxLength = Width - 6;
-            if (maxLength > 0 && _prompt.Length > 0)
-            {
-                string prompt = _prompt.Length > maxLength ? _prompt[..maxLength] : _prompt;
-                Surface.Print(Width - prompt.Length - 3, Height - 1, _prompt, Constants.Colors.WindowTitle);
+                if (alignment == HorizontalAlignment.Left)
+                {
+                    Surface.Print(Constants.BorderStyle.TextPadding, y, t, Constants.Colors.WindowTitle);
+                }
+                else if (alignment == HorizontalAlignment.Center)
+                {
+                    Surface.Print(Width / 2 - t.Length / 2, y, t, Constants.Colors.WindowTitle);
+                }
+                else
+                {
+                    Surface.Print(Width - t.Length - Constants.BorderStyle.TextPadding, y, t, Constants.Colors.WindowTitle);
+                }
             }
         }
 
@@ -158,5 +176,8 @@ namespace Emberpoint.Core.UserInterface.Windows
         public virtual void Refresh() { }
         public virtual void BeforeCreate() { }
         public virtual void AfterCreate() { }
+
+        enum VerticalSide { Top, Bottom }
+        enum HorizontalSide { Left, Right }
     }
 }

@@ -9,17 +9,13 @@ using SadRogue.Primitives;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class WorldmapWindow : Console, IUserInterface
+    public class WorldmapWindow : BorderedWindow
     {
-        public Console Content
+        public WorldmapWindow(int width, int height) : base(width + 2, height + 2, 0, 0)
         {
-            get { return this; }
-        }
-
-        public WorldmapWindow(int width, int height) : base(width + 2, height + 2)
-        {
+            TitleAlignment = HorizontalAlignment.Center;
+            Title = Strings.Map;
             Position = new Point(4, 2);
-            GameHost.Instance.Screen.Children.Add(this);
         }
 
         public override bool ProcessKeyboard(Keyboard info)
@@ -33,18 +29,13 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
             return false;
         }
 
-        public void BeforeCreate()
+        public override void BeforeCreate()
         {
             IsVisible = false;
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
-            Surface.Clear();
-            this.ColorFill(Color.Black);
-            this.DrawBorders(Width, Height, "O", "|", "-", Color.Gray);
-            Surface.Print(Width / 2 - Strings.Map.Length / 2, 0, Strings.Map, Color.Orange);
-
             if (GridManager.Grid != null)
                 DrawMap();
         }
@@ -60,11 +51,11 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
         {
             // Make cells dark
             var darkGray = new Color(10, 10, 10, 255);
-            for (int x = 1; x < Width - 1; x++)
+            for (int x = 0; x < Content.Width; x++)
             {
-                for (int y = 1; y < Height - 1; y++)
+                for (int y = 0; y < Content.Height; y++)
                 {
-                    Surface.SetGlyph(x, y, 0, darkGray, darkGray);
+                    Content.SetGlyph(x, y, 0, darkGray, darkGray);
                 }
             }
 
@@ -72,14 +63,14 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
             var exploredCells = GridManager.Grid.GetCells(a => a.CellProperties.IsExplored || IsBorderCell(a));
             foreach (var cell in exploredCells)
             {
-                Surface.SetGlyph(cell.Position.X + 1, cell.Position.Y + 1, cell.Glyph,
+                Content.SetGlyph(cell.Position.X, cell.Position.Y, cell.Glyph,
                     cell.CellProperties.NormalForeground, cell.CellProperties.NormalBackground);
             }
 
             // Draw player
             if (Game.Player != null)
             {
-                Surface.SetGlyph(Game.Player.Position.X + 1, Game.Player.Position.Y + 1, Game.Player.Glyph,
+                Content.SetGlyph(Game.Player.Position.X, Game.Player.Position.Y, Game.Player.Glyph,
                     Game.Player.Appearance.Foreground, Game.Player.Appearance.Background);
             }
         }

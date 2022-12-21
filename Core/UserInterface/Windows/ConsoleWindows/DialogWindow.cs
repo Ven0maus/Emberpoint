@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class DialogWindow : Window
+    public class DialogWindow : BorderedWindow
     {
         private readonly Queue<DialogBuilder.Dialog> _queuedDialogs;
         private DialogBuilder.Dialog _displayedDialog;
@@ -13,7 +13,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
         public DialogWindow(int width, int height) : base(width, height)
         {
             _queuedDialogs = new Queue<DialogBuilder.Dialog>();
-            GameHost.Instance.Screen.Children.Add(this);
             Position = (5, Constants.GameWindowHeight - Height - 1);
             Prompt = Strings.PressEnterPrompt;
         }
