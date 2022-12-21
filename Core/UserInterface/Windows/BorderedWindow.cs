@@ -6,14 +6,14 @@ using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public abstract class Window : Console, IWindow, IUserInterface
+    public abstract class BorderedWindow : Console, IWindow, IUserInterface
     {
         string _title = string.Empty;
         string _prompt = string.Empty;
         int _horizontalPadding;
         int _verticalPadding;
 
-        public Window(int width, int height, int hPadding = 1, int vPadding = 1) : base(width, height)
+        public BorderedWindow(int width, int height, int hPadding = 1, int vPadding = 1) : base(width, height)
         {
             Content = new Console(1, 1) { Parent = this };
             _horizontalPadding = hPadding;

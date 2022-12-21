@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class DialogWindow : Window
+    public class DialogWindow : BorderedWindow
     {
         private readonly Queue<DialogBuilder.Dialog> _queuedDialogs;
         private DialogBuilder.Dialog _displayedDialog;

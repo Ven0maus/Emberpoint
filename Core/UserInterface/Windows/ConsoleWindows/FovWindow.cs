@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class FovWindow : Window
+    public class FovWindow : BorderedWindow
     {
         private ILookup<char, CharObj> _charObjects;
         private readonly Dictionary<char, BlueprintTile> _blueprintTiles;

@@ -3,7 +3,7 @@ using SadConsole;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class InteractionWindow : Window
+    public class InteractionWindow : BorderedWindow
     {
         private System.Func<string> _currentMessage;
 

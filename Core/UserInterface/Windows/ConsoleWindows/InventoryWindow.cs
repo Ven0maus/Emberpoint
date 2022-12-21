@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {
-    public class InventoryWindow : Window
+    public class InventoryWindow : BorderedWindow
     {
         private readonly List<IItem> _inventory;
 
