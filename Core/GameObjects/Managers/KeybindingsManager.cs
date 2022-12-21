@@ -8,7 +8,7 @@ namespace Emberpoint.Core.GameObjects.Managers
     {
         private static readonly Dictionary<Keybindings, Keys> _keybindings = new Dictionary<Keybindings, Keys>();
 
-        public static void InitializeDefaultKeybindings()
+        static KeybindingsManager()
         {
             (Keybindings, Keys)[] bindings = new (Keybindings, Keys)[]
             {

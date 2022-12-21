@@ -100,9 +100,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
             var mainMenu = UserInterfaceManager.Get<MainMenuWindow>();
             if (mainMenu == null)
             {
-                // Intialize default keybindings
-                KeybindingsManager.InitializeDefaultKeybindings();
-
                 mainMenu = new MainMenuWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
                 UserInterfaceManager.Add(mainMenu);
             }
