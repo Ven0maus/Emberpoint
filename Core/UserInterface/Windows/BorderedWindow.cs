@@ -178,5 +178,6 @@ namespace Emberpoint.Core.UserInterface.Windows
         public virtual void AfterCreate() { }
 
         enum VerticalSide { Top, Bottom }
+        enum HorizontalSide { Left, Right }
     }
 }
