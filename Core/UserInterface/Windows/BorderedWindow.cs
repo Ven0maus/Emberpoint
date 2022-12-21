@@ -6,7 +6,7 @@ using Console = SadConsole.Console;
 
 namespace Emberpoint.Core.UserInterface.Windows
 {
-    public abstract class BorderedWindow : Console, IWindow, IUserInterface
+    public abstract class BorderedWindow : Console, IBorderedWindow, IUserInterface
     {
         string _title = string.Empty;
         string _prompt = string.Empty;
