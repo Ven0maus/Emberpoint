@@ -92,16 +92,16 @@ namespace Emberpoint.Core
 
         public static class BorderStyle
         {
-            public static readonly char Topleft = '0';
-            public static readonly char TopRight = '0';
-            public static readonly char BottomLeft = '0';
-            public static readonly char BottomRight = '0';
+            public static readonly char Topleft = 'O';
+            public static readonly char TopRight = 'O';
+            public static readonly char BottomLeft = 'O';
+            public static readonly char BottomRight = 'O';
             public static readonly char Top = '-';
             public static readonly char Left = '|';
             public static readonly char Right = '|';
             public static readonly char Bottom = '-';
 
-            public static readonly string Corner = "0";
+            public static readonly string Corner = "O";
             public static readonly string HorizontalSide = "-";
             public static readonly string VerticalSide = "|";
         }
