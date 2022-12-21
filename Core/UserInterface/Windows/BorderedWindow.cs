@@ -16,6 +16,7 @@ namespace Emberpoint.Core.UserInterface.Windows
         public BorderedWindow(int width, int height, int hPadding = 1, int vPadding = 1) : base(width, height)
         {
             Content = new Console(1, 1) { Parent = this };
+            GameHost.Instance.Screen.Children.Add(this);
             _horizontalPadding = hPadding;
             _verticalPadding = vPadding;
             ResizeContent();

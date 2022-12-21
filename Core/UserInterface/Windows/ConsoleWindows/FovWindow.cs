@@ -23,7 +23,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
             _blueprintTiles = Blueprint.GetTilesFromConfig();
             Title = Strings.ObjectsInView;
             Position = (Constants.Map.Width + 7, 3 + 24);
-            GameHost.Instance.Screen.Children.Add(this);
         }
 
         private void ReinitializeCharObjects(EmberCell[] cells, bool updateText = true)
