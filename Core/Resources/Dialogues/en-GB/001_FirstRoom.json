@@ -18,7 +18,7 @@
 		{
 			"ID": 3,
 			"ActorID": 1,
-			"Text": "Quiter! You will wake them up! How did you get here?",
+			"Text": "Shush! You will wake them up! How did you get here?",
 			"Choices": [
 				{
 					"ID": 4,
