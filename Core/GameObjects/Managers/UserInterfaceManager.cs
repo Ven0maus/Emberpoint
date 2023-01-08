@@ -25,7 +25,7 @@ namespace Emberpoint.Core.GameObjects.Managers
             {
                 new GameWindow(Constants.GameWindowWidth, Constants.GameWindowHeight),
                 new MapWindow(Constants.Map.Width, Constants.Map.Height),
-                new DialogWindow(Constants.Map.Width, 6),
+                new DialogueWindow(Constants.Map.Width, 6),
                 new GameOverWindow(Constants.GameWindowWidth, Constants.GameWindowHeight),
                 new FovWindow(Constants.GameWindowWidth / 3, 13),
                 new InventoryWindow(Constants.GameWindowWidth / 3, 15),

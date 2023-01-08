@@ -19,7 +19,8 @@ namespace Emberpoint.Core.GameObjects.Managers
                 (Keybindings.Flashlight, Keys.F),
                 (Keybindings.Interact, Keys.G),
                 (Keybindings.DeveloperConsole, Keys.Tab),
-                (Keybindings.Map, Keys.M)
+                (Keybindings.Map, Keys.M),
+                (Keybindings.Confirm, Keys.Enter)
             };
 
             foreach (var binding in bindings)
@@ -55,6 +56,7 @@ namespace Emberpoint.Core.GameObjects.Managers
         Flashlight,
         Interact,
         DeveloperConsole,
-        Map
+        Map,
+        Confirm
     }
 }

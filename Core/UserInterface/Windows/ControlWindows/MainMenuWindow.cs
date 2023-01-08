@@ -151,7 +151,7 @@ namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
             Game.Player.Initialize();
 
             // Show a tutorial dialog window.
-            TutorialDialog.Start();
+            DialogueManager.Load("001_FirstRoom");
         }
 
         public void ButtonPressContributors(object sender, EventArgs args)

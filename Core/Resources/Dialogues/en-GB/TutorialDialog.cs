@@ -3,11 +3,14 @@ using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
 
 namespace Emberpoint.Core.GameObjects.Dialogs
 {
+    // TODO: redo as a json dialogue
+
+    /*
     public class TutorialDialog
     {
         public static void Start()
         {
-            var dialogWindow = UserInterfaceManager.Get<DialogWindow>();
+            var dialogWindow = UserInterfaceManager.Get<DialogueWindow>();
             var builder = new DialogBuilder();
             // TODO: Move text to files?
             // TODO: Add localization for dialogs
@@ -33,4 +36,5 @@ namespace Emberpoint.Core.GameObjects.Dialogs
             dialogWindow.AddDialogs(builder);
         }
     }
+    */
 }
