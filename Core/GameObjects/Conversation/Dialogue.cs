@@ -8,10 +8,33 @@ namespace Emberpoint.Core.GameObjects.Conversation
 {
     public record Dialogue(int ID, DialogueSection[] Sections)
     {
+        // list of all dialogues as a pair {id, file_name}
+        static readonly Dictionary<int, string> s_dialogues = new()
+        {
+            {1,  "001_FirstRoom"}
+        };
+
+        /// <summary>
+        /// Retrieves dialogue file name as per given id.
+        /// </summary>
+        /// <param name="id">ID of the dialogue.</param>
+        public static string GetFileName(int id) => s_dialogues[id];
+
         /// <summary>
         /// Dialogue sections in order as chosen by the player during conversation
         /// </summary>
         public List<DialogueSection> Path = new();
+
+        /// <summary>
+        /// Retrieves <see cref="DialogueSection"/> with the id 1.
+        /// </summary>
+        public DialogueSection GetFirstSection()
+        {
+            var firstSection = Array.Find(Sections, s => s.ID == 1);
+            if (firstSection is null) 
+                throw new IndexOutOfRangeException("Cannot find the initial dialogue line (with the ID: 1).");
+            return firstSection;
+        }
     }
 
     public record DialogueLine(int ID, int NextID, string Text)
@@ -20,6 +43,9 @@ namespace Emberpoint.Core.GameObjects.Conversation
         protected const int DefaultMaxLineLength = 200;
         string[] _textLines;
 
+        /// <summary>
+        /// Dialogue text split into shorter strings according to the MaxLineLength
+        /// </summary>
         public string[] TextLines
         {
             get
@@ -32,6 +58,10 @@ namespace Emberpoint.Core.GameObjects.Conversation
 
         public int GetMaxLineLength() => _maxLineLength;
 
+        /// <summary>
+        /// Sets the maximum line length and breaks the dialogue text down into shorter strings per that value.
+        /// </summary>
+        /// <param name="maxLineLength">Maxim number of characters per line.</param>
         public virtual void SetMaxLineLength(int maxLineLength)
         {
             if (_maxLineLength != maxLineLength)
@@ -41,6 +71,9 @@ namespace Emberpoint.Core.GameObjects.Conversation
             }
         }
 
+        /// <summary>
+        /// Number of lines this dialogue line occupies.
+        /// </summary>
         public virtual int Height
         {
             get
@@ -52,7 +85,12 @@ namespace Emberpoint.Core.GameObjects.Conversation
             }
         }
 
-        // breaks a long string down into an array of shorter ones
+        /// <summary>
+        /// Breaks a long string down into an array of shorter ones.
+        /// </summary>
+        /// <param name="input">String to be broken down.</param>
+        /// <param name="maxLength">Maxim number of characters per line.</param>
+        /// <returns></returns>
         public static string[] BreakString(string input, int maxLength)
         {
             if (string.IsNullOrEmpty(input))
@@ -62,7 +100,7 @@ namespace Emberpoint.Core.GameObjects.Conversation
             List<string> lines = new();
             StringBuilder sb = new();
 
-            string[] articles = { "a", "an", "is", "are", "were", "was", "I" };
+            string[] articles = { "a", "an", "and", "is", "are", "were", "was", "i" };
             string lastWord = "";
 
             for (int i = 0; i < words.Length; i++)
@@ -73,14 +111,14 @@ namespace Emberpoint.Core.GameObjects.Conversation
                     if (articles.Contains(lastWord.ToLower()))
                     {
                         sb.Remove(sb.Length - lastWord.Length, lastWord.Length);
-                        lines.Add(sb.ToString().TrimEnd().TrimStart());
+                        lines.Add(sb.ToString().TrimEnd());
                         sb.Clear();
                         sb.Append(lastWord + " ");
 
                     }
                     else
                     {
-                        lines.Add(sb.ToString().TrimEnd().TrimStart());
+                        lines.Add(sb.ToString().TrimEnd());
                         sb.Clear();
                     }
                 }
@@ -90,7 +128,7 @@ namespace Emberpoint.Core.GameObjects.Conversation
                 lastWord = words[i];
             }
 
-            lines.Add(sb.ToString().TrimEnd().TrimStart());
+            lines.Add(sb.ToString().TrimEnd());
             return lines.ToArray();
         }
     }
@@ -100,12 +138,25 @@ namespace Emberpoint.Core.GameObjects.Conversation
     {
         string[] _descriptionLines;
 
+        /// <summary>
+        /// Checks if this <see cref="DialogueSection"/> has a text line.
+        /// </summary>
         public bool HasText() => !string.IsNullOrEmpty(Text);
 
+        /// <summary>
+        /// Checks if this <see cref="DialogueSection"/> has a description.
+        /// </summary>
+        /// <returns></returns>
         public bool HasDescription() => !string.IsNullOrEmpty(Description);
 
+        /// <summary>
+        /// Checks if this <see cref="DialogueSection"/> has choices.
+        /// </summary>
         public bool HasChoices() => Choices is not null && Choices.Length > 0;
 
+        /// <summary>
+        /// Description text broken down into an array of shorter strings as per MaxLineLength.
+        /// </summary>
         public string[] DescriptionLines
         {
             get
@@ -116,6 +167,7 @@ namespace Emberpoint.Core.GameObjects.Conversation
             }
         }
 
+        /// <inheritdoc/>
         public override void SetMaxLineLength(int maxLineLength)
         {
             if (GetMaxLineLength() != maxLineLength)

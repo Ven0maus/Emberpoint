@@ -60,16 +60,6 @@ namespace Emberpoint.Core.GameObjects.Entities
         {
             bool keyHandled = false;
 
-            // resolve dialogs
-            //var dialogWindow = UserInterfaceManager.Get<DialogWindow>();
-            //if (dialogWindow.IsVisible)
-            //{
-            //    dialogWindow.HandleKeyboard(info);
-
-            //    if (dialogWindow.PausesGame)
-            //        return true;
-            //}
-            
             // Simplified way to check if any key we care about is pressed and set movement direction.
             foreach (var key in _playerMovements.Keys)
             {

@@ -116,17 +116,8 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
             if (_dialogueSection is null) 
                 throw new FieldAccessException("Dialogue Window cannot be focused without a dialogue line saved.");
 
-            // handle a simple dialogue text without any choices
-            if (_dialogueSection.Choices is null || _dialogueSection.Choices.Length == 0)
-            {
-                if (keyboard.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Confirm)))
-                {
-                    SetDialogueSection(DialogueManager.GetNextDialogueSection());
-                }
-            }
-
             // handle a more complex dialogue section with answers to pick from
-            else
+            if (_dialogueSection.HasChoices())
             {
                 for (int x = 0, count = _dialogueSection.Choices.Length; x < count; x++)
                 {
@@ -136,6 +127,15 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
                         SetDialogueSection(DialogueManager.GetDialogueSection(id));
                         break;
                     }
+                }
+            }
+
+            // handle a simple dialogue text without any choices
+            else
+            {
+                if (keyboard.IsKeyPressed(KeybindingsManager.GetKeybinding(Keybindings.Confirm)))
+                {
+                    SetDialogueSection(DialogueManager.GetNextDialogueSection());
                 }
             }
 

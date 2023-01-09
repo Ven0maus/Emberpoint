@@ -150,8 +150,8 @@ namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
             Game.Player = EntityManager.Create<Player>(spawnPosition.Position, GridManager.ActiveBlueprint.ObjectId);
             Game.Player.Initialize();
 
-            // Show a tutorial dialog window.
-            DialogueManager.Load("001_FirstRoom");
+            // Show the first room dialogue
+            DialogueManager.Load(1);
         }
 
         public void ButtonPressContributors(object sender, EventArgs args)

@@ -42,14 +42,46 @@ namespace Emberpoint.Core.GameObjects.Managers
             }
         }
 
-        public static void Load(string fileName)
+        public static void Load(int id)
         {
-            string jsonString = File.ReadAllText("Resources/Dialogues/en-GB/" + fileName + ".json");
+            // check if the dialogue has already been loaded before
+            var d = s_resolvedDialogues.Find(d => d.ID == id);
+            if (d != null)
+            {
+                s_dialogue = d;
+                ResetPath();
+                return;
+            }
+
+            // load dialogue from file
+            string path = $"Resources/Dialogues/{Constants.Language}/{Dialogue.GetFileName(id)}.json";
+            string jsonString;
+            if (File.Exists(path))
+                jsonString = File.ReadAllText(path);
+            else
+            {
+                path = $"Resources/Dialogues/en-US/{Dialogue.GetFileName(id)}.json";
+                if (File.Exists(path))
+                    jsonString = File.ReadAllText(path);
+                else
+                    throw new ArgumentException($"Cannot find a dialogue with the id {id} in any of the supported languages.");
+            }
+
             s_dialogue = JsonSerializer.Deserialize<Dialogue>(jsonString)!;
-            var firstSection = Array.Find(s_dialogue.Sections, l => l.ID == 1);
-            if (firstSection is null) throw new JsonException("Cannot find the initial dialogue line (with the ID: 1).");
-            s_dialogue.Path.Add(firstSection);
-            UserInterfaceManager.Get<DialogueWindow>().Show(firstSection);
+            if (s_dialogue.ID != id) throw new ArgumentException("Dialogue.ID doesn't match argument id.");
+
+            // set path to the first section
+            ResetPath();
+
+            // show window
+            UserInterfaceManager.Get<DialogueWindow>().Show(s_dialogue.Path[0]);
+        }
+
+        static void ResetPath()
+        {
+            s_dialogue.Path.Clear();
+            var fs = s_dialogue.GetFirstSection();
+            s_dialogue.Path.Add(fs);
         }
     }
 }
