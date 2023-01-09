@@ -286,6 +286,15 @@ namespace Emberpoint.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Misterious Voice.
+        /// </summary>
+        public static string MisteriousVoice {
+            get {
+                return ResourceManager.GetString("MisteriousVoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nothing happens..
         /// </summary>
         public static string NothingHappens {
@@ -300,6 +309,15 @@ namespace Emberpoint.Core.Resources {
         public static string ObjectsInView {
             get {
                 return ResourceManager.GetString("ObjectsInView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick a choice.
+        /// </summary>
+        public static string PickChoice {
+            get {
+                return ResourceManager.GetString("PickChoice", resourceCulture);
             }
         }
         
@@ -322,11 +340,11 @@ namespace Emberpoint.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Press &apos;Enter&apos; to continue.
+        ///   Looks up a localized string similar to Press &apos;{0}&apos; to continue.
         /// </summary>
-        public static string PressEnterPrompt {
+        public static string PressConfirmToContinue {
             get {
-                return ResourceManager.GetString("PressEnterPrompt", resourceCulture);
+                return ResourceManager.GetString("PressConfirmToContinue", resourceCulture);
             }
         }
         
@@ -372,6 +390,15 @@ namespace Emberpoint.Core.Resources {
         public static string Wardrobe {
             get {
                 return ResourceManager.GetString("Wardrobe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You.
+        /// </summary>
+        public static string You {
+            get {
+                return ResourceManager.GetString("You", resourceCulture);
             }
         }
     }

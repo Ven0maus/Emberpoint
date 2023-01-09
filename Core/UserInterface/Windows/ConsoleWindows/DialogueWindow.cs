@@ -21,7 +21,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
         public DialogueWindow(int width, int height) : base(width, height)
         {
             Position = (5, Constants.GameWindowHeight - Height - 1);
-            Prompt = Strings.PressEnterPrompt;
         }
 
         public override void Refresh()
@@ -92,12 +91,13 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
                     }
 
                     // prompt the player to pick a choice
-                    Prompt = "Pick a choice: 1 - " + _dialogueSection.Choices.Length;
+                    Prompt = Strings.PickChoice + ": 1 - " + _dialogueSection.Choices.Length;
                 }
                 else
                 {
                     // prompt the player to press Confirm
-                    Prompt = "Press '" + KeybindingsManager.GetKeybinding(Keybindings.Confirm) + "' to continue";
+                    var keyName = KeybindingsManager.GetKeybinding(Keybindings.Confirm);
+                    Prompt = string.Format(Strings.PressConfirmToContinue, keyName);
                 }
             }
 

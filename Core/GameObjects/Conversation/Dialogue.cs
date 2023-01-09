@@ -107,10 +107,10 @@ namespace Emberpoint.Core.GameObjects.Conversation
             {
                 if (sb.Length + words[i].Length > maxLength)
                 {
-                    // check if the last word is in the articles
-                    if (articles.Contains(lastWord.ToLower()))
+                    // if the language is English, move the short article words at the end of a line to the next line
+                    if (articles.Contains(lastWord.ToLower()) && Constants.Language == "en-US")
                     {
-                        sb.Remove(sb.Length - lastWord.Length, lastWord.Length);
+                        sb.Remove(sb.Length - lastWord.Length - 1, lastWord.Length);
                         lines.Add(sb.ToString().TrimEnd());
                         sb.Clear();
                         sb.Append(lastWord + " ");

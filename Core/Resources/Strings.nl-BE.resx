@@ -192,11 +192,17 @@
   <data name="Map" xml:space="preserve">
     <value>Kaart</value>
   </data>
+  <data name="MisteriousVoice" xml:space="preserve">
+    <value>Mysterieuze stem</value>
+  </data>
   <data name="NothingHappens" xml:space="preserve">
     <value>Er gebeurd niets.</value>
   </data>
   <data name="ObjectsInView" xml:space="preserve">
     <value>Objecten in zicht</value>
+  </data>
+  <data name="PickChoice" xml:space="preserve">
+    <value>Kies een keuze</value>
   </data>
   <data name="Pillar" xml:space="preserve">
     <value>Pilaar</value>
@@ -204,8 +210,8 @@
   <data name="Play" xml:space="preserve">
     <value>Start spel</value>
   </data>
-  <data name="PressEnterPrompt" xml:space="preserve">
-    <value>Druk op 'Enter' om door te gaan</value>
+  <data name="PressConfirmToContinue" xml:space="preserve">
+    <value>Druk op '{0}' om door te gaan</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Instellingen</value>
@@ -221,5 +227,8 @@
   </data>
   <data name="Wardrobe" xml:space="preserve">
     <value>Kleerkast</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>U</value>
   </data>
 </root>
