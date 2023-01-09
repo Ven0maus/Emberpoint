@@ -196,6 +196,15 @@ namespace Emberpoint.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Environment.
+        /// </summary>
+        public static string Environment {
+            get {
+                return ResourceManager.GetString("Environment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {

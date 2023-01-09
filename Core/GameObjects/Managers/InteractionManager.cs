@@ -44,6 +44,10 @@ namespace Emberpoint.Core.GameObjects.Managers
                 cell.CellProperties.Walkable = true;
                 cell.Glyph = '=';
                 cell.CellProperties.BlocksFov = false;
+
+                // show once the FirstDoor dialogue after opening a door in the first room
+                if (!DialogueManager.CheckResolved(2))
+                    DialogueManager.Load(2);
             }
             GridManager.Grid.SetCell(cell);
 

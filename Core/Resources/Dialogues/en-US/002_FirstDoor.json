@@ -1,0 +1,17 @@
+﻿{
+  "ID": 2,
+  "Description": "Dialogue shown after opening the door in the first room",
+  "Sections": [
+    {
+      "ID": 1,
+      "ActorID": 2,
+      "NextID": 2,
+      "Description": "A creaky door with hinges not oiled for a long time opens loudly."
+    },
+    {
+      "ID": 2,
+      "ActorID": 2,
+      "Description": "Strange, cold breeze from the corridor enters the room. You feel your arm hair raising."
+    }
+  ]
+}

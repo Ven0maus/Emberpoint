@@ -158,6 +158,7 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
             SetDialogueSection(dialogueSection);
             Game.Player.IsFocused = false;
             IsFocused = true;
+            IsVisible = true;
         }
     }
 }

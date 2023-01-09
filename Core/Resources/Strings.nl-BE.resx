@@ -162,6 +162,9 @@
   <data name="English" xml:space="preserve">
     <value>Engels</value>
   </data>
+  <data name="Environment" xml:space="preserve">
+    <value>Omgeving</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Verlaat het spel</value>
   </data>

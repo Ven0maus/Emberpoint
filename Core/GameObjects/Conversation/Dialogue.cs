@@ -11,7 +11,8 @@ namespace Emberpoint.Core.GameObjects.Conversation
         // list of all dialogues as a pair {id, file_name}
         static readonly Dictionary<int, string> s_dialogues = new()
         {
-            {1,  "001_FirstRoom"}
+            {1, "001_FirstRoom"},
+            {2, "002_FirstDoor"}
         };
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace Emberpoint.Core.GameObjects.Conversation
                 if (sb.Length + words[i].Length > maxLength)
                 {
                     // if the language is English, move the short article words at the end of a line to the next line
-                    if (articles.Contains(lastWord.ToLower()) && Constants.Language == "en-US")
+                    if (Constants.Language == "en-US" && articles.Contains(lastWord.ToLower()))
                     {
                         sb.Remove(sb.Length - lastWord.Length - 1, lastWord.Length);
                         lines.Add(sb.ToString().TrimEnd());

@@ -1,0 +1,17 @@
+﻿{
+  "ID": 2,
+  "Description": "Dialoog die na het openen van de deur in de eerste kamer wordt weergegeven",
+  "Sections": [
+    {
+      "ID": 1,
+      "ActorID": 2,
+      "NextID": 2,
+      "Description": "Een piepende deur met beslag dat al een lange tijd niet is ingevet, gaat luid open."
+    },
+    {
+      "ID": 2,
+      "ActorID": 2,
+      "Description": "Vreemde, koude bries uit de gang komt de kamer binnen. Je voelt je armhaar rijzen."
+    }
+  ]
+}
