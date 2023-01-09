@@ -53,11 +53,15 @@ namespace Emberpoint.Core.GameObjects.Managers
                 return;
             }
 
-            // load dialogue from file
+            // load dialogue from a file
             string path = $"Resources/Dialogues/{Constants.Language}/{Dialogue.GetFileName(id)}.json";
             string jsonString;
+
+            // check if the localized version exists
             if (File.Exists(path))
                 jsonString = File.ReadAllText(path);
+
+            // if not, revert to the English version
             else
             {
                 path = $"Resources/Dialogues/en-US/{Dialogue.GetFileName(id)}.json";
@@ -67,6 +71,7 @@ namespace Emberpoint.Core.GameObjects.Managers
                     throw new ArgumentException($"Cannot find a dialogue with the id {id} in any of the supported languages.");
             }
 
+            // deserialize
             s_dialogue = JsonSerializer.Deserialize<Dialogue>(jsonString)!;
             if (s_dialogue.ID != id) throw new ArgumentException("Dialogue.ID doesn't match argument id.");
 

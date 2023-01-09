@@ -1,0 +1,92 @@
+﻿{
+  "ID": 1,
+  "Description": "Conversatie met een raadselachtige, verborgen stem in de eerste kamer.",
+  "Sections": [
+    {
+      "ID": 1,
+      "ActorID": 1,
+      "NextID": 2,
+      "Text": "Sst",
+      "Description": "Een zacht gesis doet je schrikken. Is het echt of kan het gewoon je verbeelding zijn? Je begint de omgeving visueel te onderzoeken."
+    },
+    {
+      "ID": 2,
+      "NextID": 3,
+      "Text": "Uh... Hallo? Wie is het? Waar ben je?",
+      "Description": "Terwijl je je omdraait, blijf je alle hoeken van de kamer checken, maar je kunt niet zeggen waar de stem vandaan komt."
+    },
+    {
+      "ID": 3,
+      "ActorID": 1,
+      "Text": "Ssst! Je gaat ze wakker maken! Hoe ben je hier terechtgekomen?",
+      "Choices": [
+        {
+          "ID": 4,
+          "NextID": 7,
+          "Text": "Ik... weet het niet... Ik weet het niet! Waar is dit?"
+        },
+        {
+          "ID": 5,
+          "NextID": 12,
+          "Text": "Ik ben een privédetective die naar een... vermiste persoon zoekt. Misschien kun jij me helpen?"
+        },
+        {
+          "ID": 6,
+          "NextID": 15,
+          "Text": "Ik zal geen enkele van je vragen beantwoorden totdat je jezelf laat zien. Waar ben je?"
+        }
+      ]
+    },
+    {
+      "ID": 7,
+      "ActorID": 1,
+      "NextID": 8,
+      "Text": "Nog een... God! Hoeveel meer? Dit wordt belachelijk..."
+    },
+    {
+      "ID": 8,
+      "ActorID": 1,
+      "NextID": 9,
+      "Text": "Luister goed. We hebben niet veel tijd. Deze plaats is kwaadaardig! Blijf weg van donkere plaatsen."
+    },
+    {
+      "ID": 9,
+      "NextID": 10,
+      "Text": "Wat behoort KWAADAARDIG? Waar ben ik in vredesnaam?"
+    },
+    {
+      "ID": 10,
+      "NextID": 11,
+      "Text": "Hallo?",
+      "Description": "Je wacht op een antwoord, maar er komt geen. De stilte voelt erg onheilspellend."
+    },
+    {
+      "ID": 11,
+      "Description": "Er gaan seconden voorbij en er gebeurt niets anders. Je wilt deze kamer verlaten."
+    },
+    {
+      "ID": 12,
+      "ActorID": 1,
+      "NextID": 13,
+      "Text": "Wat ben je? Haha, maak me niet aan het lachen. Lachen is luid en gevaarlijk."
+    },
+    {
+      "ID": 13,
+      "ActorID": 1,
+      "NextID": 14,
+      "Text": "Er is hier inderdaad een vermiste persoon, ja, en dat is JIJ!"
+    },
+    {
+      "ID": 14,
+      "ActorID": 1,
+      "NextID": 8,
+      "Text": "Ik weet perfect hoe je hier bent gekomen en waar je bent."
+    },
+    {
+      "ID": 15,
+      "ActorID": 1,
+      "NextID": 8,
+      "Text": "Jezelf laten zien? Jezelf laten zien en sterven? Nee, ik bedank. Ik moet me verstoppen. En jij zou je ook beter kunnen verstoppen."
+    }
+  ]
+}
