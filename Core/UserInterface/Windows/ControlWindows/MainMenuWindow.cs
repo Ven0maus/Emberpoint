@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.GameObjects.Entities;
+﻿using Emberpoint.Core.GameObjects.Conversation;
+using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
@@ -150,7 +151,7 @@ namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
             Game.Player.Initialize();
 
             // Show the first room dialogue
-            DialogueManager.Load(1);
+            DialogueManager.Load(Dialogues.FirstRoom);
         }
 
         public void ButtonPressContributors(object sender, EventArgs args)

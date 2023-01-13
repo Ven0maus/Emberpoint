@@ -1,4 +1,5 @@
-﻿using Emberpoint.Core.GameObjects.Entities;
+﻿using Emberpoint.Core.GameObjects.Conversation;
+using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Items;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
@@ -46,8 +47,8 @@ namespace Emberpoint.Core.GameObjects.Managers
                 cell.CellProperties.BlocksFov = false;
 
                 // show once the FirstDoor dialogue after opening a door in the first room
-                if (!DialogueManager.CheckResolved(2))
-                    DialogueManager.Load(2);
+                if (!DialogueManager.CheckResolved(Dialogues.FirstDoor))
+                    DialogueManager.Load(Dialogues.FirstDoor);
             }
             GridManager.Grid.SetCell(cell);
 

@@ -19,7 +19,7 @@ namespace Emberpoint.Core.GameObjects.Managers
         /// Checks if a dialogue with the given id has already been resolved.
         /// </summary>
         /// <param name="id">Id of the dialogue.</param>
-        public static bool CheckResolved(int id) => s_resolvedDialogues.Exists(d => d.ID == id);
+        public static bool CheckResolved(Dialogues dialogue) => s_resolvedDialogues.Exists(d => d.ID == (int)dialogue);
 
         /// <summary>
         /// Retrieves a <see cref="DialogueSection"/> with the id equal to the NextID of the last element in <see cref="Path"/>.
@@ -63,10 +63,10 @@ namespace Emberpoint.Core.GameObjects.Managers
         /// </summary>
         /// <param name="id">Id of the dialogue.</param>
         /// <exception cref="FileLoadException">Neither a localized nor English version of the dialogue file exists.</exception>
-        public static void Load(int id)
+        public static void Load(Dialogues dialogue)
         {
             // check if the dialogue has already been loaded before
-            var d = s_resolvedDialogues.Find(d => d.ID == id);
+            var d = s_resolvedDialogues.Find(d => d.ID == (int)dialogue);
             if (d != null)
             {
                 s_dialogue = d;
@@ -75,7 +75,7 @@ namespace Emberpoint.Core.GameObjects.Managers
             }
 
             // form a path pointing to the localized version of the dialogue
-            string fileName = Dialogue.GetFileName(id);
+            string fileName = Dialogue.GetFileName((int)dialogue);
             string path = $"Resources/Dialogues/{Constants.Language}/{fileName}.json";
             string jsonString;
 
@@ -90,12 +90,12 @@ namespace Emberpoint.Core.GameObjects.Managers
                 if (File.Exists(path))
                     jsonString = File.ReadAllText(path);
                 else
-                    throw new FileLoadException($"Cannot find a dialogue with the id {id} in any of the supported languages.");
+                    throw new FileLoadException($"Cannot find the dialogue '{dialogue}' in atleast the en-US culture.");
             }
 
             // deserialize
             s_dialogue = JsonSerializer.Deserialize<Dialogue>(jsonString)!;
-            if (s_dialogue.ID != id) throw new ArgumentException("Dialogue.ID doesn't match argument id.");
+            if (s_dialogue.ID != (int)dialogue) throw new ArgumentException("Dialogue.ID doesn't match argument id.");
 
             // set path to the first section
             ResetPath();

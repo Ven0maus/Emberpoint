@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -9,19 +8,8 @@ namespace Emberpoint.Core.GameObjects.Conversation
     public record Dialogue(int ID, DialogueSection[] Sections)
     {
         // list of all dialogues as a pair {id, file_name}
-        static readonly Dictionary<int, string> s_dialogues = LoadDialogueFiles();
-        private static Dictionary<int, string> LoadDialogueFiles()
-        {
-            var dialogueJsons = Directory.GetFiles($"Resources/Dialogues/en-US");
-            var dictionary = new Dictionary<int, string>();
-            foreach (var dialogueFilePath in dialogueJsons)
-            {
-                var fileName = System.IO.Path.GetFileNameWithoutExtension(dialogueFilePath);
-                var id = fileName.Split('_')[0];
-                dictionary.Add(int.Parse(id.TrimStart('0')), fileName);
-            }
-            return dictionary;
-        }
+        static readonly Dictionary<int, string> s_dialogues = ((Dialogues[])Enum.GetValues(typeof(Dialogues)))
+            .ToDictionary(a => (int)a, a => ((int)a).ToString("D3") + "_" + a.ToString());
 
         /// <summary>
         /// Retrieves dialogue file name as per given id.
