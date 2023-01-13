@@ -6,12 +6,12 @@
       "ID": 1,
       "ActorID": 2,
       "NextID": 2,
-      "Description": "Een piepende deur met beslag dat al een lange tijd niet is ingevet, gaat luid open."
+      "Description": "Een piepende deur met verroeste scharnieren die al een lange tijd niet zijn ingevet, gaat luid open."
     },
     {
       "ID": 2,
       "ActorID": 2,
-      "Description": "Vreemde, koude bries uit de gang komt de kamer binnen. Je voelt je armhaar rijzen."
+      "Description": "Een vreemde, koude bries uit de gang komt de kamer binnen. Je voelt je armhaar omhoog springen."
     }
   ]
 }
