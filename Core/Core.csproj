@@ -59,6 +59,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Resources\Dialogues\en-US\001_FirstRoom.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Dialogues\en-US\002_FirstDoor.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Dialogues\nl-BE\001_FirstRoom.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Dialogues\nl-BE\002_FirstDoor.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Fonts\BIGICE_F.TDF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

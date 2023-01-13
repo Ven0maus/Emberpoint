@@ -26,7 +26,6 @@ namespace Emberpoint.Core.GameObjects.Items
 
             if (Power == 0)
             {
-                var dialogWindow = UserInterfaceManager.Get<DialogWindow>();
                 // Check if we have more than one battery
                 if (Amount > 1)
                 {
@@ -36,7 +35,7 @@ namespace Emberpoint.Core.GameObjects.Items
                 }
 
                 // TODO: Add localization, move to file?
-                dialogWindow.AddDialog("Batteries depleted.", new[] { "Oh dear, oh dear...", "You ran out of batteries!" });
+                // add dialog ("Batteries depleted.", new[] { "Oh dear, oh dear...", "You ran out of batteries!" });
                 return false;
             }
             return true;

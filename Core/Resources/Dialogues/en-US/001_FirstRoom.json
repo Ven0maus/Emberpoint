@@ -1,0 +1,92 @@
+﻿{
+	"ID": 1,
+	"Description": "Conversation with a mysterious, hidden voice in the first room.",
+	"Sections": [
+		{
+			"ID": 1,
+			"ActorID": 1,
+			"NextID": 2,
+			"Text": "Pssst",
+			"Description": "Quiet hiss startles you. Is it real or could it be just your imagination? You start visually examining the surroundings."
+		},
+		{
+			"ID": 2,
+			"NextID": 3,
+			"Text": "Errr... Hello? Who is it? Where are you?",
+			"Description": "Turning around you keep checking all the corners of the room but can't tell where the voice is coming from."
+		},
+		{
+			"ID": 3,
+			"ActorID": 1,
+			"Text": "Shush! You will wake them up! How did you get here?",
+			"Choices": [
+				{
+					"ID": 4,
+					"NextID": 7,
+					"Text": "I... don't know... I don't know! What the hell is this place?"
+				},
+				{
+					"ID": 5,
+					"NextID": 12,
+					"Text": "I am a private investigator looking for a... missing person. Perhaps you could help me?"
+				},
+				{
+					"ID": 6,
+					"NextID": 15,
+					"Text": "I will not answer any of your questions until you show yourself. Where are you?"
+				}
+			]
+		},
+		{
+			"ID": 7,
+			"ActorID": 1,
+			"NextID": 8,
+			"Text": "Another one... God! How many more? This is getting ridiculous..."
+		},
+		{
+			"ID": 8,
+			"ActorID": 1,
+			"NextID": 9,
+			"Text": "Listen closely. We don't have much time. This place is evil! Stay away from dark places."
+		},
+		{
+			"ID": 9,
+			"NextID": 10,
+			"Text": "What do you mean EVIL? Where the hell am I?"
+		},
+		{
+			"ID": 10,
+			"NextID": 11,
+			"Text": "Hello?",
+			"Description": "You wait for a response but none comes. The silence feels very ominous."
+		},
+		{
+			"ID": 11,
+			"Description": "Seconds pass and nothing else happens. You feel like leaving this room."
+		},
+		{
+			"ID": 12,
+			"ActorID": 1,
+			"NextID": 13,
+			"Text": "You are what? Hahaha, don't make me laugh. Laugh is loud and dangerous."
+		},
+		{
+			"ID": 13,
+			"ActorID": 1,
+			"NextID": 14,
+			"Text": "There is a lost person here, yes, and that person is YOU!"
+		},
+		{
+			"ID": 14,
+			"ActorID": 1,
+			"NextID": 8,
+			"Text": "I know perfectly well you haven't got a clue where you are and how you got here."
+		},
+		{
+			"ID": 15,
+			"ActorID": 1,
+			"NextID": 8,
+			"Text": "Show myself? Show myself and die? No, I pass. I need to hide. And you better hide too."
+		}
+	]
+}

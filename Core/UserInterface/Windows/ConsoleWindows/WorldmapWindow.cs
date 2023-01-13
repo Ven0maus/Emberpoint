@@ -1,6 +1,4 @@
-﻿using Emberpoint.Core.Extensions;
-using Emberpoint.Core.GameObjects.Interfaces;
-using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.GameObjects.Map;
 using Emberpoint.Core.Resources;
 using SadConsole;

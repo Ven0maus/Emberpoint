@@ -8,7 +8,7 @@ namespace Emberpoint.Core.GameObjects.Managers
     {
         private static readonly Dictionary<Keybindings, Keys> _keybindings = new Dictionary<Keybindings, Keys>();
 
-        public static void InitializeDefaultKeybindings()
+        static KeybindingsManager()
         {
             (Keybindings, Keys)[] bindings = new (Keybindings, Keys)[]
             {
@@ -19,7 +19,8 @@ namespace Emberpoint.Core.GameObjects.Managers
                 (Keybindings.Flashlight, Keys.F),
                 (Keybindings.Interact, Keys.G),
                 (Keybindings.DeveloperConsole, Keys.Tab),
-                (Keybindings.Map, Keys.M)
+                (Keybindings.Map, Keys.M),
+                (Keybindings.Confirm, Keys.Enter)
             };
 
             foreach (var binding in bindings)
@@ -55,6 +56,7 @@ namespace Emberpoint.Core.GameObjects.Managers
         Flashlight,
         Interact,
         DeveloperConsole,
-        Map
+        Map,
+        Confirm
     }
 }

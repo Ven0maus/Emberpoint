@@ -1,6 +1,5 @@
 ﻿using SadRogue.Primitives;
 using System;
-using System.Collections;
 using System.Globalization;
 
 namespace Emberpoint.Core.Extensions

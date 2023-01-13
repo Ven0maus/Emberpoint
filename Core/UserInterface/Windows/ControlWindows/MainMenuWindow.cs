@@ -1,4 +1,4 @@
-﻿using Emberpoint.Core.GameObjects.Dialogs;
+﻿using Emberpoint.Core.GameObjects.Conversation;
 using Emberpoint.Core.GameObjects.Entities;
 using Emberpoint.Core.GameObjects.Interfaces;
 using Emberpoint.Core.GameObjects.Managers;
@@ -100,9 +100,6 @@ namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
             var mainMenu = UserInterfaceManager.Get<MainMenuWindow>();
             if (mainMenu == null)
             {
-                // Intialize default keybindings
-                KeybindingsManager.InitializeDefaultKeybindings();
-
                 mainMenu = new MainMenuWindow(Constants.GameWindowWidth, Constants.GameWindowHeight);
                 UserInterfaceManager.Add(mainMenu);
             }
@@ -153,8 +150,8 @@ namespace Emberpoint.Core.UserInterface.Windows.ControlWindows
             Game.Player = EntityManager.Create<Player>(spawnPosition.Position, GridManager.ActiveBlueprint.ObjectId);
             Game.Player.Initialize();
 
-            // Show a tutorial dialog window.
-            TutorialDialog.Start();
+            // Show the first room dialogue
+            DialogueManager.Load(Dialogues.FirstRoom);
         }
 
         public void ButtonPressContributors(object sender, EventArgs args)
