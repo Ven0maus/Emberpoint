@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.IO;
+﻿using Emberpoint.Core.GameObjects.Conversation;
 using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
-using Newtonsoft.Json.Linq;
-using Emberpoint.Core.GameObjects.Conversation;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 
 namespace Emberpoint.Core.GameObjects.Managers
 {

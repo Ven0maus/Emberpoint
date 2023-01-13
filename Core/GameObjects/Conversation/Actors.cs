@@ -1,9 +1,5 @@
 ﻿using Emberpoint.Core.Resources;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Emberpoint.Core.GameObjects.Conversation
 {

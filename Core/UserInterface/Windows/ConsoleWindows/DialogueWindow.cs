@@ -1,13 +1,10 @@
-﻿using Emberpoint.Core.GameObjects.Managers;
+﻿using Emberpoint.Core.GameObjects.Conversation;
+using Emberpoint.Core.GameObjects.Managers;
 using Emberpoint.Core.Resources;
 using SadConsole;
 using SadConsole.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SadRogue.Primitives;
-using Emberpoint.Core.GameObjects.Conversation;
+using System;
 
 namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
 {

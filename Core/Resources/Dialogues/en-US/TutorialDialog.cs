@@ -1,7 +1,4 @@
-﻿using Emberpoint.Core.GameObjects.Managers;
-using Emberpoint.Core.UserInterface.Windows.ConsoleWindows;
-
-namespace Emberpoint.Core.GameObjects.Dialogs
+﻿namespace Emberpoint.Core.GameObjects.Dialogs
 {
     // TODO: redo as a json dialogue
 
