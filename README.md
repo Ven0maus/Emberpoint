@@ -20,4 +20,7 @@ Please visit [CONTRIBUTING.md](https://github.com/Venom0us/Emberpoint/blob/maste
 
 ## Pictures
 
-![Emberpoint](https://user-images.githubusercontent.com/20340184/68163408-bcbaa980-ff5a-11e9-92be-3c72aa10bed1.png)
+![Emberpoint](/Screenshots/Screenshot_1.png)
+![Emberpoint](/Screenshots/Screenshot_2.png)
+![Emberpoint](/Screenshots/Screenshot_3.png)
+![Emberpoint](/Screenshots/Screenshot_4.png)
