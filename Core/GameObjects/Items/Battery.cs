@@ -35,7 +35,7 @@ namespace Emberpoint.Core.GameObjects.Items
                 }
 
                 // TODO: Add localization, move to file?
-                //dialogWindow.AddDialog("Batteries depleted.", new[] { "Oh dear, oh dear...", "You ran out of batteries!" });
+                // add dialog ("Batteries depleted.", new[] { "Oh dear, oh dear...", "You ran out of batteries!" });
                 return false;
             }
             return true;
