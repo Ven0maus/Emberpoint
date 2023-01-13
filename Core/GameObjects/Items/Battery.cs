@@ -26,7 +26,6 @@ namespace Emberpoint.Core.GameObjects.Items
 
             if (Power == 0)
             {
-                var dialogWindow = UserInterfaceManager.Get<DialogueWindow>();
                 // Check if we have more than one battery
                 if (Amount > 1)
                 {

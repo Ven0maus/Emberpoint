@@ -295,11 +295,11 @@ namespace Emberpoint.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Misterious Voice.
+        ///   Looks up a localized string similar to Mysterious Voice.
         /// </summary>
-        public static string MisteriousVoice {
+        public static string MysteriousVoice {
             get {
-                return ResourceManager.GetString("MisteriousVoice", resourceCulture);
+                return ResourceManager.GetString("MysteriousVoice", resourceCulture);
             }
         }
         

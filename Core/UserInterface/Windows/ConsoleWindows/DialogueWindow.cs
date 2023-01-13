@@ -27,6 +27,8 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
         {
             if (_dialogueSection is not null)
             {
+                UserInterfaceManager.IsPaused = true;
+
                 // calculate the total height of the window including gaps between text, description and choices
                 int lineCount = _dialogueSection.Height 
                     + (_dialogueSection.HasText() && _dialogueSection.HasDescription() ? 1 : 0) 
@@ -42,8 +44,12 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
                 // remove old content
                 Content.Clear();
 
+                // retrieve actor by id
+                var actor = Actors.GetActor(_dialogueSection.ActorID);
+                if (actor == null) throw new Exception("No actor defined with id: " + _dialogueSection.ActorID);
+
                 // display the name of the currently speaking actor
-                Title = Actors.GetActor(_dialogueSection.ActorID).Name;
+                Title = actor.Name;
 
                 // display main dialogue text
                 int y = 0, count;
@@ -108,6 +114,7 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
                 IsFocused = false;
                 Game.Player.IsFocused = true;
                 IsVisible = false;
+                UserInterfaceManager.IsPaused = false;
             }
         }
 
@@ -121,7 +128,7 @@ namespace Emberpoint.Core.UserInterface.Windows.ConsoleWindows
             {
                 for (int x = 0, count = _dialogueSection.Choices.Length; x < count; x++)
                 {
-                    if (keyboard.IsKeyPressed((Keys) 49 + x))
+                    if (keyboard.IsKeyPressed(Keys.D1 + x))
                     {
                         var id = _dialogueSection.Choices[x].NextID;
                         SetDialogueSection(DialogueManager.GetDialogueSection(id));

@@ -14,6 +14,8 @@ namespace Emberpoint.Core.GameObjects.Managers
     static class DialogueManager
     {
         static Dialogue s_dialogue;
+
+        // TODO: Check if we can save only the int ID to save memory in long-run
         static readonly List<Dialogue> s_resolvedDialogues = new();
 
         /// <summary>

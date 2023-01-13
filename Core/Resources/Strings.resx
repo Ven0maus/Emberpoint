@@ -195,8 +195,8 @@
   <data name="Map" xml:space="preserve">
     <value>Map</value>
   </data>
-  <data name="MisteriousVoice" xml:space="preserve">
-    <value>Misterious Voice</value>
+  <data name="MysteriousVoice" xml:space="preserve">
+    <value>Mysterious Voice</value>
   </data>
   <data name="NothingHappens" xml:space="preserve">
     <value>Nothing happens.</value>

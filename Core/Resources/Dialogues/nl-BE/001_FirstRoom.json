@@ -23,7 +23,7 @@
         {
           "ID": 4,
           "NextID": 7,
-          "Text": "Ik... weet het niet... Ik weet het niet! Waar is dit?"
+          "Text": "Ik... weet het niet... Ik weet het niet! Waar ben ik?"
         },
         {
           "ID": 5,
@@ -41,7 +41,7 @@
       "ID": 7,
       "ActorID": 1,
       "NextID": 8,
-      "Text": "Nog een... God! Hoeveel meer? Dit wordt belachelijk..."
+      "Text": "Nog één... God! Hoeveel meer? Dit wordt belachelijk..."
     },
     {
       "ID": 8,
@@ -52,7 +52,7 @@
     {
       "ID": 9,
       "NextID": 10,
-      "Text": "Wat behoort KWAADAARDIG? Waar ben ik in vredesnaam?"
+      "Text": "Wat bedoel je KWAADAARDIG? Waar ben ik in vredesnaam?"
     },
     {
       "ID": 10,
@@ -74,7 +74,7 @@
       "ID": 13,
       "ActorID": 1,
       "NextID": 14,
-      "Text": "Er is hier inderdaad een vermiste persoon, ja, en dat is JIJ!"
+      "Text": "Er is hier inderdaad een vermiste persoon, ja, en dat ben JIJ!"
     },
     {
       "ID": 14,
@@ -86,7 +86,7 @@
       "ID": 15,
       "ActorID": 1,
       "NextID": 8,
-      "Text": "Jezelf laten zien? Jezelf laten zien en sterven? Nee, ik bedank. Ik moet me verstoppen. En jij zou je ook beter kunnen verstoppen."
+      "Text": "Mezelf laten zien? Mezelf laten zien en sterven? Nee, bedankt. Ik moet me verstoppen. En jij zou dat ook beter doen."
     }
   ]
 }

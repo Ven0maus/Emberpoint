@@ -195,7 +195,7 @@
   <data name="Map" xml:space="preserve">
     <value>Kaart</value>
   </data>
-  <data name="MisteriousVoice" xml:space="preserve">
+  <data name="MysteriousVoice" xml:space="preserve">
     <value>Mysterieuze stem</value>
   </data>
   <data name="NothingHappens" xml:space="preserve">
